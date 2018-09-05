@@ -1,4 +1,4 @@
-#version 330/n
+#version 330
 
 	smooth in vec3 color; 
 

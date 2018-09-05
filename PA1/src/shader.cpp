@@ -39,7 +39,7 @@ bool Shader::AddShader(GLenum ShaderType)
   std::string line;
 	if(ShaderType == GL_VERTEX_SHADER)
 	{
-		std::ifstream myfile ("shaders/GL_VERT.txt");
+		std::ifstream myfile ("../shaders/GL_VERT.txt");
 		if (myfile.is_open())
 		{
 			getline (myfile, s, (char) myfile.eof());
@@ -54,7 +54,7 @@ bool Shader::AddShader(GLenum ShaderType)
 	}
 	else if(ShaderType == GL_FRAGMENT_SHADER)
 	{
-		std::ifstream myfile ("shaders/GL_FRAG.txt");
+		std::ifstream myfile ("../shaders/GL_FRAG.txt");
 		if (myfile.is_open())
 		{
 			getline (myfile, s, (char) myfile.eof());

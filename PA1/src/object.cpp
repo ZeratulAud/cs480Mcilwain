@@ -83,7 +83,7 @@ void Object::Update(unsigned int dt)
   
   angle += dt * M_PI/1000 * angleMultiplier;
   model = glm::rotate(glm::mat4(1.0f), (angle/25), glm::vec3(0.0, 1.0, 0.0))*glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 10.0))
-  	*glm::rotate(glm::mat4(1.0f), (angle/1), glm::vec3(0.0, 1.0, 0.0))*glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 2.0))*glm::rotate(glm::mat4(1.0f), (-angle/25), glm::vec3(0.0, 1.0, 0.0));
+  	*glm::rotate(glm::mat4(1.0f), (angle/1), glm::vec3(0.0, 1.0, 0.0));//*glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, 2.0))*glm::rotate(glm::mat4(1.0f), (-angle/25), glm::vec3(0.0, 1.0, 0.0));
 }
 
 glm::mat4 Object::GetModel()

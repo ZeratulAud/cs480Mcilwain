@@ -39,28 +39,32 @@ bool Shader::AddShader(GLenum ShaderType)
   std::string line;
 	if(ShaderType == GL_VERTEX_SHADER)
 	{
-		std::ifstream myfile ("GL_VERT.txt");
+		std::ifstream myfile ("shaders/GL_VERT.txt");
 		if (myfile.is_open())
 		{
-			while ( getline (myfile,line) )
+			getline (myfile, s, (char) myfile.eof());
+			/*while ( getline (myfile,line) )
 			{
 				s.append(line);
-			}
+				//s.append("/n");
+			}*/
 			myfile.close();
 
 		}
 	}
-  else if(ShaderType == GL_FRAGMENT_SHADER)
-  {
-  	std::ifstream myfile ("GL_FRAG.txt");
-  	if (myfile.is_open())
-    {
-		while ( getline (myfile,line) )
+	else if(ShaderType == GL_FRAGMENT_SHADER)
+	{
+		std::ifstream myfile ("shaders/GL_FRAG.txt");
+		if (myfile.is_open())
 		{
-			s.append(line);
+			getline (myfile, s, (char) myfile.eof());
+			/*while ( getline (myfile,line) )
+			{
+				s.append(line);
+				//s.append("/n");
+			}*/
+			myfile.close();
 		}
-		myfile.close();
-	}
   }
 
   std::cout << s << std::endl;
@@ -102,6 +106,18 @@ bool Shader::AddShader(GLenum ShaderType)
   glAttachShader(m_shaderProg, ShaderObj);
 
   return true;
+}
+
+
+
+std::string get_file_contents(const char *filename)
+{
+  std::ifstream in(filename, std::ios::in | std::ios::binary);
+  if (in)
+  {
+    return(std::string((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>()));
+  }
+  throw(errno);
 }
 
 

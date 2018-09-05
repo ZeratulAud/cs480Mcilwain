@@ -1,4 +1,0 @@
-/home/zmcilwain/Dev/CS480/computer-graphics/PA1/build/CMakeFiles/rebuild_cache.dir
-/home/zmcilwain/Dev/CS480/computer-graphics/PA1/build/CMakeFiles/edit_cache.dir
-/home/zmcilwain/Dev/CS480/computer-graphics/PA1/build/CMakeFiles/Tutorial.dir
-/home/zmcilwain/Dev/CS480/computer-graphics/PA1/build/CMakeFiles/Tutorial_SUCCESSFUL.dir

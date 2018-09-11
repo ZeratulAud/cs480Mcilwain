@@ -38,16 +38,12 @@ make
 ./Tutorial
 ```
 
-### Makefile Instructions 
-The makefile works as expected and must be updated with new files added in.
-
-```bash
-mkdir build
-cd build
-cp ../makefile .
-make
-./Tutorial
-```
+### Input Documentation
+The Following inputs allow for interaction with the cube:
+-Left Arrow: Flips the planets orbit
+-Right Arrow: Flips the planets rotation
+-Left Mouse: Toggles the planets orbit
+-Right Mouse: Toggles the planets rotation
 
 ## Ubuntu.cse.unr.edu
 OpenGL 3.3 will run on the [ubuntu.cse.unr.edu](https://ubuntu.cse.unr.edu/) website. To do so follow the build instructions, but when running the Tutorial executable use this line to execute.

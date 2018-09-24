@@ -55,17 +55,19 @@ Object::Object()
 	5, 1, 8
 	};
 
-	std::string filename = "ICO_Planet";
+	orbitAngle = 0.0f;
+	spinAngle = 0.0f;
 
-	Load("../Models/ICO_Planet.obj");
-
+	std::string filename;
+	std::cout << "Enter in a filename from the Models folder" << std::endl;
+	std::cout << "possible chices are ICO_Planet, board or, dragon" << std::endl;
+	std::cin >> filename;
+	Load("../Models/"+filename+".obj");
 	// The index works at a 0th index
 	for(unsigned int i = 0; i < Indices.size(); i++)
 	{
 		Indices[i] = Indices[i] - 1;
 	}
-	orbitAngle = 0.0f;
-	spinAngle = 0.0f;
 
 	glGenBuffers(1, &VB);
 	glBindBuffer(GL_ARRAY_BUFFER, VB);
@@ -83,6 +85,8 @@ Object::Object(float speed, float scale, float radius) : Object()
 	spinSpeed = 1 * speed;
 	planetScale = scale;
 	orbitRadius = radius;
+	//Load("../Models/"+filename+".obj");
+
 } 
 
 Object::~Object()
@@ -178,11 +182,66 @@ void Object::Load(std::string modelLoation){
 		return;
 	}
 	
+	Vertices.clear();
+	Indices.clear();
+
 	while(true) {
 		getline(inFile, line, ' ');
 		if(inFile.eof()) break;
 
-		std::cout << "reading file" << std::endl;
+		while(std::isspace(line[0])) {
+			line.erase(0, 1);
+		}
+
+		std::cout << "reading:" << line << std::endl;
+
+		if(line == "#") {
+			//Skip line for comment
+			getline(inFile, line);
+
+		} else if(line == "v") {
+			std::cout << "Vertex found" << std::endl;
+			float r = rand() / (float) RAND_MAX;
+			float g = rand() / (float) RAND_MAX;
+			float b = rand() / (float) RAND_MAX;
+			Vertex tempVert = {{0.0, 0.0, 0.0}, {r, g, b}};
+			inFile >> tempVert.vertex.x;
+			inFile >> tempVert.vertex.y;
+			inFile >> tempVert.vertex.z;
+
+			Vertices.push_back(tempVert);
+
+		} else if (line == "vn") {
+			getline(inFile, line);
+		} else if (line == "mtllib") {
+			getline(inFile, line);
+		} else if (line == "o") {
+			getline(inFile, line);
+		} else if (line == "usemtl") {
+			getline(inFile, line);
+		} else if (line == "s") {
+			getline(inFile, line);
+		} else if(line == "f") {
+			//New face
+			//f #/#/# #/#/# #/#/#
+			unsigned int faceVertex[3];
+			std::string nextArg;
+			char* numEnding;
+			unsigned vertexIndex;
+		
+			for (unsigned int &i : faceVertex) {
+				//Just take the first number, we don't need to know texture mapping or normals
+				inFile >> nextArg;
+				i = strtol(nextArg.c_str(), &numEnding, 10);
+				Indices.push_back(i);
+				
+				//strtol(numEnding + 1, &numEnding, 10); //just in case of the second number
+				//strtol(numEnding + 1, &numEnding, 10) - 1;
+				
+			}
+
+		}
+
 
 	}	
 }

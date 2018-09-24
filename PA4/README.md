@@ -5,8 +5,6 @@
 ## Dependency Instructions
 For both of the operating systems to run this project installation of these three programs are required [GLEW](http://glew.sourceforge.net/), [GLM](http://glm.g-truc.net/0.9.7/index.html), and [SDL2](https://wiki.libsdl.org/Tutorials).
 
-This project uses OpenGL 3.3. Some computers, such as virtual machines in the ECC, can not run this version. In in order to run OpenGL 2.7 follow the instructions at [Using OpenGL 2.7](https://github.com/HPC-Vis/computer-graphics/wiki/Using-OpenGL-2.7)
-
 ### CMake Instructions
 
 ```bash
@@ -18,6 +16,10 @@ make
 ```
 
 ### Input Documentation
+before loading an object the program will ask for a model to load and the current files avaliable are the dragon that you provided (dragon.obj), a board based on the assignment description (board.obj) and, a sphere (ICO_Planet.obj)
+
+I recomend loading them in that order cause i feel like it has the nicest result but any order should work
+
 The Following inputs allow for interaction with the cube
 
 Left Arrow Flips the planets orbit

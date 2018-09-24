@@ -45,10 +45,10 @@ bool Graphics::Initialize(int width, int height)
   }
 
   // Create the object
-  m_sun = new Object(1, 3, 0);
+  m_sun = new Object(0, 3, 0);
 
   std::srand(time(NULL));
-  for (int i=0; i<6; i++){
+  for (int i=0; i<1; i++){
     std::cout << "creating planets" << std::endl;
 
 

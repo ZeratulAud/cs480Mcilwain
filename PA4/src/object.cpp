@@ -60,9 +60,9 @@ Object::Object()
 
 	std::string filename;
 	std::cout << "Enter in a filename from the Models folder" << std::endl;
-	std::cout << "possible chices are ICO_Planet, board or, dragon" << std::endl;
+	std::cout << "possible chices are ICO_Planet.obj, board.obj or, dragon.obj" << std::endl;
 	std::cin >> filename;
-	Load("../Models/"+filename+".obj");
+	Load("../Models/"+filename);
 	// The index works at a 0th index
 	for(unsigned int i = 0; i < Indices.size(); i++)
 	{

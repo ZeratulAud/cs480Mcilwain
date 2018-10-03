@@ -2,7 +2,7 @@
 #include "engine.h"
 
 Object::Object()
-{  
+{
 	/*
 	# Blender File for a Cube
 	o Cube
@@ -63,7 +63,7 @@ Object::Object()
 	std::cout << "possible chices are ICO_Planet.obj, board.obj or, dragon.obj" << std::endl;
 	std::cin >> filename;
 
-	const aiScene *myScene = importer.ReadFile("../Models/"+filename, aiProcess_Triangulate );//| aiProcess_JoinIdenticalVertices); 
+	const aiScene *myScene = importer.ReadFile("../Models/"+filename, aiProcess_Triangulate );//| aiProcess_JoinIdenticalVertices);
 
 
     // If the import failed, report it
@@ -101,7 +101,7 @@ Object::Object(float speed, float scale, float radius) : Object()
 	orbitRadius = radius;
 	//Load("../Models/"+filename+".obj");
 
-} 
+}
 
 Object::~Object()
 {
@@ -116,11 +116,11 @@ void Object::Update(unsigned int dt, glm::mat4 orbitOrigin)
 		orbitAngle += dt * M_PI/1000 * orbitSpeed;
 	if (!stopSpin)
 		spinAngle += dt * M_PI/1000 * spinSpeed;
-	
+
 
 	model = glm::rotate(orbitOrigin, (orbitAngle), glm::vec3(0.0, 1.0, 0.0))*glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, orbitRadius));
 	model = glm::rotate(model, (-orbitAngle), glm::vec3(0.0, 1.0, 0.0));
-	
+
 	for (auto &i : children) {
 		i->Update(dt, model);
 	}
@@ -128,7 +128,7 @@ void Object::Update(unsigned int dt, glm::mat4 orbitOrigin)
 	model = glm::rotate(model, (spinAngle), glm::vec3(0.0, 1.0, 0.0));
 	model = glm::scale(model, glm::vec3(planetScale,planetScale,planetScale));
 
-	
+
 }
 
 
@@ -199,7 +199,7 @@ void Object::Load(const aiScene *myScene){
 		const aiFace& face = mesh->mFaces[index];
 
 		// loop through each face in each vertex
-		for( vertexNum = 0; vertexNum < 3; vertexNum++ )
+		for( vertexNum = 0; vertexNum < face.mNumVertices; vertexNum++ )
 		{
 			aiVector3D tempPos = mesh -> mVertices[face.mIndices[vertexNum]];
 
@@ -209,7 +209,7 @@ void Object::Load(const aiScene *myScene){
 			Vertex tempVert = {{tempPos.x, tempPos.y, tempPos.z}, {r, g, b}};
 
 			// push vertex to Vertices
-			Vertices.push_back(tempVert);    
+			Vertices.push_back(tempVert);
 			Indices.push_back(face.mIndices[vertexNum]);
 		}
 
@@ -220,7 +220,7 @@ void Object::Load(const aiScene *myScene){
 
 
       // create aiMesh
-	
+
 
 
 
@@ -229,6 +229,6 @@ void Object::Load(const aiScene *myScene){
 
 
 
-	
+
 }
 

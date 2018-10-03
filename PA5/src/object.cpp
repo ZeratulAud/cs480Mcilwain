@@ -199,7 +199,7 @@ void Object::Load(const aiScene *myScene){
 		const aiFace& face = mesh->mFaces[index];
 
 		// loop through each face in each vertex
-		for( vertexNum = 0; vertexNum < face.mNumVertices; vertexNum++ )
+		for( vertexNum = 0; vertexNum < face.mNumIndices; vertexNum++ )
 		{
 			aiVector3D tempPos = mesh -> mVertices[face.mIndices[vertexNum]];
 

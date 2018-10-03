@@ -1,3 +1,9 @@
+# PA5: Assimp Model Loading
+
+Groups: Evan Brown, Zach Mcilwain, Enzo A.
+The graded repo is in Zach's github.
+
+
 # PA4: Object Loading
 
 # Dependencies, Building, and Running

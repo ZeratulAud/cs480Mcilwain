@@ -1,3 +1,4 @@
+#include <fstream>
 #include "shader.h"
 
 Shader::Shader()
@@ -23,7 +24,7 @@ bool Shader::Initialize()
 {
   m_shaderProg = glCreateProgram();
 
-  if (m_shaderProg == 0) 
+  if (m_shaderProg == 0)
   {
     std::cerr << "Error creating shader program\n";
     return false;
@@ -36,46 +37,16 @@ bool Shader::Initialize()
 bool Shader::AddShader(GLenum ShaderType)
 {
   std::string s;
-  std::string line;
-	if(ShaderType == GL_VERTEX_SHADER)
-	{
-		std::ifstream myfile ("../shaders/GL_VERT.txt");
-		if (myfile.is_open())
-		{
-			getline (myfile, s, (char) myfile.eof());
-			/*while ( getline (myfile,line) )
-			{
-				s.append(line);
-				//s.append("/n");
-			}*/
-			myfile.close();
 
-		}
-	}
-	else if(ShaderType == GL_FRAGMENT_SHADER)
-	{
-		std::ifstream myfile ("../shaders/GL_FRAG.txt");
-		if (myfile.is_open())
-		{
-			getline (myfile, s, (char) myfile.eof());
-			/*while ( getline (myfile,line) )
-			{
-				s.append(line);
-				//s.append("/n");
-			}*/
-			myfile.close();
-		}
-  }
+  if(ShaderType == GL_VERTEX_SHADER)
+    s = readShaderFile("../shaders/vert_shader");
 
-  //std::cout << s << std::endl;
-
-
-
-
+  else if(ShaderType == GL_FRAGMENT_SHADER)
+    s = readShaderFile("../shaders/frag_shader");
 
   GLuint ShaderObj = glCreateShader(ShaderType);
 
-  if (ShaderObj == 0) 
+  if (ShaderObj == 0)
   {
     std::cerr << "Error creating shader type " << ShaderType << std::endl;
     return false;
@@ -95,7 +66,7 @@ bool Shader::AddShader(GLenum ShaderType)
   GLint success;
   glGetShaderiv(ShaderObj, GL_COMPILE_STATUS, &success);
 
-  if (!success) 
+  if (!success)
   {
     GLchar InfoLog[1024];
     glGetShaderInfoLog(ShaderObj, 1024, NULL, InfoLog);
@@ -106,18 +77,6 @@ bool Shader::AddShader(GLenum ShaderType)
   glAttachShader(m_shaderProg, ShaderObj);
 
   return true;
-}
-
-
-
-std::string get_file_contents(const char *filename)
-{
-  std::ifstream in(filename, std::ios::in | std::ios::binary);
-  if (in)
-  {
-    return(std::string((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>()));
-  }
-  throw(errno);
 }
 
 
@@ -174,4 +133,31 @@ GLint Shader::GetUniformLocation(const char* pUniformName)
     }
 
     return Location;
+}
+
+/**
+ * Helper function I added to help read in a file.
+ * Each line within the GLSL code must be appended with
+ * a newline.
+ */
+std::string Shader::readShaderFile(const char* filePath)
+{
+  std::string content, line;
+  std::ifstream fileStream(filePath, std::ios::in);
+
+  if(!fileStream.is_open())
+  {
+    std::cerr << "Could not read file " << filePath
+              << ".\nFile does not exist." << std::endl;
+    return "";
+  }
+
+  while(fileStream.good())
+  {
+    std::getline(fileStream, line);
+    content.append(line + "\n");
+  }
+
+  fileStream.close();
+  return content;
 }

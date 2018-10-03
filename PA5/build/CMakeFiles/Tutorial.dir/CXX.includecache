@@ -50,24 +50,8 @@ glm/gtc/type_ptr.hpp
 glm/gtx/rotate_vector.hpp
 -
 
-../include/input.h
-window.h
-../include/window.h
-graphics.h
-../include/graphics.h
-engine.h
-../include/engine.h
-
 ../include/object.h
 vector
--
-graphics_headers.h
-../include/graphics_headers.h
-window.h
-../include/window.h
-string
--
-fstream
 -
 assimp/Importer.hpp
 -
@@ -77,13 +61,11 @@ assimp/postprocess.h
 -
 assimp/color4.h
 -
+graphics_headers.h
+../include/graphics_headers.h
 
 ../include/shader.h
 vector
--
-iostream
--
-fstream
 -
 graphics_headers.h
 ../include/graphics_headers.h
@@ -101,16 +83,10 @@ camera.h
 /home/evanbrown/School/cs480Mcilwain/PA5/src/engine.cpp
 engine.h
 /home/evanbrown/School/cs480Mcilwain/PA5/src/engine.h
-input.h
-/home/evanbrown/School/cs480Mcilwain/PA5/src/input.h
 
 /home/evanbrown/School/cs480Mcilwain/PA5/src/graphics.cpp
 graphics.h
 /home/evanbrown/School/cs480Mcilwain/PA5/src/graphics.h
-
-/home/evanbrown/School/cs480Mcilwain/PA5/src/input.cpp
-input.h
-/home/evanbrown/School/cs480Mcilwain/PA5/src/input.h
 
 /home/evanbrown/School/cs480Mcilwain/PA5/src/main.cpp
 iostream
@@ -119,12 +95,22 @@ engine.h
 /home/evanbrown/School/cs480Mcilwain/PA5/src/engine.h
 
 /home/evanbrown/School/cs480Mcilwain/PA5/src/object.cpp
+fstream
+-
+iostream
+-
+cstdio
+-
+cstdlib
+-
+ctime
+-
 object.h
 /home/evanbrown/School/cs480Mcilwain/PA5/src/object.h
-engine.h
-/home/evanbrown/School/cs480Mcilwain/PA5/src/engine.h
 
 /home/evanbrown/School/cs480Mcilwain/PA5/src/shader.cpp
+fstream
+-
 shader.h
 /home/evanbrown/School/cs480Mcilwain/PA5/src/shader.h
 

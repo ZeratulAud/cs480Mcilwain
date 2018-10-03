@@ -2,8 +2,7 @@
 #define SHADER_H
 
 #include <vector>
-#include <iostream>
-#include <fstream>
+
 #include "graphics_headers.h"
 
 class Shader
@@ -18,8 +17,10 @@ class Shader
     GLint GetUniformLocation(const char* pUniformName);
 
   private:
-    GLuint m_shaderProg;    
+    GLuint m_shaderProg;
     std::vector<GLuint> m_shaderObjList;
+
+    std::string readShaderFile(const char* filePath);
 };
 
 #endif  /* SHADER_H */

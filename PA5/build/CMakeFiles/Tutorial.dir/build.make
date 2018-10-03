@@ -129,33 +129,9 @@ CMakeFiles/Tutorial.dir/src/graphics.cpp.o.provides: CMakeFiles/Tutorial.dir/src
 CMakeFiles/Tutorial.dir/src/graphics.cpp.o.provides.build: CMakeFiles/Tutorial.dir/src/graphics.cpp.o
 
 
-CMakeFiles/Tutorial.dir/src/input.cpp.o: CMakeFiles/Tutorial.dir/flags.make
-CMakeFiles/Tutorial.dir/src/input.cpp.o: ../src/input.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evanbrown/School/cs480Mcilwain/PA5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Tutorial.dir/src/input.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Tutorial.dir/src/input.cpp.o -c /home/evanbrown/School/cs480Mcilwain/PA5/src/input.cpp
-
-CMakeFiles/Tutorial.dir/src/input.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Tutorial.dir/src/input.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/evanbrown/School/cs480Mcilwain/PA5/src/input.cpp > CMakeFiles/Tutorial.dir/src/input.cpp.i
-
-CMakeFiles/Tutorial.dir/src/input.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Tutorial.dir/src/input.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/evanbrown/School/cs480Mcilwain/PA5/src/input.cpp -o CMakeFiles/Tutorial.dir/src/input.cpp.s
-
-CMakeFiles/Tutorial.dir/src/input.cpp.o.requires:
-
-.PHONY : CMakeFiles/Tutorial.dir/src/input.cpp.o.requires
-
-CMakeFiles/Tutorial.dir/src/input.cpp.o.provides: CMakeFiles/Tutorial.dir/src/input.cpp.o.requires
-	$(MAKE) -f CMakeFiles/Tutorial.dir/build.make CMakeFiles/Tutorial.dir/src/input.cpp.o.provides.build
-.PHONY : CMakeFiles/Tutorial.dir/src/input.cpp.o.provides
-
-CMakeFiles/Tutorial.dir/src/input.cpp.o.provides.build: CMakeFiles/Tutorial.dir/src/input.cpp.o
-
-
 CMakeFiles/Tutorial.dir/src/main.cpp.o: CMakeFiles/Tutorial.dir/flags.make
 CMakeFiles/Tutorial.dir/src/main.cpp.o: ../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evanbrown/School/cs480Mcilwain/PA5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/Tutorial.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evanbrown/School/cs480Mcilwain/PA5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Tutorial.dir/src/main.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Tutorial.dir/src/main.cpp.o -c /home/evanbrown/School/cs480Mcilwain/PA5/src/main.cpp
 
 CMakeFiles/Tutorial.dir/src/main.cpp.i: cmake_force
@@ -179,7 +155,7 @@ CMakeFiles/Tutorial.dir/src/main.cpp.o.provides.build: CMakeFiles/Tutorial.dir/s
 
 CMakeFiles/Tutorial.dir/src/object.cpp.o: CMakeFiles/Tutorial.dir/flags.make
 CMakeFiles/Tutorial.dir/src/object.cpp.o: ../src/object.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evanbrown/School/cs480Mcilwain/PA5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/Tutorial.dir/src/object.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evanbrown/School/cs480Mcilwain/PA5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/Tutorial.dir/src/object.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Tutorial.dir/src/object.cpp.o -c /home/evanbrown/School/cs480Mcilwain/PA5/src/object.cpp
 
 CMakeFiles/Tutorial.dir/src/object.cpp.i: cmake_force
@@ -203,7 +179,7 @@ CMakeFiles/Tutorial.dir/src/object.cpp.o.provides.build: CMakeFiles/Tutorial.dir
 
 CMakeFiles/Tutorial.dir/src/shader.cpp.o: CMakeFiles/Tutorial.dir/flags.make
 CMakeFiles/Tutorial.dir/src/shader.cpp.o: ../src/shader.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evanbrown/School/cs480Mcilwain/PA5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/Tutorial.dir/src/shader.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evanbrown/School/cs480Mcilwain/PA5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/Tutorial.dir/src/shader.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Tutorial.dir/src/shader.cpp.o -c /home/evanbrown/School/cs480Mcilwain/PA5/src/shader.cpp
 
 CMakeFiles/Tutorial.dir/src/shader.cpp.i: cmake_force
@@ -227,7 +203,7 @@ CMakeFiles/Tutorial.dir/src/shader.cpp.o.provides.build: CMakeFiles/Tutorial.dir
 
 CMakeFiles/Tutorial.dir/src/window.cpp.o: CMakeFiles/Tutorial.dir/flags.make
 CMakeFiles/Tutorial.dir/src/window.cpp.o: ../src/window.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evanbrown/School/cs480Mcilwain/PA5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/Tutorial.dir/src/window.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/evanbrown/School/cs480Mcilwain/PA5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/Tutorial.dir/src/window.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Tutorial.dir/src/window.cpp.o -c /home/evanbrown/School/cs480Mcilwain/PA5/src/window.cpp
 
 CMakeFiles/Tutorial.dir/src/window.cpp.i: cmake_force
@@ -254,7 +230,6 @@ Tutorial_OBJECTS = \
 "CMakeFiles/Tutorial.dir/src/camera.cpp.o" \
 "CMakeFiles/Tutorial.dir/src/engine.cpp.o" \
 "CMakeFiles/Tutorial.dir/src/graphics.cpp.o" \
-"CMakeFiles/Tutorial.dir/src/input.cpp.o" \
 "CMakeFiles/Tutorial.dir/src/main.cpp.o" \
 "CMakeFiles/Tutorial.dir/src/object.cpp.o" \
 "CMakeFiles/Tutorial.dir/src/shader.cpp.o" \
@@ -266,7 +241,6 @@ Tutorial_EXTERNAL_OBJECTS =
 Tutorial: CMakeFiles/Tutorial.dir/src/camera.cpp.o
 Tutorial: CMakeFiles/Tutorial.dir/src/engine.cpp.o
 Tutorial: CMakeFiles/Tutorial.dir/src/graphics.cpp.o
-Tutorial: CMakeFiles/Tutorial.dir/src/input.cpp.o
 Tutorial: CMakeFiles/Tutorial.dir/src/main.cpp.o
 Tutorial: CMakeFiles/Tutorial.dir/src/object.cpp.o
 Tutorial: CMakeFiles/Tutorial.dir/src/shader.cpp.o
@@ -277,8 +251,9 @@ Tutorial: /usr/lib/x86_64-linux-gnu/libGL.so
 Tutorial: /usr/lib/x86_64-linux-gnu/libGLU.so
 Tutorial: /usr/lib/x86_64-linux-gnu/libSDL2main.a
 Tutorial: /usr/lib/x86_64-linux-gnu/libSDL2.so
+Tutorial: /usr/lib/x86_64-linux-gnu/libassimp.so
 Tutorial: CMakeFiles/Tutorial.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/evanbrown/School/cs480Mcilwain/PA5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable Tutorial"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/evanbrown/School/cs480Mcilwain/PA5/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable Tutorial"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Tutorial.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -289,7 +264,6 @@ CMakeFiles/Tutorial.dir/build: Tutorial
 CMakeFiles/Tutorial.dir/requires: CMakeFiles/Tutorial.dir/src/camera.cpp.o.requires
 CMakeFiles/Tutorial.dir/requires: CMakeFiles/Tutorial.dir/src/engine.cpp.o.requires
 CMakeFiles/Tutorial.dir/requires: CMakeFiles/Tutorial.dir/src/graphics.cpp.o.requires
-CMakeFiles/Tutorial.dir/requires: CMakeFiles/Tutorial.dir/src/input.cpp.o.requires
 CMakeFiles/Tutorial.dir/requires: CMakeFiles/Tutorial.dir/src/main.cpp.o.requires
 CMakeFiles/Tutorial.dir/requires: CMakeFiles/Tutorial.dir/src/object.cpp.o.requires
 CMakeFiles/Tutorial.dir/requires: CMakeFiles/Tutorial.dir/src/shader.cpp.o.requires

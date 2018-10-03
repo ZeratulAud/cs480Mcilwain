@@ -2,7 +2,7 @@
 #define GRAPHICS_H
 
 #include <iostream>
-using namespace std;
+//using namespace std;
 
 #include "graphics_headers.h"
 #include "camera.h"
@@ -14,12 +14,11 @@ class Graphics
   public:
     Graphics();
     ~Graphics();
-    bool Initialize(int width, int height);
+    bool Initialize(int width, int height, std::string objFilePath);
     void Update(unsigned int dt);
     void Render();
-    Object *m_sun;
-    Object *m_planet;
-    //Object *m_moon;
+    Object* GetCube() const;
+
   private:
     std::string ErrorString(GLenum error);
 
@@ -30,10 +29,7 @@ class Graphics
     GLint m_viewMatrix;
     GLint m_modelMatrix;
 
-    std::vector<Object*> planets;
-
-    
-    //Object *m_cube2;
+    Object *m_cube;
 };
 
 #endif /* GRAPHICS_H */

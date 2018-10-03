@@ -9,7 +9,6 @@ CMakeFiles/Tutorial.dir/src/engine.cpp.o: ../include/camera.h
 CMakeFiles/Tutorial.dir/src/engine.cpp.o: ../include/engine.h
 CMakeFiles/Tutorial.dir/src/engine.cpp.o: ../include/graphics.h
 CMakeFiles/Tutorial.dir/src/engine.cpp.o: ../include/graphics_headers.h
-CMakeFiles/Tutorial.dir/src/engine.cpp.o: ../include/input.h
 CMakeFiles/Tutorial.dir/src/engine.cpp.o: ../include/object.h
 CMakeFiles/Tutorial.dir/src/engine.cpp.o: ../include/shader.h
 CMakeFiles/Tutorial.dir/src/engine.cpp.o: ../include/window.h
@@ -20,18 +19,7 @@ CMakeFiles/Tutorial.dir/src/graphics.cpp.o: ../include/graphics.h
 CMakeFiles/Tutorial.dir/src/graphics.cpp.o: ../include/graphics_headers.h
 CMakeFiles/Tutorial.dir/src/graphics.cpp.o: ../include/object.h
 CMakeFiles/Tutorial.dir/src/graphics.cpp.o: ../include/shader.h
-CMakeFiles/Tutorial.dir/src/graphics.cpp.o: ../include/window.h
 CMakeFiles/Tutorial.dir/src/graphics.cpp.o: ../src/graphics.cpp
-
-CMakeFiles/Tutorial.dir/src/input.cpp.o: ../include/camera.h
-CMakeFiles/Tutorial.dir/src/input.cpp.o: ../include/engine.h
-CMakeFiles/Tutorial.dir/src/input.cpp.o: ../include/graphics.h
-CMakeFiles/Tutorial.dir/src/input.cpp.o: ../include/graphics_headers.h
-CMakeFiles/Tutorial.dir/src/input.cpp.o: ../include/input.h
-CMakeFiles/Tutorial.dir/src/input.cpp.o: ../include/object.h
-CMakeFiles/Tutorial.dir/src/input.cpp.o: ../include/shader.h
-CMakeFiles/Tutorial.dir/src/input.cpp.o: ../include/window.h
-CMakeFiles/Tutorial.dir/src/input.cpp.o: ../src/input.cpp
 
 CMakeFiles/Tutorial.dir/src/main.cpp.o: ../include/camera.h
 CMakeFiles/Tutorial.dir/src/main.cpp.o: ../include/engine.h
@@ -42,13 +30,8 @@ CMakeFiles/Tutorial.dir/src/main.cpp.o: ../include/shader.h
 CMakeFiles/Tutorial.dir/src/main.cpp.o: ../include/window.h
 CMakeFiles/Tutorial.dir/src/main.cpp.o: ../src/main.cpp
 
-CMakeFiles/Tutorial.dir/src/object.cpp.o: ../include/camera.h
-CMakeFiles/Tutorial.dir/src/object.cpp.o: ../include/engine.h
-CMakeFiles/Tutorial.dir/src/object.cpp.o: ../include/graphics.h
 CMakeFiles/Tutorial.dir/src/object.cpp.o: ../include/graphics_headers.h
 CMakeFiles/Tutorial.dir/src/object.cpp.o: ../include/object.h
-CMakeFiles/Tutorial.dir/src/object.cpp.o: ../include/shader.h
-CMakeFiles/Tutorial.dir/src/object.cpp.o: ../include/window.h
 CMakeFiles/Tutorial.dir/src/object.cpp.o: ../src/object.cpp
 
 CMakeFiles/Tutorial.dir/src/shader.cpp.o: ../include/graphics_headers.h

@@ -10,7 +10,7 @@ Graphics::~Graphics()
 
 }
 
-bool Graphics::Initialize(int width, int height)
+bool Graphics::Initialize(int width, int height, std::string objFilePath)
 {
   // Used for the linux OS
   #if !defined(__APPLE__) && !defined(MACOSX)
@@ -45,25 +45,7 @@ bool Graphics::Initialize(int width, int height)
   }
 
   // Create the object
-  m_sun = new Object(0, 3, 0);
-
-  std::srand(time(NULL));
-  for (int i=0; i<1; i++){
-    std::cout << "creating planets" << std::endl;
-
-
-    float orbit = (std::rand() % 150 + 30)/3;
-    float speed = (std::rand() % 15 + 3)/3;
-    m_planet = new Object(speed, 1, orbit);
-    m_planet->AddChild(-speed*2, .5, orbit/5);
-    planets.push_back(m_planet);
-
-  }
-
-  
-  
-  //m_planet->AddChild(-.75, .25, 5);
-
+  m_cube = new Object(objFilePath);
 
   // Set up the shaders
   m_shader = new Shader();
@@ -96,7 +78,7 @@ bool Graphics::Initialize(int width, int height)
 
   // Locate the projection matrix in the shader
   m_projectionMatrix = m_shader->GetUniformLocation("projectionMatrix");
-  if (m_projectionMatrix == INVALID_UNIFORM_LOCATION) 
+  if (m_projectionMatrix == INVALID_UNIFORM_LOCATION)
   {
     printf("m_projectionMatrix not found\n");
     return false;
@@ -104,7 +86,7 @@ bool Graphics::Initialize(int width, int height)
 
   // Locate the view matrix in the shader
   m_viewMatrix = m_shader->GetUniformLocation("viewMatrix");
-  if (m_viewMatrix == INVALID_UNIFORM_LOCATION) 
+  if (m_viewMatrix == INVALID_UNIFORM_LOCATION)
   {
     printf("m_viewMatrix not found\n");
     return false;
@@ -112,7 +94,7 @@ bool Graphics::Initialize(int width, int height)
 
   // Locate the model matrix in the shader
   m_modelMatrix = m_shader->GetUniformLocation("modelMatrix");
-  if (m_modelMatrix == INVALID_UNIFORM_LOCATION) 
+  if (m_modelMatrix == INVALID_UNIFORM_LOCATION)
   {
     printf("m_modelMatrix not found\n");
     return false;
@@ -128,15 +110,7 @@ bool Graphics::Initialize(int width, int height)
 void Graphics::Update(unsigned int dt)
 {
   // Update the object
-  //m_viewMatrix;
-  m_sun->Update(dt,glm::mat4(1.0f));
-  for (auto &i : planets) {
-    i->Update(dt, glm::mat4(1.0f));
-  }
-  //m_planet->Update(dt,glm::mat4(1.0f));
-
-  //m_moon->Update(dt,m_planet->GetModel());
-  //Update(dt);
+  m_cube->Update(dt);
 }
 
 void Graphics::Render()
@@ -149,24 +123,18 @@ void Graphics::Render()
   m_shader->Enable();
 
   // Send in the projection and view to the shader
-  glUniformMatrix4fv(m_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection())); 
-  glUniformMatrix4fv(m_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView())); 
+  glUniformMatrix4fv(m_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection()));
+  glUniformMatrix4fv(m_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
 
   // Render the object
-  m_sun->Render(m_modelMatrix);
-  //m_planet->Render(m_modelMatrix);
-  for (auto &i : planets) {
-    i->Render(m_modelMatrix);
-  }
+  glUniformMatrix4fv(m_modelMatrix, 1, GL_FALSE, glm::value_ptr(m_cube->GetModel()));
+  m_cube->Render();
 
-
-
-  //m_moon->Render(m_modelMatrix);
   // Get any errors from OpenGL
   auto error = glGetError();
   if ( error != GL_NO_ERROR )
   {
-    string val = ErrorString( error );
+    std::string val = ErrorString( error );
     std::cout<< "Error initializing OpenGL! " << error << ", " << val << std::endl;
   }
 }
@@ -201,5 +169,10 @@ std::string Graphics::ErrorString(GLenum error)
   {
     return "None";
   }
+}
+
+Object* Graphics::GetCube() const
+{
+  return m_cube;
 }
 

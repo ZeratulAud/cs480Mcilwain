@@ -14,12 +14,6 @@
 # EXTERNAL cache entries
 ########################
 
-//The directory containing a CMake configuration file for ASSIMP.
-ASSIMP_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/assimp-4.1
-
-//the suffix for the openrave libraries
-ASSIMP_LIBRARY_SUFFIX:STRING=
-
 //Path to a program.
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
@@ -238,13 +232,17 @@ Tutorial_BINARY_DIR:STATIC=/home/evanbrown/School/cs480Mcilwain/PA5/build
 //Value Computed by CMake
 Tutorial_SOURCE_DIR:STATIC=/home/evanbrown/School/cs480Mcilwain/PA5
 
+//Path to a file.
+assimp_INCLUDE_DIRS:PATH=/usr/include/assimp
+
+//Path to a library.
+assimp_LIBRARIES:FILEPATH=/usr/lib/x86_64-linux-gnu/libassimp.so
+
 
 ########################
 # INTERNAL cache entries
 ########################
 
-//ADVANCED property for variable: ASSIMP_LIBRARY_SUFFIX
-ASSIMP_LIBRARY_SUFFIX-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
 CMAKE_AR-ADVANCED:INTERNAL=1
 //This is the directory where this CMakeCache.txt was created

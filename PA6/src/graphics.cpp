@@ -45,7 +45,8 @@ bool Graphics::Initialize(int width, int height, std::string objFilePath)
   }
 
   // Create the object
-  m_cube = new Object(objFilePath);
+  m_cube = new Object(objFilePath, 0);
+  m_cube->AddChild();
 
   // Set up the shaders
   m_shader = new Shader();
@@ -110,7 +111,7 @@ bool Graphics::Initialize(int width, int height, std::string objFilePath)
 void Graphics::Update(unsigned int dt)
 {
   // Update the object
-  m_cube->Update(dt);
+  m_cube->Update(dt,glm::mat4(1.0));
 }
 
 void Graphics::Render()
@@ -127,8 +128,8 @@ void Graphics::Render()
   glUniformMatrix4fv(m_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
 
   // Render the object
-  glUniformMatrix4fv(m_modelMatrix, 1, GL_FALSE, glm::value_ptr(m_cube->GetModel()));
-  m_cube->Render();
+  //glUniformMatrix4fv(m_modelMatrix, 1, GL_FALSE, glm::value_ptr(m_cube->GetModel()));
+  m_cube->Render(m_modelMatrix);
 
   // Get any errors from OpenGL
   auto error = glGetError();

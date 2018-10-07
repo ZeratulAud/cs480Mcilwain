@@ -7,26 +7,18 @@
 #include "object.h"
 //using namespace Magick; 
 
-Object::Object(std::string objFilePath)
+Object::Object(std::string objFilePath, float radius)
 {
   if (!LoadObjFile(objFilePath))
   {
     std::cerr << "Failure to load file" << std::endl;
     exit(1);
   }
-  Magick::InitializeMagick("");
-  Magick::Blob blob;  
-  Magick::Image *my_image; 
-  my_image = new Magick::Image("../models/granite.jpg");
-  my_image->write(&blob, "RGBA");
-  angle = 0.0f;
 
-  glGenTextures(1, &texture);
-  glBindTexture(GL_TEXTURE_2D, texture);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, my_image->columns(), my_image->rows(), 0, GL_RGBA, GL_UNSIGNED_BYTE, blob.data());
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  delete my_image;
+  angle = 0.0f;
+  orbitRadius = radius;
+
+  LoadTexFile("../models/granite.jpg");
 
   glGenBuffers(1, &VB);
   glBindBuffer(GL_ARRAY_BUFFER, VB);
@@ -43,10 +35,28 @@ Object::~Object()
   Indices.clear();
 }
 
-void Object::Update(unsigned int dt)
+void Object::Update(unsigned int dt, glm::mat4 origin)
 {
-  angle += dt * M_PI/1000;
-  model = glm::rotate(glm::mat4(1.0), angle, glm::vec3(0.0, 1.0, 0.0));
+  angle += dt * M_PI/10000;
+
+  model = glm::translate(origin, glm::vec3(-2.0, -8.0, 0.0));
+  if (orbitRadius>0){
+    model = glm::translate(origin, glm::vec3(0.0, 2.0, 0.0));
+    model = glm::rotate(model, angle, glm::vec3(0.0, 1.0, 0.0)) * glm::translate(model, glm::vec3(0.0, 0.0, orbitRadius));
+
+  } 
+  
+  for (auto &i : children) {
+    i->Update(dt, origin);
+  }
+  model = glm::scale(model, glm::vec3(2.0, 2.0, 2.0));
+  if (orbitRadius>0){
+    model = glm::rotate(model, angle, glm::vec3(0.0, 1.0, 0.0));
+  }
+
+
+
+
 }
 
 glm::mat4 Object::GetModel()
@@ -54,8 +64,14 @@ glm::mat4 Object::GetModel()
   return model;
 }
 
-void Object::Render()
+void Object::Render(GLint& m_modelMatrix)
 {
+  for (auto &i : children) {
+    i->Render(m_modelMatrix);
+  }
+
+  glUniformMatrix4fv(m_modelMatrix, 1, GL_FALSE, glm::value_ptr(GetModel()));
+
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
 
@@ -65,10 +81,21 @@ void Object::Render()
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
 
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture);
+
   glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, 0);
 
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
+
+}
+
+void Object::AddChild() {
+
+  auto child = new Object("../models/sphere.obj", 10);
+  child->LoadTexFile("../models/SunSurface.png");
+  children.push_back(child);
 }
 
 bool Object::LoadObjFile(std::string objFilePath)
@@ -97,6 +124,25 @@ bool Object::LoadObjFile(std::string objFilePath)
     }
   }
   return true;
+}
+
+
+bool Object::LoadTexFile(std::string texFilePath)
+{
+  Magick::InitializeMagick("");
+  Magick::Blob blob;  
+  Magick::Image *my_image; 
+  my_image = new Magick::Image(texFilePath);//resize_granite.jpg");
+  my_image->write(&blob, "RGBA");
+
+  glGenTextures(1, &texture);
+
+  glBindTexture(GL_TEXTURE_2D, texture);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, my_image->columns(), my_image->rows(), 0, GL_RGBA, GL_UNSIGNED_BYTE, blob.data());
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  delete my_image;
+  return 1;
 }
 
 glm::vec3 Object::RandomColor()

@@ -15,10 +15,11 @@
 class Object
 {
   public:
-    Object(std::string objFilePath);
+    Object(std::string objFilePath, float radius);
     ~Object();
-    void Update(unsigned int dt);
-    void Render();
+    void AddChild();
+    void Update(unsigned int dt, glm::mat4 origin);
+    void Render(GLint& m_modelMatrix);
     glm::mat4 GetModel();
 
   private:
@@ -29,10 +30,15 @@ class Object
     GLuint IB;
 
     GLuint texture;
+
     float angle;
+    float orbitRadius;
 
     bool LoadObjFile(std::string objFilePath);
+    bool LoadTexFile(std::string texFilePath);
     glm::vec3 RandomColor();
+    std::vector<Object*> children;
+
 };
 
 #endif /* OBJECT_H */

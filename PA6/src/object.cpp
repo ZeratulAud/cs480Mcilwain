@@ -5,7 +5,6 @@
 #include <ctime>
 
 #include "object.h"
-//using namespace Magick; 
 
 Object::Object(std::string objFilePath, float radius)
 {
@@ -44,8 +43,8 @@ void Object::Update(unsigned int dt, glm::mat4 origin)
     model = glm::translate(origin, glm::vec3(0.0, 2.0, 0.0));
     model = glm::rotate(model, angle, glm::vec3(0.0, 1.0, 0.0)) * glm::translate(model, glm::vec3(0.0, 0.0, orbitRadius));
 
-  } 
-  
+  }
+
   for (auto &i : children) {
     i->Update(dt, origin);
   }
@@ -106,21 +105,24 @@ bool Object::LoadObjFile(std::string objFilePath)
   if (myScene == NULL)
     return false;
 
-  const aiMesh* mesh = myScene->mMeshes[0];
-
-  for (int i = 0; i < mesh->mNumFaces; i++)
+  for (int i = 0; i < myScene->mNumMeshes; i++)
   {
-    const aiFace* face = &mesh->mFaces[i];
+    aiMesh* mesh = myScene->mMeshes[i];
 
-    for(int vertexNum = 0; vertexNum < face->mNumIndices; vertexNum++)
+    for (int j = 0; j < mesh->mNumFaces; j++)
     {
-      const aiVector3D tempPos = mesh->mVertices[face->mIndices[vertexNum]];
+      aiFace* face = &mesh->mFaces[j];
 
-      aiVector3D uv = mesh->mTextureCoords[0][face->mIndices[vertexNum]];
-      Vertex tempVert(glm::vec3(tempPos.x, tempPos.y, tempPos.z), glm::vec2(uv.x, uv.y));
+      for (int k = 0; k < face->mNumIndices; k++)
+      {
+        aiVector3D tempPos = mesh->mVertices[face->mIndices[k]];
 
-      Vertices.push_back(tempVert);
-      Indices.push_back(face->mIndices[vertexNum]);
+        aiVector3D uv = mesh->mTextureCoords[0][face->mIndices[k]];
+        Vertex tempVert(glm::vec3(tempPos.x, tempPos.y, tempPos.z), glm::vec2(uv.x, uv.y));
+
+        Vertices.push_back(tempVert);
+        Indices.push_back(face->mIndices[k]);
+      }
     }
   }
   return true;
@@ -130,8 +132,8 @@ bool Object::LoadObjFile(std::string objFilePath)
 bool Object::LoadTexFile(std::string texFilePath)
 {
   Magick::InitializeMagick("");
-  Magick::Blob blob;  
-  Magick::Image *my_image; 
+  Magick::Blob blob;
+  Magick::Image *my_image;
   my_image = new Magick::Image(texFilePath);//resize_granite.jpg");
   my_image->write(&blob, "RGBA");
 
@@ -142,7 +144,7 @@ bool Object::LoadTexFile(std::string texFilePath)
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   delete my_image;
-  return 1;
+  return true;
 }
 
 glm::vec3 Object::RandomColor()

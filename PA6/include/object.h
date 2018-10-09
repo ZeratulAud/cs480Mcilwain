@@ -11,7 +11,11 @@
 #include <Magick++.h>
 
 #include "graphics_headers.h"
-
+struct ModelInfo
+{
+    std::vector<Vertex> Vertices;
+    std::vector<unsigned int> Indices;
+};
 class Object
 {
   public:
@@ -24,18 +28,17 @@ class Object
 
   private:
     glm::mat4 model;
-    std::vector<Vertex> Vertices;
-    std::vector<unsigned int> Indices;
-    GLuint VB;
-    GLuint IB;
+    std::vector<ModelInfo> modelInfo;
+    std::vector <GLuint> VB;
+    std::vector <GLuint> IB;
 
-    GLuint texture;
+    std::vector <GLuint> texture;
 
     float angle;
     float orbitRadius;
 
     bool LoadObjFile(std::string objFilePath);
-    bool LoadTexFile(std::string texFilePath);
+    bool LoadTexFile(std::string texFilePath, int count);
     glm::vec3 RandomColor();
     std::vector<Object*> children;
 

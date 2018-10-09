@@ -46,7 +46,8 @@ bool Graphics::Initialize(int width, int height, std::string objFilePath)
 
   // Create the object
   m_cube = new Object(objFilePath, 0);
-  m_cube->AddChild();
+  m_cube->AddChild(7, "../models/2kSun.jpg")->AddChild(4, "../models/2kMoon.jpg");;
+  m_cube->AddChild(15, "../models/2kEarthDay.jpg");
 
   // Set up the shaders
   m_shader = new Shader();

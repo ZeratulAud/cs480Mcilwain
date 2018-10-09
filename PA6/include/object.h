@@ -21,7 +21,7 @@ class Object
   public:
     Object(std::string objFilePath, float radius);
     ~Object();
-    void AddChild();
+    Object* AddChild(float radius, std::string texture);
     void Update(unsigned int dt, glm::mat4 origin);
     void Render(GLint& m_modelMatrix);
     glm::mat4 GetModel();

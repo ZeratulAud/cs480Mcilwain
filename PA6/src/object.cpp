@@ -29,21 +29,25 @@ Object::~Object()
 
 void Object::Update(unsigned int dt, glm::mat4 origin)
 {
-  angle += dt * M_PI/10000;
+  if (orbitRadius>0){
+    angle += dt * M_PI/(1000 * orbitRadius);
+  }
 
   model = glm::translate(origin, glm::vec3(-2.0, -8.0, 0.0));
   if (orbitRadius>0){
     model = glm::translate(origin, glm::vec3(0.0, 2.0, 0.0));
     model = glm::rotate(model, angle, glm::vec3(0.0, 1.0, 0.0)) * glm::translate(model, glm::vec3(0.0, 0.0, orbitRadius));
 
-  }
-
+  } 
+  
   for (auto &i : children) {
     i->Update(dt, origin);
   }
-  model = glm::scale(model, glm::vec3(2.0, 2.0, 2.0));
+  //model = glm::scale(model, glm::vec3(2.0, 2.0, 2.0));
   if (orbitRadius>0){
     model = glm::rotate(model, angle, glm::vec3(0.0, 1.0, 0.0));
+  } else {
+    model = glm::scale(model, glm::vec3(2.0, 2.0, -2.0));
   }
 
 
@@ -86,12 +90,13 @@ void Object::Render(GLint& m_modelMatrix)
 
 }
 
-void Object::AddChild() {
-
-  auto child = new Object("../models/sphere.obj", 10);
-  child->LoadTexFile("../models/SunSurface.png", 0);
+Object* Object::AddChild(float radius , std::string texture) {
+  auto child = new Object("../models/sphere.obj", radius);
+  child->LoadTexFile(texture, 0);
   children.push_back(child);
+  return child;
 }
+
 
 bool Object::LoadObjFile(std::string objFilePath)
 {

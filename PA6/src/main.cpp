@@ -12,8 +12,8 @@ int main(int argc, char **argv)
   }
 
   // Start an engine and run it then cleanup after
-  Engine *engine = new Engine("PA5: Assimp Model Loading", 800, 600);
-  if(!engine->Initialize(std::string(argv[1])))
+  Engine *engine = new Engine("PA6: Assimp Texture Loading", 800, 600);
+  if(!engine->Initialize(MODEL_DIR + std::string(argv[1])))
   {
     printf("The engine failed to start.\n");
     delete engine;

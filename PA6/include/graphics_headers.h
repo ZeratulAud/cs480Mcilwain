@@ -25,6 +25,9 @@
 
 #define INVALID_UNIFORM_LOCATION 0x7fffffff
 
+// File path for all models
+#define MODEL_DIR std::string("../models/")
+
 struct Vertex
 {
   glm::vec3 vertex;

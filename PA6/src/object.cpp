@@ -8,7 +8,7 @@
 
 Object::Object(std::string objFilePath, float radius)
 {
-  if (!LoadObjFile(objFilePath))
+  if (!LoadObjFile(MODEL_DIR + objFilePath))
   {
     std::cerr << "Failure to load file" << std::endl;
     exit(1);
@@ -38,8 +38,8 @@ void Object::Update(unsigned int dt, glm::mat4 origin)
     model = glm::translate(origin, glm::vec3(0.0, 2.0, 0.0));
     model = glm::rotate(model, angle, glm::vec3(0.0, 1.0, 0.0)) * glm::translate(model, glm::vec3(0.0, 0.0, orbitRadius));
 
-  } 
-  
+  }
+
   for (auto &i : children) {
     i->Update(dt, origin);
   }
@@ -110,7 +110,7 @@ bool Object::LoadObjFile(std::string objFilePath)
   if (myScene == NULL)
     return false;
 
-  
+
   for (int i = 0; i < myScene->mNumMeshes; i++)
   {
 
@@ -128,7 +128,7 @@ bool Object::LoadObjFile(std::string objFilePath)
 
       for (int k = 0; k < face->mNumIndices; k++)
       {
-         
+
 
         aiVector3D tempPos = mesh->mVertices[face->mIndices[k]];
 
@@ -142,7 +142,7 @@ bool Object::LoadObjFile(std::string objFilePath)
     VB.push_back(buffer);
     glGenBuffers(1, &VB[i]);
     glBindBuffer(GL_ARRAY_BUFFER, VB[i]);
-   
+
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * modelInfo[i].Vertices.size(), &modelInfo[i].Vertices[0], GL_STATIC_DRAW);
     IB.push_back(buffer);
     glGenBuffers(1, &IB[i]);
@@ -163,7 +163,7 @@ bool Object::LoadObjFile(std::string objFilePath)
 
 bool Object::LoadTexFile(std::string texFilePath, int count)
 {
-  
+
   Magick::InitializeMagick("");
   Magick::Blob blob;
   Magick::Image *my_image;

@@ -1,19 +1,15 @@
-# PA3: Assimp Model Loading
+# PA6: Texture Loading with Assimp and ImageMagick
 
-Group: Evan Brown, Zach Mcilwain, Enzo A.
-The repo to be graded is in Zach's github.
-
-
-# PA4: Blender and Model Loading
+### Enzo Arata
+### Evan Brown
+### Zach Mcilwain
 
 ## Running
 Simply run
 
-    >>> ./Tutorial "filePath".obj
+    >>> ./Tutorials <filename>.obj
 
-    for example: ./Tutorial ../ConcaveBox.obj
-
-# PA1: Spinning Cube
+    for example: ./Tutorial buddha.obj
 
 # Dependencies, Building, and Running
 
@@ -25,6 +21,17 @@ This project uses OpenGL 3.3. Some computers, such as virtual machines in the EC
 ### Ubuntu/Linux
 ```bash
 sudo apt-get install libglew-dev libglm-dev libsdl2-dev
+```
+
+#### Assimp Installation
+```bash
+sudo apt-get install libassimp-dev
+```
+
+#### Magick++ (C++ ImageMagick Extension)
+```bash
+sudo apt-get install imagemagick
+sudo apt-get install magick++-dev
 ```
 
 ### Mac OSX

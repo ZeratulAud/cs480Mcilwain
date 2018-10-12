@@ -31,10 +31,9 @@ class Object
   private:
     glm::mat4 model;
     std::vector<ModelInfo> modelInfo;
-    std::vector <GLuint> VB;
-    std::vector <GLuint> IB;
-
-    std::vector <GLuint> texture;
+    std::vector<GLuint> VB;
+    std::vector<GLuint> IB;
+    std::vector<GLuint> texture;
 
     float angle;
     float orbitRadius;

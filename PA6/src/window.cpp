@@ -13,7 +13,7 @@ Window::~Window()
   SDL_Quit();
 }
 
-bool Window::Initialize(const string &name, int* width, int* height)
+bool Window::Initialize(const std::string &name, int* width, int* height)
 {
     // Start SDL
   if(SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -34,7 +34,7 @@ bool Window::Initialize(const string &name, int* width, int* height)
   // Create window
   SDL_DisplayMode current;
   SDL_GetCurrentDisplayMode(0, &current);
-  
+
   //use for fullscreen
   if (*height == 0 && *width == 0)
   {

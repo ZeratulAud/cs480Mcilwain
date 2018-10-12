@@ -1,7 +1,7 @@
 
 #include "engine.h"
 
-Engine::Engine(string name, int width, int height)
+Engine::Engine(std::string name, int width, int height)
 {
   m_WINDOW_NAME = name;
   m_WINDOW_WIDTH = width;
@@ -9,7 +9,7 @@ Engine::Engine(string name, int width, int height)
   m_FULLSCREEN = false;
 }
 
-Engine::Engine(string name)
+Engine::Engine(std::string name)
 {
   m_WINDOW_NAME = name;
   m_WINDOW_HEIGHT = 0;

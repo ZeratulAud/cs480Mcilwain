@@ -10,8 +10,8 @@
 class Engine
 {
   public:
-    Engine(string name, int width, int height);
-    Engine(string name);
+    Engine(std::string name, int width, int height);
+    Engine(std::string name);
     ~Engine();
     bool Initialize(std::string objFilePath);
     void Run();
@@ -22,7 +22,7 @@ class Engine
   private:
     // Window related variables
     Window *m_window;
-    string m_WINDOW_NAME;
+    std::string m_WINDOW_NAME;
     int m_WINDOW_WIDTH;
     int m_WINDOW_HEIGHT;
     bool m_FULLSCREEN;

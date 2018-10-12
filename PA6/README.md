@@ -5,14 +5,13 @@
 ### Zach Mcilwain
 
 This is the repository to be graded.
-This project was tested on Debian Stretch partition in ECC.
+This project was ran and tested on Debian Stretch partition in ECC.
 
 ## Running
 Simply run
 
     >>> ./Tutorial <filename>.obj
-
-    for example: ./Tutorial buddha.obj
+    For example: ./Tutorial buddha.obj
 
 # Dependencies, Building, and Running
 

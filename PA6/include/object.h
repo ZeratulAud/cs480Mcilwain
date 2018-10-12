@@ -11,11 +11,13 @@
 #include <Magick++.h>
 
 #include "graphics_headers.h"
+
 struct ModelInfo
 {
     std::vector<Vertex> Vertices;
     std::vector<unsigned int> Indices;
 };
+
 class Object
 {
   public:

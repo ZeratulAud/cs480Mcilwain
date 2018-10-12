@@ -4,12 +4,13 @@
 ### Evan Brown
 ### Zach Mcilwain
 
-This is the repositor to be graded.
+This is the repository to be graded.
+This project was tested on Debian Stretch partition in ECC.
 
 ## Running
 Simply run
 
-    >>> ./Tutorials <filename>.obj
+    >>> ./Tutorial <filename>.obj
 
     for example: ./Tutorial buddha.obj
 

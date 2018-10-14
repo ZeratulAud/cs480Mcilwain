@@ -85,6 +85,28 @@ void Engine::Keyboard()
     // handle key down events here
     switch(m_event.key.keysym.sym)
     {
+      case SDLK_RIGHT:
+        m_graphics->timeScale += 0.1;
+        printf("Increasing timeScale\n");
+        break;
+      case SDLK_LEFT:
+        m_graphics->timeScale -= 0.1;
+        printf("Decreasing timeScale\n");
+        break;
+      case SDLK_UP:
+        m_graphics->orbitScale += 0.5;
+        printf("Increasing orbitScale\n");
+        break;
+      case SDLK_DOWN:
+        m_graphics->orbitScale -= 0.5;
+        if (m_graphics->orbitScale < 0.5)
+          m_graphics->orbitScale = 0.5;
+        printf("Decreasing orbitScale\n");
+        break;
+      case SDLK_SPACE:
+        m_graphics->timeScale = 1;
+        printf("Resetting timeScale\n");
+        break;
       // Stop program
       case SDLK_ESCAPE:
         m_running = false;

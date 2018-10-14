@@ -19,6 +19,9 @@ class Graphics
     void Render();
     Object* GetCube() const;
 
+    float timeScale;
+    float orbitScale;
+
   private:
     std::string ErrorString(GLenum error);
 

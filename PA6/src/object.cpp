@@ -6,7 +6,7 @@
 
 #include "object.h"
 
-Object::Object(std::string objFilePath, float radius)
+Object::Object(std::string objFilePath, float radius, float speed, float scale)
 {
   if (!LoadObjFile(MODEL_DIR + objFilePath))
   {
@@ -16,6 +16,8 @@ Object::Object(std::string objFilePath, float radius)
 
   angle = 0.0f;
   orbitRadius = radius;
+  orbitSpeed = speed;
+  planetScale = scale;
 
  // LoadTexFile("../models/granite.jpg");
 
@@ -27,31 +29,20 @@ Object::~Object()
   modelInfo.clear();
 }
 
-void Object::Update(unsigned int dt, glm::mat4 origin)
+void Object::Update(unsigned int dt, glm::mat4 origin, float timeScale, float orbitScale)
 {
+  model = origin;
+  angle += dt * M_PI/(1000 * orbitSpeed) * timeScale;
   if (orbitRadius>0){
-    angle += dt * M_PI/(1000 * orbitRadius);
-  }
-
-  model = glm::translate(origin, glm::vec3(-2.0, -8.0, 0.0));
-  if (orbitRadius>0){
-    model = glm::translate(origin, glm::vec3(0.0, 2.0, 0.0));
-    model = glm::rotate(model, angle, glm::vec3(0.0, 1.0, 0.0)) * glm::translate(model, glm::vec3(0.0, 0.0, orbitRadius));
-
+    model = glm::rotate(model, angle/orbitRadius, glm::vec3(0.0, 1.0, 0.0)) * glm::translate(glm::mat4(1.0), glm::vec3(0.0, 0.0, orbitRadius/orbitScale));
+    model = glm::rotate(model, angle/orbitRadius, glm::vec3(0.0, 1.0, 0.0));
   }
 
   for (auto &i : children) {
-    i->Update(dt, origin);
+    i->Update(dt, model, timeScale, orbitScale);
   }
-  //model = glm::scale(model, glm::vec3(2.0, 2.0, 2.0));
-  if (orbitRadius>0){
-    model = glm::rotate(model, angle, glm::vec3(0.0, 1.0, 0.0));
-  } else {
-    model = glm::scale(model, glm::vec3(2.0, 2.0, -2.0));
-  }
-
-
-
+  model = glm::rotate(model, angle, glm::vec3(0.0, 1.0, 0.0));
+  model = glm::scale(model, glm::vec3(planetScale, planetScale, planetScale));
 
 }
 
@@ -90,8 +81,8 @@ void Object::Render(GLint& m_modelMatrix)
 
 }
 
-Object* Object::AddChild(float radius , std::string texture) {
-  auto child = new Object("../models/sphere.obj", radius);
+Object* Object::AddChild(std::string texture, float radius, float speed, float scale) {
+  auto child = new Object("../models/sphere.obj", radius, speed, scale);
   child->LoadTexFile(texture, 0);
   children.push_back(child);
   return child;
@@ -152,7 +143,7 @@ bool Object::LoadObjFile(std::string objFilePath)
     if(i>=1)
      LoadTexFile("../models/checker.jpg", i);
     else
-     LoadTexFile("../models/granite.jpg", i);
+     LoadTexFile("../models/2kSun.jpg", i);//granite.jpg", i);
 
   }
 

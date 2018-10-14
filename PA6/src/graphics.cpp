@@ -2,7 +2,8 @@
 
 Graphics::Graphics()
 {
-
+  timeScale = 1;
+  orbitScale = 1;
 }
 
 Graphics::~Graphics()
@@ -45,9 +46,17 @@ bool Graphics::Initialize(int width, int height, std::string objFilePath)
   }
 
   // Create the object
-  m_cube = new Object(MODEL_DIR + objFilePath, 0);
-  m_cube->AddChild(7, MODEL_DIR + "2kSun.jpg")->AddChild(4, MODEL_DIR + "2kMoon.jpg");;
-  m_cube->AddChild(15, MODEL_DIR + "2kEarthDay.jpg");
+  m_cube = new Object(MODEL_DIR + objFilePath, 0, 1, 10);
+  m_cube->AddChild(MODEL_DIR + "2kMercury.jpg", 70, 1, .4);
+  m_cube->AddChild(MODEL_DIR + "2kVenus.jpg", 110, 1, .9);
+
+  m_cube->AddChild(MODEL_DIR + "2kEarthDay.jpg", 150, 1, 1)->AddChild(MODEL_DIR + "2kMoon.jpg", 5, 1, 0.3);;
+  m_cube->AddChild(MODEL_DIR + "2kMars.jpg", 200, 1, .5);
+  m_cube->AddChild(MODEL_DIR + "2kJupiter.jpg", 800, 1, 11.2);
+  m_cube->AddChild(MODEL_DIR + "2kSaturn.jpg", 1500, 1, 9.4);
+  m_cube->AddChild(MODEL_DIR + "2kUranus.jpg", 2900, 1, 4);
+  m_cube->AddChild(MODEL_DIR + "2kNeptune.jpg", 4500, 1, 3.9);
+
 
   // Set up the shaders
   m_shader = new Shader();
@@ -112,7 +121,7 @@ bool Graphics::Initialize(int width, int height, std::string objFilePath)
 void Graphics::Update(unsigned int dt)
 {
   // Update the object
-  m_cube->Update(dt,glm::mat4(1.0));
+  m_cube->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
 }
 
 void Graphics::Render()

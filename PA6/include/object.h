@@ -14,10 +14,10 @@ struct ModelInfo
 class Object
 {
   public:
-    Object(std::string objFilePath, float radius);
+    Object(std::string objFilePath, float radius, float speed, float scale);
     ~Object();
-    Object* AddChild(float radius, std::string texture);
-    void Update(unsigned int dt, glm::mat4 origin);
+    Object* AddChild(std::string texture, float radius, float speed, float scale);
+    void Update(unsigned int dt, glm::mat4 origin, float timeScale, float orbitScale);
     void Render(GLint& m_modelMatrix);
     glm::mat4 GetModel();
 
@@ -30,6 +30,8 @@ class Object
 
     float angle;
     float orbitRadius;
+    float orbitSpeed;
+    float planetScale;
 
     bool LoadObjFile(std::string objFilePath);
     bool LoadTexFile(std::string texFilePath, int count);

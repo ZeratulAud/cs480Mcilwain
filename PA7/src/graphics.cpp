@@ -50,10 +50,17 @@ bool Graphics::Initialize(int width, int height, std::string objFilePath)
   m_cube->AddChild(MODEL_DIR + "2kMercury.jpg", 70, 1, .4);
   m_cube->AddChild(MODEL_DIR + "2kVenus.jpg", 110, 1, .9);
 
-  m_cube->AddChild(MODEL_DIR + "2kEarthDay.jpg", 150, 1, 1)->AddChild(MODEL_DIR + "2kMoon.jpg", 5, 1, 0.3);;
-  m_cube->AddChild(MODEL_DIR + "2kMars.jpg", 200, 1, .5);
-  m_cube->AddChild(MODEL_DIR + "2kJupiter.jpg", 800, 1, 11.2);
-  m_cube->AddChild(MODEL_DIR + "2kSaturn.jpg", 1500, 1, 9.4);
+  m_cube->AddChild(MODEL_DIR + "2kEarthDay.jpg", 150, 1, 1)->AddChild(MODEL_DIR + "2kMoon.jpg", 7, 1, 0.3);
+  Object *temp = m_cube->AddChild(MODEL_DIR + "2kMars.jpg", 200, 1, .5);
+  for(int i = 0; i<2; i++){
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 0.3);
+  }
+  //m_cube->AddChild(MODEL_DIR + "2kMars.jpg", 200, 1, .5);
+  temp = m_cube->AddChild(MODEL_DIR + "2kJupiter.jpg", 800, 1, 11.2);
+  for(int i = 0; i<62; i++){
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 15+i*4, 1, 0.3);
+  }
+  m_cube->AddChild(MODEL_DIR + "2kSaturn.jpg", 1500, 1, 9.4)->AddRing(1, 9.4);
   m_cube->AddChild(MODEL_DIR + "2kUranus.jpg", 2900, 1, 4);
   m_cube->AddChild(MODEL_DIR + "2kNeptune.jpg", 4500, 1, 3.9);
 

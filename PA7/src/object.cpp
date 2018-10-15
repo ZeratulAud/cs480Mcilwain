@@ -34,7 +34,7 @@ void Object::Update(unsigned int dt, glm::mat4 origin, float timeScale, float or
   model = origin;
   angle += dt * M_PI/(1000 * orbitSpeed) * timeScale;
   if (orbitRadius>0){
-    model = glm::rotate(model, angle/orbitRadius, glm::vec3(0.0, 1.0, 0.0)) * glm::translate(glm::mat4(1.0), glm::vec3(-orbitRadius/orbitScale, 0.0, 0.0));
+    model = glm::rotate(model, angle/orbitRadius, glm::vec3(0.0, 1.0, 0.0)) * glm::translate(glm::mat4(1.0), glm::vec3((-orbitRadius/2)+(-orbitRadius/2)/orbitScale, 0.0, 0.0));
     model = glm::rotate(model, angle/orbitRadius, glm::vec3(0.0, 1.0, 0.0));
   }
 
@@ -42,7 +42,7 @@ void Object::Update(unsigned int dt, glm::mat4 origin, float timeScale, float or
     i->Update(dt, model, timeScale, orbitScale);
   }
   model = glm::rotate(model, angle, glm::vec3(0.0, 1.0, 0.0));
-  model = glm::scale(model, glm::vec3(planetScale, planetScale, planetScale));
+  model = glm::scale(model, glm::vec3(planetScale/orbitScale, planetScale/orbitScale, planetScale/orbitScale));
 
 }
 
@@ -84,6 +84,13 @@ void Object::Render(GLint& m_modelMatrix)
 Object* Object::AddChild(std::string texture, float radius, float speed, float scale) {
   auto child = new Object("../models/sphere.obj", radius, speed, scale);
   child->LoadTexFile(texture, 0);
+  children.push_back(child);
+  return child;
+}
+
+Object* Object::AddRing(float speed, float scale) {
+  auto child = new Object("../models/ring.obj", 0, speed, scale);
+  child->LoadTexFile("../models/2kSaturnRing.png", 0);
   children.push_back(child);
   return child;
 }

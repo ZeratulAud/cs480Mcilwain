@@ -23,9 +23,13 @@ Object::Object(std::string objFilePath, float radius, float speed, float scale)
 /*
   This copy constructor performs a deep copy of the object's trivial data fields.
   This is to reduce the time spent performing multiple model loading's of the same mesh.
+  Might have to make it a local function that returns an instance of a new object.
+  I will debug this function later, unless anyone else has a better idea. Otherwise,
+  just ignore this.
   */
 Object::Object(const Object& other, float radius, float speed, float scale)
 {
+
   // these are consistent across all of these models
   model = other.model;
   modelInfo = other.modelInfo;
@@ -44,13 +48,13 @@ Object::Object(const Object& other, float radius, float speed, float scale)
   {
     glGenBuffers(1, &VB[i]);
     glBindBuffer(GL_ARRAY_BUFFER, VB[i]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * modelInfo[i].Vertices.size(), &modelInfo[i].Vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * modelInfo[i].Vertices.size(), &modelInfo[i].Vertices[i], GL_STATIC_DRAW);
   }
   for (int i = 0; i < IB.size(); i++)
   {
     glGenBuffers(1, &IB[i]);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB[i]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * modelInfo[i].Indices.size(), &modelInfo[i].Indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * modelInfo[i].Indices.size(), &modelInfo[i].Indices[i], GL_STATIC_DRAW);
   }
 }
 
@@ -110,8 +114,7 @@ void Object::Render(GLint& m_modelMatrix)
 }
 
 Object* Object::AddChild(std::string texture, float radius, float speed, float scale) {
-  // calls copy constructor, rather than reloading the same mesh
-  auto child = new Object(*this, radius, speed, scale);
+  Object* child = new Object(MODEL_DIR + "sphere.obj", radius, speed, scale);
   child->LoadTexFile(texture, 0);
   children.push_back(child);
   return child;
@@ -119,7 +122,7 @@ Object* Object::AddChild(std::string texture, float radius, float speed, float s
 
 Object* Object::AddRing(float speed, float scale)
 {
-  auto child = new Object("../models/ring.obj", 0, speed, scale);
+  Object* child = new Object("../models/ring.obj", 0, speed, scale);
   child->LoadTexFile("../models/2kSaturnRing.png", 0);
   children.push_back(child);
   return child;

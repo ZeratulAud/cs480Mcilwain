@@ -47,14 +47,17 @@ bool Graphics::Initialize(int width, int height)
 
   // Create the object
   m_cube = new Object(MODEL_DIR + "sphere.obj", 0, 1, 10);
+
   m_cube->AddChild(MODEL_DIR + "2kMercury.jpg", 70, 1, .4);
   m_cube->AddChild(MODEL_DIR + "2kVenus.jpg", 110, 1, .9);
 
   m_cube->AddChild(MODEL_DIR + "2kEarthDay.jpg", 150, 1, 1)->AddChild(MODEL_DIR + "2kMoon.jpg", 7, 1, 0.3);
+
   Object *temp = m_cube->AddChild(MODEL_DIR + "2kMars.jpg", 200, 1, .5);
   for(int i = 0; i < 2; i++){
     temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 0.3);
   }
+
   //m_cube->AddChild(MODEL_DIR + "2kMars.jpg", 200, 1, .5);
   temp = m_cube->AddChild(MODEL_DIR + "2kJupiter.jpg", 800, 1, 11.2);
   for(int i = 0; i<62; i++){

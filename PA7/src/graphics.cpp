@@ -11,7 +11,7 @@ Graphics::~Graphics()
 
 }
 
-bool Graphics::Initialize(int width, int height, std::string objFilePath)
+bool Graphics::Initialize(int width, int height)
 {
   // Used for the linux OS
   #if !defined(__APPLE__) && !defined(MACOSX)
@@ -46,13 +46,13 @@ bool Graphics::Initialize(int width, int height, std::string objFilePath)
   }
 
   // Create the object
-  m_cube = new Object(MODEL_DIR + objFilePath, 0, 1, 10);
+  m_cube = new Object(MODEL_DIR + "sphere.obj", 0, 1, 10);
   m_cube->AddChild(MODEL_DIR + "2kMercury.jpg", 70, 1, .4);
   m_cube->AddChild(MODEL_DIR + "2kVenus.jpg", 110, 1, .9);
 
   m_cube->AddChild(MODEL_DIR + "2kEarthDay.jpg", 150, 1, 1)->AddChild(MODEL_DIR + "2kMoon.jpg", 7, 1, 0.3);
   Object *temp = m_cube->AddChild(MODEL_DIR + "2kMars.jpg", 200, 1, .5);
-  for(int i = 0; i<2; i++){
+  for(int i = 0; i < 2; i++){
     temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 0.3);
   }
   //m_cube->AddChild(MODEL_DIR + "2kMars.jpg", 200, 1, .5);
@@ -63,6 +63,7 @@ bool Graphics::Initialize(int width, int height, std::string objFilePath)
   m_cube->AddChild(MODEL_DIR + "2kSaturn.jpg", 1500, 1, 9.4)->AddRing(1, 9.4);
   m_cube->AddChild(MODEL_DIR + "2kUranus.jpg", 2900, 1, 4);
   m_cube->AddChild(MODEL_DIR + "2kNeptune.jpg", 4500, 1, 3.9);
+  // add pluto at some point
 
 
   // Set up the shaders

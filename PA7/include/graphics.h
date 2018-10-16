@@ -14,7 +14,7 @@ class Graphics
   public:
     Graphics();
     ~Graphics();
-    bool Initialize(int width, int height, std::string objFilePath);
+    bool Initialize(int width, int height);
     void Update(unsigned int dt);
     void Render();
     Object* GetCube() const;
@@ -27,12 +27,11 @@ class Graphics
 
     Camera *m_camera;
     Shader *m_shader;
+    Object *m_cube;
 
     GLint m_projectionMatrix;
     GLint m_viewMatrix;
     GLint m_modelMatrix;
-
-    Object *m_cube;
 };
 
 #endif /* GRAPHICS_H */

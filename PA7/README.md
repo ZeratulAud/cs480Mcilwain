@@ -1,4 +1,4 @@
-# PA6: Texture Loading with Assimp and ImageMagick
+# PA7: Solar System Model
 
 ### Enzo Arata
 ### Evan Brown
@@ -8,10 +8,11 @@ This is the repository to be graded.
 This project was ran and tested on Debian Stretch partition in ECC.
 
 ## Running
-Simply run
+Simply run:
 
-    >>> ./Tutorial <filename>.obj
-    For example: ./Tutorial buddha.obj
+```bash
+./PA7
+```
 
 # Dependencies, Building, and Running
 

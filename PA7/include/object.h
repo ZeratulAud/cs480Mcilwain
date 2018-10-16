@@ -15,6 +15,7 @@ class Object
 {
   public:
     Object(std::string objFilePath, float radius, float speed, float scale);
+    Object(const Object& other, float radius, float speed, float scale);
     ~Object();
     Object* AddChild(std::string texture, float radius, float speed, float scale);
     Object* AddRing(float speed, float scale);
@@ -28,6 +29,7 @@ class Object
     std::vector<GLuint> VB;
     std::vector<GLuint> IB;
     std::vector<GLuint> texture;
+    std::vector<Object*> children;
 
     float angle;
     float orbitRadius;
@@ -37,8 +39,6 @@ class Object
     bool LoadObjFile(std::string objFilePath);
     bool LoadTexFile(std::string texFilePath, int count);
     glm::vec3 RandomColor();
-    std::vector<Object*> children;
-
 };
 
 #endif /* OBJECT_H */

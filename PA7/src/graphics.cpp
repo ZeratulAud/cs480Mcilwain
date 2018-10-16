@@ -60,14 +60,13 @@ bool Graphics::Initialize(int width, int height)
 
   //m_cube->AddChild(MODEL_DIR + "2kMars.jpg", 200, 1, .5);
   temp = m_cube->AddChild(MODEL_DIR + "2kJupiter.jpg", 800, 1, 11.2);
-  for(int i = 0; i<62; i++){
+  /*for(int i = 0; i<62; i++){
     temp->AddChild(MODEL_DIR + "2kMoon.jpg", 15+i*4, 1, 0.3);
-  }
+  }*/
   m_cube->AddChild(MODEL_DIR + "2kSaturn.jpg", 1500, 1, 9.4)->AddRing(1, 9.4);
   m_cube->AddChild(MODEL_DIR + "2kUranus.jpg", 2900, 1, 4);
   m_cube->AddChild(MODEL_DIR + "2kNeptune.jpg", 4500, 1, 3.9);
-  // add pluto at some point
-
+  m_cube->AddChild(MODEL_DIR + "2kPluto.jpg", 6000, 1, .3);
 
   // Set up the shaders
   m_shader = new Shader();

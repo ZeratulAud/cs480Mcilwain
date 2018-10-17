@@ -85,6 +85,24 @@ void Engine::Keyboard()
     // handle key down events here
     switch(m_event.key.keysym.sym)
     {
+      case SDLK_w:
+        m_graphics->m_camera->translate.x += 0.5;
+
+        break;
+      case SDLK_a:
+        m_graphics->m_camera->translate.z -= 0.5;
+
+        break;
+      case SDLK_s:
+        m_graphics->m_camera->translate.x -= 0.5;
+
+        break;
+      case SDLK_d:
+        m_graphics->m_camera->translate.z += 0.5;
+
+        break;
+
+
       case SDLK_RIGHT:
         m_graphics->timeScale += 0.1;
         printf("Increasing timeScale\n");

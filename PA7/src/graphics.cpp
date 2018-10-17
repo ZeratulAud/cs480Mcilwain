@@ -131,6 +131,7 @@ bool Graphics::Initialize(int width, int height)
 void Graphics::Update(unsigned int dt)
 {
   // Update the object
+  m_camera->Update();
   m_cube->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
 }
 

@@ -2,7 +2,7 @@
 
 Camera::Camera()
 {
-
+  translate = glm::vec3(0.0,0.0,0.0);
 }
 
 Camera::~Camera()
@@ -25,6 +25,13 @@ bool Camera::Initialize(int w, int h)
                                  0.01f, //Distance to the near plane, normally a small value like this
                                  5000.0f); //Distance to the far plane, 
   return true;
+}
+
+
+void Camera::Update()
+{
+  view = glm::translate(view, translate);
+  translate = glm::vec3(0.0,0.0,0.0);
 }
 
 glm::mat4 Camera::GetProjection()

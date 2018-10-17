@@ -2,7 +2,6 @@
 #define GRAPHICS_H
 
 #include <iostream>
-//using namespace std;
 
 #include "graphics_headers.h"
 #include "camera.h"
@@ -21,12 +20,11 @@ class Graphics
 
     float timeScale;
     float orbitScale;
-
     Camera *m_camera;
 
   private:
     std::string ErrorString(GLenum error);
-
+    void CreateObjects();
 
     Shader *m_shader;
     Object *m_sun;

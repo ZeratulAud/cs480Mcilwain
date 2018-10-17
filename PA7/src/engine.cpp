@@ -89,20 +89,25 @@ void Engine::Keyboard()
       case SDLK_RIGHT:
         m_graphics->timeScale += 0.1;
         break;
+
       case SDLK_LEFT:
         m_graphics->timeScale -= 0.1;
         break;
+
       case SDLK_UP:
         m_graphics->orbitScale -= 0.5;
         if (m_graphics->orbitScale < 0.5)
           m_graphics->orbitScale = 0.5;
         break;
+
       case SDLK_DOWN:
         m_graphics->orbitScale += 0.5;
         break;
+
       case SDLK_SPACE:
         m_graphics->timeScale = 1;
         break;
+
       // Stop program
       case SDLK_ESCAPE:
         m_running = false;

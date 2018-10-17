@@ -3,9 +3,10 @@
 ### Enzo Arata
 ### Evan Brown
 ### Zach Mcilwain
-
+```
 This is the repository to be graded.
 This project was ran and tested on Debian Stretch partition in ECC.
+```
 
 ## Controls
 ```

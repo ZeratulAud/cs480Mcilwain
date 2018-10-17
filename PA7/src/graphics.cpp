@@ -8,7 +8,12 @@ Graphics::Graphics()
 
 Graphics::~Graphics()
 {
-
+  delete m_camera;
+  delete m_shader;
+  delete m_sun;
+  m_camera = NULL;
+  m_shader = NULL;
+  m_sun = NULL;
 }
 
 bool Graphics::Initialize(int width, int height)
@@ -45,39 +50,8 @@ bool Graphics::Initialize(int width, int height)
     return false;
   }
 
-  // Create the object
-   m_sun = new Object(MODEL_DIR + "sphere.obj", 0, 1, 1, 10);
-
-  m_sun->AddChild(MODEL_DIR + "2kMercury.jpg", 70, 1.6, .017, .4);
-  m_sun->AddChild(MODEL_DIR + "2kVenus.jpg", 110, 1.17, .004, .9);
-  m_sun->AddChild(MODEL_DIR + "2kEarthDay.jpg", 150, 1, 1, 1)->AddChild(MODEL_DIR + "2kMoon.jpg", 7, 1, 1, 0.3);
-
-  Object *temp = m_sun->AddChild(MODEL_DIR + "2kMars.jpg", 200, .80, .96, .5);
-  for(int i = 0; i < 2; i++){
-    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
-  }
-
-  temp = m_sun->AddChild(MODEL_DIR + "2kJupiter.jpg", 800, .43, 2.4, 11.2);
-  for(int i = 0; i < 79; i++){
-    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 15+i*4, 1, 1, 0.3);
-  }
-
-  temp = m_sun->AddChild(MODEL_DIR + "2kSaturn.jpg", 1500, .32, 2.18,  9.4)->AddRing(1, 9.4);
-  for(int i = 0; i < 53; i++){
-    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
-  }
-
-  temp = m_sun->AddChild(MODEL_DIR + "2kUranus.jpg", 2900, .22, 1.41, 4);
-  for(int i = 0; i < 27; i++){
-    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
-  }
-
-  temp = m_sun->AddChild(MODEL_DIR + "2kNeptune.jpg", 4500, .18, 1.5, 3.9);
-  for(int i = 0; i < 13; i++){
-    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
-  }
-
-  m_sun->AddChild(MODEL_DIR + "2kPluto.jpg", 6000, 1, .15, .3);
+  // Create all objects for solar system
+  CreateObjects();
 
   // Set up the shaders
   m_shader = new Shader();
@@ -202,6 +176,42 @@ std::string Graphics::ErrorString(GLenum error)
   {
     return "None";
   }
+}
+
+void Graphics::CreateObjects()
+{
+  m_sun = new Object(MODEL_DIR + "sphere.obj", 0, 1, 1, 10);
+
+  m_sun->AddChild(MODEL_DIR + "2kMercury.jpg", 70, 1.6, .017, .4);
+  m_sun->AddChild(MODEL_DIR + "2kVenus.jpg", 110, 1.17, .004, .9);
+  m_sun->AddChild(MODEL_DIR + "2kEarthDay.jpg", 150, 1, 1, 1)->AddChild(MODEL_DIR + "2kMoon.jpg", 7, 1, 1, 0.3);
+
+  Object *temp = m_sun->AddChild(MODEL_DIR + "2kMars.jpg", 200, .80, .96, .5);
+  for(int i = 0; i < 2; i++){
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
+  }
+
+  temp = m_sun->AddChild(MODEL_DIR + "2kJupiter.jpg", 800, .43, 2.4, 11.2);
+  for(int i = 0; i < 79; i++){
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 15+i*4, 1, 1, 0.3);
+  }
+
+  temp = m_sun->AddChild(MODEL_DIR + "2kSaturn.jpg", 1500, .32, 2.18,  9.4)->AddRing(1, 9.4);
+  for(int i = 0; i < 53; i++){
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
+  }
+
+  temp = m_sun->AddChild(MODEL_DIR + "2kUranus.jpg", 2900, .22, 1.41, 4);
+  for(int i = 0; i < 27; i++){
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
+  }
+
+  temp = m_sun->AddChild(MODEL_DIR + "2kNeptune.jpg", 4500, .18, 1.5, 3.9);
+  for(int i = 0; i < 13; i++){
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
+  }
+
+  m_sun->AddChild(MODEL_DIR + "2kPluto.jpg", 6000, 1, .15, .3);
 }
 
 Object* Graphics::GetSun() const

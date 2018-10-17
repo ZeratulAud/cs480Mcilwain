@@ -174,10 +174,8 @@ bool Object::LoadObjFile(std::string objFilePath)
 
     IB.push_back(buffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * modelInfo[i].Indices.size(), &modelInfo[i].Indices[0], GL_STATIC_DRAW);
-    if(i >= 1)
-     LoadTexFile("../models/checker.jpg", i);
-    else
-     LoadTexFile("../models/2kSun.jpg", i);
+
+    LoadTexFile("../models/2kSun.jpg", i);
   }
 
   return true;

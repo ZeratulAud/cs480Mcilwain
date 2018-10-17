@@ -14,10 +14,10 @@ struct ModelInfo
 class Object
 {
   public:
-    Object(std::string objFilePath, float radius, float speed, float scale);
-    Object(const Object& other, float radius, float speed, float scale);
+    Object(std::string objFilePath, float radius, float speed, float rotation, float scale);
+    Object(const Object& other, float radius, float speed, float rotation, float scale);
     ~Object();
-    Object* AddChild(std::string texture, float radius, float speed, float scale);
+    Object* AddChild(std::string texture, float radius, float speed, float rotation, float scale);
     Object* AddRing(float speed, float scale);
     void Update(unsigned int dt, glm::mat4 origin, float timeScale, float orbitScale);
     void Render(GLint& m_modelMatrix);
@@ -34,6 +34,7 @@ class Object
     float angle;
     float orbitRadius;
     float orbitSpeed;
+    float rotationSpeed;
     float planetScale;
 
     bool LoadObjFile(std::string objFilePath);

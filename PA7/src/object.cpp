@@ -6,7 +6,7 @@
 
 #include "object.h"
 
-Object::Object(std::string objFilePath, float radius, float speed, float scale)
+Object::Object(std::string objFilePath, float radius, float speed, float rotation, float scale)
 {
   if (!LoadObjFile(MODEL_DIR + objFilePath))
   {
@@ -17,6 +17,7 @@ Object::Object(std::string objFilePath, float radius, float speed, float scale)
   angle = 0.0f;
   orbitRadius = radius;
   orbitSpeed = speed;
+  rotationSpeed = rotation;
   planetScale = scale;
 }
 
@@ -27,7 +28,7 @@ Object::Object(std::string objFilePath, float radius, float speed, float scale)
   I will debug this function later, unless anyone else has a better idea. Otherwise,
   just ignore this.
   */
-Object::Object(const Object& other, float radius, float speed, float scale)
+Object::Object(const Object& other, float radius, float speed, float rotation, float scale)
 {
 
   // these are consistent across all of these models
@@ -41,6 +42,7 @@ Object::Object(const Object& other, float radius, float speed, float scale)
   angle = 0.0f;
   orbitRadius = radius;
   orbitSpeed = speed;
+  rotationSpeed = rotation;
   planetScale = scale;
 
   // opengl calls to generate and bind both buffers
@@ -66,16 +68,16 @@ Object::~Object()
 void Object::Update(unsigned int dt, glm::mat4 origin, float timeScale, float orbitScale)
 {
   model = origin;
-  angle += dt * M_PI/(1000 * orbitSpeed) * timeScale;
+  angle += dt * M_PI/(1000 ) * timeScale;
   if (orbitRadius > 0) {
-    model = glm::rotate(model, angle/orbitRadius, glm::vec3(0.0, 1.0, 0.0)) * glm::translate(glm::mat4(1.0), glm::vec3((-orbitRadius)/orbitScale, 0.0, 0.0));
-    model = glm::rotate(model, angle/orbitRadius, glm::vec3(0.0, 1.0, 0.0));
+    model = glm::rotate(model, (angle/orbitRadius) * orbitSpeed, glm::vec3(0.0, 1.0, 0.0)) * glm::translate(glm::mat4(1.0), glm::vec3((-orbitRadius)/orbitScale, 0.0, 0.0));
+    model = glm::rotate(model, (angle/orbitRadius) * orbitSpeed, glm::vec3(0.0, 1.0, 0.0));
   }
 
   for (auto &i : children) {
     i->Update(dt, model, timeScale, orbitScale);
   }
-  model = glm::rotate(model, angle, glm::vec3(0.0, 1.0, 0.0));
+  model = glm::rotate(model, angle * rotationSpeed, glm::vec3(0.0, 1.0, 0.0));
   model = glm::scale(model, glm::vec3(planetScale, planetScale, planetScale));
 
 }
@@ -113,8 +115,8 @@ void Object::Render(GLint& m_modelMatrix)
   }
 }
 
-Object* Object::AddChild(std::string texture, float radius, float speed, float scale) {
-  Object* child = new Object(MODEL_DIR + "sphere.obj", radius, speed, scale);
+Object* Object::AddChild(std::string texture, float radius, float speed, float rotation, float scale) {
+  Object* child = new Object(MODEL_DIR + "sphere.obj", radius, speed, rotation, scale);
   child->LoadTexFile(texture, 0);
   children.push_back(child);
   return child;
@@ -122,7 +124,7 @@ Object* Object::AddChild(std::string texture, float radius, float speed, float s
 
 Object* Object::AddRing(float speed, float scale)
 {
-  Object* child = new Object("../models/ring.obj", 0, speed, scale);
+  Object* child = new Object("../models/ring.obj", 0, speed, 1, scale);
   child->LoadTexFile("../models/2kSaturnRing.png", 0);
   children.push_back(child);
   return child;

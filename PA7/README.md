@@ -17,23 +17,25 @@ This project was ran and tested on Debian Stretch partition in ECC.
 5 : Jupiter
 6 : Saturn
 7 : Uranus
-8 : Pluto
+8 : Neptune
+9 : Pluto
 
 w : Pan up
 a : Pan left
-s : Pan right
-d : Pan down
+s : Pan down
+d : Pan right
+q : Pan in
+e : Pan out
 
 UP : Increase orbit scale
 DOWN : Decrease orbit scale
-LEFT : Increase orbit speed
-RIGHT : Decrease orbit speed
+LEFT : Decrease orbit speed
+RIGHT : Increase orbit speed
 ```
 
 ## Running
+```
 Simply run:
-
-```bash
 ./PA7
 ```
 

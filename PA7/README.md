@@ -7,6 +7,27 @@
 This is the repository to be graded.
 This project was ran and tested on Debian Stretch partition in ECC.
 
+## Controls
+>> 0 : Sun
+>> 1 : Mercury
+>> 2 : Venus
+>> 3 : Earth
+>> 4 : Mars
+>> 5 : Jupiter
+>> 6 : Saturn
+>> 7 : Uranus
+>> 8 : Pluto
+
+>> w : Pan up
+>> a : Pan right
+>> s : Pan left
+>> d : Pan down
+
+>> UP : Decrease orbit scale
+>> DOWN : Increase orbit scale
+>> RIGHT : Decrease orbit speed
+>> LEFT : Increase orbit speed
+
 ## Running
 Simply run:
 

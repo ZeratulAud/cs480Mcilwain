@@ -8,7 +8,7 @@ This is the repository to be graded.
 This project was ran and tested on Debian Stretch partition in ECC.
 
 ## Controls
-```bash
+```
 0 : Sun
 1 : Mercury
 2 : Venus
@@ -20,14 +20,14 @@ This project was ran and tested on Debian Stretch partition in ECC.
 8 : Pluto
 
 w : Pan up
-a : Pan right
-s : Pan left
+a : Pan left
+s : Pan right
 d : Pan down
 
-UP : Decrease orbit scale
-DOWN : Increase orbit scale
-RIGHT : Decrease orbit speed
+UP : Increase orbit scale
+DOWN : Decrease orbit scale
 LEFT : Increase orbit speed
+RIGHT : Decrease orbit speed
 ```
 
 ## Running
@@ -57,7 +57,7 @@ sudo apt-get install libassimp-dev
 #### Magick++ (C++ ImageMagick Extension)
 ```bash
 sudo apt-get install imagemagick
-sudo apt-get install magick++-dev
+sudo apt-get install libmagick++-dev
 ```
 
 ### Mac OSX

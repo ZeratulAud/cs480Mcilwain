@@ -141,84 +141,82 @@ void Engine::Camera()
         m_graphics->m_camera->translate.z += 1.0;
         break;
 
+      case SDLK_q:
+        m_graphics->m_camera->translate.y -= 1.0;
+        break;
+
+      case SDLK_e:
+        m_graphics->m_camera->translate.y += 1.0;
+        break;
+
       case SDLK_0:
         model = m_graphics->GetSun()->GetModel();
         vec = glm::vec3(model[3]);
         m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
-                                           vec.x, vec.y, vec.z,
-                                           0.0f, 1.0f, 0.0f);
+                                           vec.x, vec.y, vec.z);
         break;
 
       case SDLK_1:
         model = m_graphics->GetSun()->children[0]->GetModel();
         vec = glm::vec3(model[3]);
-        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
-                                           vec.x, vec.y, vec.z,
-                                           0.0f, 1.0f, 0.0f);
+        m_graphics->m_camera->SnapToPlanet(vec.x+25, vec.y+25, vec.z,
+                                           vec.x, vec.y, vec.z);
         break;
 
       case SDLK_2:
         model = m_graphics->GetSun()->children[1]->GetModel();
         vec = glm::vec3(model[3]);
-        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
-                                           vec.x, vec.y, vec.z,
-                                           0.0f, 1.0f, 0.0f);
+        m_graphics->m_camera->SnapToPlanet(vec.x+25, vec.y+25, vec.z,
+                                           vec.x, vec.y, vec.z);
         break;
 
       case SDLK_3:
         model = m_graphics->GetSun()->children[2]->GetModel();
         vec = glm::vec3(model[3]);
-        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
-                                           vec.x, vec.y, vec.z,
-                                           0.0f, 1.0f, 0.0f);
+        m_graphics->m_camera->SnapToPlanet(vec.x+25, vec.y+25, vec.z,
+                                           vec.x, vec.y, vec.z);
         break;
 
       case SDLK_4:
         model = m_graphics->GetSun()->children[3]->GetModel();
         vec = glm::vec3(model[3]);
-        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
-                                           vec.x, vec.y, vec.z,
-                                           0.0f, 1.0f, 0.0f);
+        m_graphics->m_camera->SnapToPlanet(vec.x+25, vec.y+25, vec.z,
+                                           vec.x, vec.y, vec.z);
         break;
 
       case SDLK_5:
         model = m_graphics->GetSun()->children[4]->GetModel();
         vec = glm::vec3(model[3]);
         m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
-                                           vec.x, vec.y, vec.z,
-                                           0.0f, 1.0f, 0.0f);
+                                           vec.x, vec.y, vec.z);
         break;
 
       case SDLK_6:
         model = m_graphics->GetSun()->children[5]->GetModel();
         vec = glm::vec3(model[3]);
         m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
-                                           vec.x, vec.y, vec.z,
-                                           0.0f, 1.0f, 0.0f);
+                                           vec.x, vec.y, vec.z);
         break;
 
       case SDLK_7:
         model = m_graphics->GetSun()->children[6]->GetModel();
         vec = glm::vec3(model[3]);
-        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
-                                           vec.x, vec.y, vec.z,
-                                           0.0f, 1.0f, 0.0f);
+        m_graphics->m_camera->SnapToPlanet(vec.x+50, vec.y+50, vec.z,
+                                           vec.x, vec.y, vec.z);
         break;
 
       case SDLK_8:
         model = m_graphics->GetSun()->children[7]->GetModel();
         vec = glm::vec3(model[3]);
-        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
-                                           vec.x, vec.y, vec.z,
-                                           0.0f, 1.0f, 0.0f);
+        m_graphics->m_camera->SnapToPlanet(vec.x+50, vec.y+50, vec.z,
+                                           vec.x, vec.y, vec.z);
         break;
 
       case SDLK_9:
         model = m_graphics->GetSun()->children[8]->GetModel();
         vec = glm::vec3(model[3]);
-        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
-                                           vec.x, vec.y, vec.z,
-                                           0.0f, 1.0f, 0.0f);
+        m_graphics->m_camera->SnapToPlanet(vec.x+25, vec.y+25, vec.z,
+                                           vec.x, vec.y, vec.z);
         break;
     }
   }

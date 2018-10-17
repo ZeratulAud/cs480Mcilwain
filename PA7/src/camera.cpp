@@ -35,12 +35,11 @@ void Camera::Update()
 }
 
 void Camera::SnapToPlanet(float x1, float y1, float z1,
-                          float x2, float y2, float z2,
-                          float x3, float y3, float z3)
+                          float x2, float y2, float z2)
 {
   view = glm::lookAt(glm::vec3(x1, y1, z1),
                      glm::vec3(x2, y2, z2),
-                     glm::vec3(x3, y3, z3));
+                     glm::vec3(0.0, 1.0, 0.0));
 }
 glm::mat4 Camera::GetProjection()
 {

@@ -22,6 +22,7 @@ class Object
     void Update(unsigned int dt, glm::mat4 origin, float timeScale, float orbitScale);
     void Render(GLint& m_modelMatrix);
     glm::mat4 GetModel();
+    std::vector<Object*> children;
 
   private:
     glm::mat4 model;
@@ -29,7 +30,6 @@ class Object
     std::vector<GLuint> VB;
     std::vector<GLuint> IB;
     std::vector<GLuint> texture;
-    std::vector<Object*> children;
 
     float angle;
     float orbitRadius;

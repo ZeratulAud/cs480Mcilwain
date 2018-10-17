@@ -8,11 +8,14 @@ class Camera
   public:
     Camera();
     ~Camera();
-    void Update();
     bool Initialize(int w, int h);
+    void Update();
+    void SnapToPlanet(float x1, float y1, float z1,
+                      float x2, float y2, float z2,
+                      float x3, float y3, float z3);
     glm::mat4 GetProjection();
     glm::mat4 GetView();
-  
+
   	glm::vec3 translate;
   private:
     glm::mat4 projection;

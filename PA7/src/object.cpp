@@ -30,7 +30,6 @@ Object::Object(std::string objFilePath, float radius, float speed, float rotatio
   */
 Object::Object(const Object& other, float radius, float speed, float rotation, float scale)
 {
-
   // these are consistent across all of these models
   model = other.model;
   modelInfo = other.modelInfo;

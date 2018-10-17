@@ -46,27 +46,38 @@ bool Graphics::Initialize(int width, int height)
   }
 
   // Create the object
-   m_cube = new Object(MODEL_DIR + "sphere.obj", 0, 1, 1, 10);
+   m_sun = new Object(MODEL_DIR + "sphere.obj", 0, 1, 1, 10);
 
-  m_cube->AddChild(MODEL_DIR + "2kMercury.jpg", 70, 1.6, .017, .4);
-  m_cube->AddChild(MODEL_DIR + "2kVenus.jpg", 110, 1.17, .004, .9);
+  m_sun->AddChild(MODEL_DIR + "2kMercury.jpg", 70, 1.6, .017, .4);
+  m_sun->AddChild(MODEL_DIR + "2kVenus.jpg", 110, 1.17, .004, .9);
+  m_sun->AddChild(MODEL_DIR + "2kEarthDay.jpg", 150, 1, 1, 1)->AddChild(MODEL_DIR + "2kMoon.jpg", 7, 1, 1, 0.3);
 
-  m_cube->AddChild(MODEL_DIR + "2kEarthDay.jpg", 150, 1, 1, 1)->AddChild(MODEL_DIR + "2kMoon.jpg", 7, 1, 1, 0.3);
-
-  Object *temp = m_cube->AddChild(MODEL_DIR + "2kMars.jpg", 200, .80, .96, .5);
+  Object *temp = m_sun->AddChild(MODEL_DIR + "2kMars.jpg", 200, .80, .96, .5);
   for(int i = 0; i < 2; i++){
     temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
   }
 
-  //m_cube->AddChild(MODEL_DIR + "2kMars.jpg", 200, 1, .5);
-  temp = m_cube->AddChild(MODEL_DIR + "2kJupiter.jpg", 800, .43, 2.4, 11.2);
-  /*for(int i = 0; i<62; i++){
+  temp = m_sun->AddChild(MODEL_DIR + "2kJupiter.jpg", 800, .43, 2.4, 11.2);
+  for(int i = 0; i < 79; i++){
     temp->AddChild(MODEL_DIR + "2kMoon.jpg", 15+i*4, 1, 1, 0.3);
-  }*/
-  m_cube->AddChild(MODEL_DIR + "2kSaturn.jpg", 1500, .32, 2.18,  9.4)->AddRing(1, 9.4);
-  m_cube->AddChild(MODEL_DIR + "2kUranus.jpg", 2900, .22, 1.41, 4);
-  m_cube->AddChild(MODEL_DIR + "2kNeptune.jpg", 4500, .18, 1.5, 3.9);
-  m_cube->AddChild(MODEL_DIR + "2kPluto.jpg", 6000, 1, .15, .3);
+  }
+
+  temp = m_sun->AddChild(MODEL_DIR + "2kSaturn.jpg", 1500, .32, 2.18,  9.4)->AddRing(1, 9.4);
+  for(int i = 0; i < 53; i++){
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
+  }
+
+  temp = m_sun->AddChild(MODEL_DIR + "2kUranus.jpg", 2900, .22, 1.41, 4);
+  for(int i = 0; i < 27; i++){
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
+  }
+
+  temp = m_sun->AddChild(MODEL_DIR + "2kNeptune.jpg", 4500, .18, 1.5, 3.9);
+  for(int i = 0; i < 13; i++){
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
+  }
+
+  m_sun->AddChild(MODEL_DIR + "2kPluto.jpg", 6000, 1, .15, .3);
 
   // Set up the shaders
   m_shader = new Shader();
@@ -132,7 +143,7 @@ void Graphics::Update(unsigned int dt)
 {
   // Update the object
   m_camera->Update();
-  m_cube->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
+  m_sun->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
 }
 
 void Graphics::Render()
@@ -149,8 +160,8 @@ void Graphics::Render()
   glUniformMatrix4fv(m_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
 
   // Render the object
-  //glUniformMatrix4fv(m_modelMatrix, 1, GL_FALSE, glm::value_ptr(m_cube->GetModel()));
-  m_cube->Render(m_modelMatrix);
+  //glUniformMatrix4fv(m_modelMatrix, 1, GL_FALSE, glm::value_ptr(m_sun->GetModel()));
+  m_sun->Render(m_modelMatrix);
 
   // Get any errors from OpenGL
   auto error = glGetError();
@@ -193,8 +204,8 @@ std::string Graphics::ErrorString(GLenum error)
   }
 }
 
-Object* Graphics::GetCube() const
+Object* Graphics::GetSun() const
 {
-  return m_cube;
+  return m_sun;
 }
 

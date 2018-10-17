@@ -17,7 +17,7 @@ class Graphics
     bool Initialize(int width, int height);
     void Update(unsigned int dt);
     void Render();
-    Object* GetCube() const;
+    Object* GetSun() const;
 
     float timeScale;
     float orbitScale;
@@ -29,7 +29,7 @@ class Graphics
 
 
     Shader *m_shader;
-    Object *m_cube;
+    Object *m_sun;
 
     GLint m_projectionMatrix;
     GLint m_viewMatrix;

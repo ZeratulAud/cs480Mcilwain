@@ -16,6 +16,7 @@ class Engine
     bool Initialize();
     void Run();
     void Keyboard();
+    void Camera();
     unsigned int getDT();
     long long GetCurrentTimeMillis();
 

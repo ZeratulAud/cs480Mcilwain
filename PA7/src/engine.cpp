@@ -63,6 +63,7 @@ void Engine::Run()
     while(SDL_PollEvent(&m_event) != 0)
     {
       Keyboard();
+      Camera();
     }
 
     // Update and render the graphics
@@ -85,24 +86,6 @@ void Engine::Keyboard()
     // handle key down events here
     switch(m_event.key.keysym.sym)
     {
-      case SDLK_w:
-        m_graphics->m_camera->translate.x += 0.5;
-
-        break;
-      case SDLK_a:
-        m_graphics->m_camera->translate.z -= 0.5;
-
-        break;
-      case SDLK_s:
-        m_graphics->m_camera->translate.x -= 0.5;
-
-        break;
-      case SDLK_d:
-        m_graphics->m_camera->translate.z += 0.5;
-
-        break;
-
-
       case SDLK_RIGHT:
         m_graphics->timeScale += 0.1;
         printf("Increasing timeScale\n");
@@ -133,10 +116,123 @@ void Engine::Keyboard()
   }
 }
 
+void Engine::Camera()
+{
+  if(m_event.type == SDL_QUIT)
+    m_running = false;
+
+  // Keyboard
+  else if (m_event.type == SDL_KEYDOWN)
+  {
+    glm::mat4 model;
+    glm::vec3 vec;
+
+    // handle key down events here
+    switch(m_event.key.keysym.sym)
+    {
+      case SDLK_w:
+        m_graphics->m_camera->translate.x += 0.5;
+        break;
+
+      case SDLK_a:
+        m_graphics->m_camera->translate.z -= 0.5;
+        break;
+
+      case SDLK_s:
+        m_graphics->m_camera->translate.x -= 0.5;
+        break;
+
+      case SDLK_d:
+        m_graphics->m_camera->translate.z += 0.5;
+        break;
+
+      case SDLK_0:
+        model = m_graphics->GetSun()->GetModel();
+        vec = glm::vec3(model[3]);
+        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
+                                           vec.x, vec.y, vec.z,
+                                           0.0f, 1.0f, 0.0f);
+        break;
+
+      case SDLK_1:
+        model = m_graphics->GetSun()->children[0]->GetModel();
+        vec = glm::vec3(model[3]);
+        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
+                                           vec.x, vec.y, vec.z,
+                                           0.0f, 1.0f, 0.0f);
+        break;
+
+      case SDLK_2:
+        model = m_graphics->GetSun()->children[1]->GetModel();
+        vec = glm::vec3(model[3]);
+        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
+                                           vec.x, vec.y, vec.z,
+                                           0.0f, 1.0f, 0.0f);
+        break;
+
+      case SDLK_3:
+        model = m_graphics->GetSun()->children[2]->GetModel();
+        vec = glm::vec3(model[3]);
+        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
+                                           vec.x, vec.y, vec.z,
+                                           0.0f, 1.0f, 0.0f);
+        break;
+
+      case SDLK_4:
+        model = m_graphics->GetSun()->children[3]->GetModel();
+        vec = glm::vec3(model[3]);
+        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
+                                           vec.x, vec.y, vec.z,
+                                           0.0f, 1.0f, 0.0f);
+        break;
+
+      case SDLK_5:
+        model = m_graphics->GetSun()->children[4]->GetModel();
+        vec = glm::vec3(model[3]);
+        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
+                                           vec.x, vec.y, vec.z,
+                                           0.0f, 1.0f, 0.0f);
+        break;
+
+      case SDLK_6:
+        model = m_graphics->GetSun()->children[5]->GetModel();
+        vec = glm::vec3(model[3]);
+        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
+                                           vec.x, vec.y, vec.z,
+                                           0.0f, 1.0f, 0.0f);
+        break;
+
+      case SDLK_7:
+        model = m_graphics->GetSun()->children[6]->GetModel();
+        vec = glm::vec3(model[3]);
+        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
+                                           vec.x, vec.y, vec.z,
+                                           0.0f, 1.0f, 0.0f);
+        break;
+
+      case SDLK_8:
+        model = m_graphics->GetSun()->children[7]->GetModel();
+        vec = glm::vec3(model[3]);
+        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
+                                           vec.x, vec.y, vec.z,
+                                           0.0f, 1.0f, 0.0f);
+        break;
+
+      case SDLK_9:
+        model = m_graphics->GetSun()->children[8]->GetModel();
+        vec = glm::vec3(model[3]);
+        m_graphics->m_camera->SnapToPlanet(vec.x+100, vec.y+100, vec.z,
+                                           vec.x, vec.y, vec.z,
+                                           0.0f, 1.0f, 0.0f);
+        break;
+    }
+  }
+}
+
 unsigned int Engine::getDT()
 {
   long long TimeNowMillis = GetCurrentTimeMillis();
-  assert(TimeNowMillis >= m_currentTimeMillis);
+  //assert(TimeNowMillis >= m_currentTimeMillis);
   unsigned int DeltaTimeMillis = (unsigned int)(TimeNowMillis - m_currentTimeMillis);
   m_currentTimeMillis = TimeNowMillis;
   return DeltaTimeMillis;

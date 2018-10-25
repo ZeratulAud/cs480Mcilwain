@@ -14,6 +14,7 @@ class Camera
     glm::mat4 GetView();
 
   	glm::vec3 translate;
+
   private:
     glm::mat4 projection;
     glm::mat4 view;

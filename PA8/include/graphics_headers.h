@@ -34,8 +34,6 @@
 #include <assimp/postprocess.h>
 #include <assimp/color4.h>
 
-
-
 // ImageMagick header
 #include <Magick++.h>
 

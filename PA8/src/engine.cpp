@@ -121,26 +121,24 @@ void Engine::Camera()
   if(m_event.type == SDL_QUIT)
     m_running = false;
 
-  // Keyboard
   else if (m_event.type == SDL_KEYDOWN)
   {
-    // handle key down events here
     switch(m_event.key.keysym.sym)
     {
       case SDLK_w:
-        m_graphics->GetCamera()->translate.x += 1.0;
-        break;
-
-      case SDLK_a:
-        m_graphics->GetCamera()->translate.z -= 1.0;
-        break;
-
-      case SDLK_s:
         m_graphics->GetCamera()->translate.x -= 1.0;
         break;
 
-      case SDLK_d:
+      case SDLK_a:
         m_graphics->GetCamera()->translate.z += 1.0;
+        break;
+
+      case SDLK_s:
+        m_graphics->GetCamera()->translate.x += 1.0;
+        break;
+
+      case SDLK_d:
+        m_graphics->GetCamera()->translate.z -= 1.0;
         break;
 
       case SDLK_q:
@@ -157,7 +155,6 @@ void Engine::Camera()
 unsigned int Engine::getDT()
 {
   long long TimeNowMillis = GetCurrentTimeMillis();
-  //assert(TimeNowMillis >= m_currentTimeMillis);
   unsigned int DeltaTimeMillis = (unsigned int)(TimeNowMillis - m_currentTimeMillis);
   m_currentTimeMillis = TimeNowMillis;
   return DeltaTimeMillis;

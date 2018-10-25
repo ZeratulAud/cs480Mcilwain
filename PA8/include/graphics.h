@@ -2,11 +2,13 @@
 #define GRAPHICS_H
 
 #include <iostream>
-
 #include "graphics_headers.h"
 #include "camera.h"
 #include "shader.h"
 #include "object.h"
+
+// Bullet
+#include <btBulletDynamicsCommon.h>
 
 class Graphics
 {
@@ -14,6 +16,7 @@ class Graphics
     Graphics();
     ~Graphics();
     bool Initialize(int width, int height);
+    bool BulletInit();
     void Update(unsigned int dt);
     void Render();
     Object* GetSun() const;

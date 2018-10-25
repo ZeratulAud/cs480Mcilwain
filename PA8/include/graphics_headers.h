@@ -34,8 +34,13 @@
 #include <assimp/postprocess.h>
 #include <assimp/color4.h>
 
+
+
 // ImageMagick header
 #include <Magick++.h>
+
+// Bullet
+#include <btBulletDynamicsCommon.h>
 
 struct Vertex
 {

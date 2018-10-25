@@ -136,6 +136,10 @@ bool Object::LoadObjFile(std::string objFilePath)
   GLuint buffer;
   ModelInfo tempModel;
   Assimp::Importer importer;
+
+  btVector3 triArray[3]; 
+  btTriangleMesh *objTriMesh = new btTriangleMesh();
+
   const aiScene *myScene = importer.ReadFile(objFilePath, aiProcess_Triangulate);
 
   if (myScene == NULL)
@@ -155,12 +159,16 @@ bool Object::LoadObjFile(std::string objFilePath)
       {
         aiVector3D tempPos = mesh->mVertices[face->mIndices[k]];
 
+        //triArray[j] = btVector3(tempPos.x, tempPos.y, tempPos.z);
+
         aiVector3D uv = mesh->mTextureCoords[0][face->mIndices[k]];
         Vertex tempVert(glm::vec3(tempPos.x, tempPos.y, tempPos.z), glm::vec2(uv.x, uv.y));
 
         modelInfo[i].Vertices.push_back(tempVert);
         modelInfo[i].Indices.push_back(face->mIndices[k]);
       }
+      std::cout << "creating triangle" << std::endl;
+      //objTriMesh->addTriangle(triArray[0], triArray[1], triArray[2]);
     }
 
     VB.push_back(buffer);
@@ -176,6 +184,8 @@ bool Object::LoadObjFile(std::string objFilePath)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * modelInfo[i].Indices.size(), &modelInfo[i].Indices[0], GL_STATIC_DRAW);
 
     LoadTexFile("../models/2kSun.jpg", i);
+    std::cout << "creating btCollisionShape" << std::endl;
+    //btCollisionShape *shape = new btBvhTriangleMeshShape(objTriMesh, true);
   }
 
   return true;

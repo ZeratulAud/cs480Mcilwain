@@ -1,13 +1,19 @@
 #include "graphics.h"
+// Bullet
+#include <btBulletDynamicsCommon.h>
+
 
 Graphics::Graphics()
 {
+  //btBroadphaseInterface *broadphase = new btDbvtBroadphase();
+  BulletInit();
   timeScale = 1;
   orbitScale = 2.5;
 }
 
 Graphics::~Graphics()
 {
+  
   delete m_camera;
   delete m_shader;
   delete m_sun;
@@ -181,6 +187,26 @@ std::string Graphics::ErrorString(GLenum error)
 void Graphics::CreateObjects()
 {
   m_sun = new Object(MODEL_DIR + "sphere.obj", 0, 1, 1, 10);
+}
+
+bool Graphics::BulletInit(){
+	std::cout<<"Initializing Bullet"<< std::endl;
+
+	btBroadphaseInterface *broadphase = 
+		new btDbvtBroadphase();
+	btDefaultCollisionConfiguration *collisionConfiguration = 
+		new btDefaultCollisionConfiguration();
+
+	btCollisionDispatcher *dispatcher = 
+		new btCollisionDispatcher(collisionConfiguration);
+	btSequentialImpulseConstraintSolver *solver = 
+		new btSequentialImpulseConstraintSolver;
+
+	btDiscreteDynamicsWorld *dynamicsWorld = 
+		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration); 
+
+	dynamicsWorld->setGravity(btVector3(0, -9.81, 0));	
+	return 1;
 }
 
 Object* Graphics::GetSun() const

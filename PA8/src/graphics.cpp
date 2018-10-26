@@ -1,6 +1,5 @@
 #include "graphics.h"
-// Bullet
-#include <btBulletDynamicsCommon.h>
+
 
 
 Graphics::Graphics()
@@ -187,6 +186,14 @@ std::string Graphics::ErrorString(GLenum error)
 void Graphics::CreateObjects()
 {
   m_sun = new Object(MODEL_DIR + "sphere.obj", 0, 1, 1, 10);
+  btDefaultMotionState *shapeMotionState = NULL; 
+  shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 0), btVector3(0, 0, 0)));
+  btScalar mass(10);
+  btVector3 inertia(1, 1, 1); 
+  m_sun->GetShape()->calculateLocalInertia(mass, inertia);
+  btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, m_sun->GetShape(), inertia);
+  btRigidBody *rigidBody = new btRigidBody(shapeRigidBodyCI);
+  dynamicsWorld->addRigidBody(rigidBody);//,COLLIDE_MASK, CollidesWith);
 }
 
 bool Graphics::BulletInit(){
@@ -202,7 +209,7 @@ bool Graphics::BulletInit(){
 	btSequentialImpulseConstraintSolver *solver = 
 		new btSequentialImpulseConstraintSolver;
 
-	btDiscreteDynamicsWorld *dynamicsWorld = 
+	dynamicsWorld = 
 		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration); 
 
 	dynamicsWorld->setGravity(btVector3(0, -9.81, 0));	

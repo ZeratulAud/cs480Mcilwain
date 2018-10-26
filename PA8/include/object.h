@@ -22,6 +22,7 @@ class Object
     void Update(unsigned int dt, glm::mat4 origin, float timeScale, float orbitScale);
     void Render(GLint& m_modelMatrix);
     glm::mat4 GetModel();
+    btCollisionShape* GetShape();
     std::vector<Object*> children;
 
   private:
@@ -30,6 +31,7 @@ class Object
     std::vector<GLuint> VB;
     std::vector<GLuint> IB;
     std::vector<GLuint> texture;
+    btCollisionShape *shape;
 
     float angle;
     float orbitRadius;

@@ -7,8 +7,7 @@
 #include "shader.h"
 #include "object.h"
 
-// Bullet
-#include <btBulletDynamicsCommon.h>
+
 
 class Graphics
 {
@@ -26,6 +25,7 @@ class Graphics
     float orbitScale;
 
   private:
+    btDiscreteDynamicsWorld *dynamicsWorld;
     std::string ErrorString(GLenum error);
     void CreateObjects();
 

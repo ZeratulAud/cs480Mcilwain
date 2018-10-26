@@ -86,6 +86,11 @@ glm::mat4 Object::GetModel()
   return model;
 }
 
+btCollisionShape* Object::GetShape()
+{
+  return shape;
+}
+
 void Object::Render(GLint& m_modelMatrix)
 {
   for (auto &i : children)
@@ -151,15 +156,15 @@ bool Object::LoadObjFile(std::string objFilePath)
     aiMesh* mesh = myScene->mMeshes[i];
     modelInfo.push_back(tempModel);
 
-    for (int j = 0; j < mesh->mNumFaces; j++)
+    for (int j = 0; j < mesh->mNumFaces-1; j++)
     {
       aiFace* face = &mesh->mFaces[j];
 
       for (int k = 0; k < face->mNumIndices; k++)
       {
         aiVector3D tempPos = mesh->mVertices[face->mIndices[k]];
-
-        //triArray[j] = btVector3(tempPos.x, tempPos.y, tempPos.z);
+        //std::cout << "loading vert" << std::endl;
+        triArray[k] = btVector3(tempPos.x, tempPos.y, tempPos.z);
 
         aiVector3D uv = mesh->mTextureCoords[0][face->mIndices[k]];
         Vertex tempVert(glm::vec3(tempPos.x, tempPos.y, tempPos.z), glm::vec2(uv.x, uv.y));
@@ -167,9 +172,11 @@ bool Object::LoadObjFile(std::string objFilePath)
         modelInfo[i].Vertices.push_back(tempVert);
         modelInfo[i].Indices.push_back(face->mIndices[k]);
       }
-      std::cout << "creating triangle" << std::endl;
-      //objTriMesh->addTriangle(triArray[0], triArray[1], triArray[2]);
+      //std::cout << "creating triangle" << std::endl;
+      objTriMesh->addTriangle(triArray[0], triArray[1], triArray[2]);
     }
+    std::cout << "creating btCollisionShape" << std::endl;
+    shape = new btBvhTriangleMeshShape(objTriMesh, true);
 
     VB.push_back(buffer);
     glGenBuffers(1, &VB[i]);
@@ -184,8 +191,8 @@ bool Object::LoadObjFile(std::string objFilePath)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * modelInfo[i].Indices.size(), &modelInfo[i].Indices[0], GL_STATIC_DRAW);
 
     LoadTexFile("../models/2kSun.jpg", i);
-    std::cout << "creating btCollisionShape" << std::endl;
-    //btCollisionShape *shape = new btBvhTriangleMeshShape(objTriMesh, true);
+    
+    
   }
 
   return true;

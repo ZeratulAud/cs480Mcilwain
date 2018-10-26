@@ -1,5 +1,5 @@
-#include "graphics.h"
 
+#include "graphics.h"
 
 
 Graphics::Graphics()
@@ -12,7 +12,7 @@ Graphics::Graphics()
 
 Graphics::~Graphics()
 {
-  
+
   delete m_camera;
   delete m_shader;
   delete m_sun;
@@ -199,20 +199,20 @@ void Graphics::CreateObjects()
 bool Graphics::BulletInit(){
 	std::cout<<"Initializing Bullet"<< std::endl;
 
-	btBroadphaseInterface *broadphase = 
+	btBroadphaseInterface *broadphase =
 		new btDbvtBroadphase();
-	btDefaultCollisionConfiguration *collisionConfiguration = 
+	btDefaultCollisionConfiguration *collisionConfiguration =
 		new btDefaultCollisionConfiguration();
 
-	btCollisionDispatcher *dispatcher = 
+	btCollisionDispatcher *dispatcher =
 		new btCollisionDispatcher(collisionConfiguration);
-	btSequentialImpulseConstraintSolver *solver = 
+	btSequentialImpulseConstraintSolver *solver =
 		new btSequentialImpulseConstraintSolver;
 
 	dynamicsWorld = 
 		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration); 
 
-	dynamicsWorld->setGravity(btVector3(0, -9.81, 0));	
+	dynamicsWorld->setGravity(btVector3(0, -9.81, 0));
 	return 1;
 }
 

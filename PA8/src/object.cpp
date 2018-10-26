@@ -142,7 +142,7 @@ bool Object::LoadObjFile(std::string objFilePath)
   ModelInfo tempModel;
   Assimp::Importer importer;
 
-  btVector3 triArray[3]; 
+  btVector3 triArray[3];
   btTriangleMesh *objTriMesh = new btTriangleMesh();
 
   const aiScene *myScene = importer.ReadFile(objFilePath, aiProcess_Triangulate);
@@ -201,16 +201,16 @@ bool Object::LoadObjFile(std::string objFilePath)
 
 bool Object::LoadTexFile(std::string texFilePath, int count)
 {
-
   Magick::InitializeMagick("");
   Magick::Blob blob;
   Magick::Image *my_image;
-  my_image = new Magick::Image(texFilePath);//resize_granite.jpg");
+  my_image = new Magick::Image(texFilePath);
   my_image->write(&blob, "RGBA");
 
   glGenTextures(1, &texture[count]);
   glBindTexture(GL_TEXTURE_2D, texture[count]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, my_image->columns(), my_image->rows(), 0, GL_RGBA, GL_UNSIGNED_BYTE, blob.data());
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, my_image->columns(), my_image->rows(),
+               0, GL_RGBA, GL_UNSIGNED_BYTE, blob.data());
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 

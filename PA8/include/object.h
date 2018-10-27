@@ -23,6 +23,7 @@ class Object
     void Render(GLint& m_modelMatrix);
     glm::mat4 GetModel();
     btCollisionShape* GetShape();
+    btRigidBody* GetRigidBody();
     std::vector<Object*> children;
 
   private:
@@ -32,6 +33,7 @@ class Object
     std::vector<GLuint> IB;
     std::vector<GLuint> texture;
     btCollisionShape *shape;
+    btRigidBody *rigidBody;
 
     float angle;
     float orbitRadius;

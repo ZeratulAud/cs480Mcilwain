@@ -14,6 +14,14 @@ Object::Object(std::string objFilePath, float radius, float speed, float rotatio
     exit(1);
   }
 
+  btDefaultMotionState *shapeMotionState = NULL; 
+  shapeMotionState = new btDefaultMotionState(btTransform::getIdentity());//(btQuaternion(0, 0, 0, 0), btVector3(0, 0, 0)));
+  btScalar mass(0);
+  btVector3 inertia(100, 100, 100); 
+  this->GetShape()->calculateLocalInertia(mass, inertia);
+  btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, this->GetShape(), inertia);
+  rigidBody = new btRigidBody(shapeRigidBodyCI);
+
   angle = 0.0f;
   orbitRadius = radius;
   orbitSpeed = speed;
@@ -66,7 +74,14 @@ Object::~Object()
 
 void Object::Update(unsigned int dt, glm::mat4 origin, float timeScale, float orbitScale)
 {
-  model = origin;
+  btTransform trans;
+  btScalar m[16];
+  rigidBody->getMotionState()->getWorldTransform(trans);
+  trans.getOpenGLMatrix(m); 
+  model = glm::make_mat4(m);
+
+  model = glm::scale(model, glm::vec3(planetScale, planetScale, planetScale));
+  /*model = origin;
   angle += dt * M_PI/(1000 ) * timeScale;
   if (orbitRadius > 0) {
     model = glm::rotate(model, (angle/orbitRadius) * orbitSpeed, glm::vec3(0.0, 1.0, 0.0)) * glm::translate(glm::mat4(1.0), glm::vec3((-orbitRadius)/orbitScale, 0.0, 0.0));
@@ -77,8 +92,8 @@ void Object::Update(unsigned int dt, glm::mat4 origin, float timeScale, float or
     i->Update(dt, model, timeScale, orbitScale);
   }
   model = glm::rotate(model, angle * rotationSpeed, glm::vec3(0.0, 1.0, 0.0));
-  model = glm::scale(model, glm::vec3(planetScale, planetScale, planetScale));
 
+*/
 }
 
 glm::mat4 Object::GetModel()
@@ -89,6 +104,11 @@ glm::mat4 Object::GetModel()
 btCollisionShape* Object::GetShape()
 {
   return shape;
+}
+
+btRigidBody* Object::GetRigidBody()
+{
+  return rigidBody;
 }
 
 void Object::Render(GLint& m_modelMatrix)

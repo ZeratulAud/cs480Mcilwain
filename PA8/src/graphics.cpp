@@ -122,6 +122,8 @@ void Graphics::Update(unsigned int dt)
 {
   // Update the object
   m_camera->Update();
+  dynamicsWorld->stepSimulation(dt, 10); 
+  
   m_sun->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
 }
 
@@ -185,15 +187,10 @@ std::string Graphics::ErrorString(GLenum error)
 
 void Graphics::CreateObjects()
 {
-  m_sun = new Object(MODEL_DIR + "sphere.obj", 0, 1, 1, 10);
-  btDefaultMotionState *shapeMotionState = NULL; 
-  shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 0), btVector3(0, 0, 0)));
-  btScalar mass(10);
-  btVector3 inertia(1, 1, 1); 
-  m_sun->GetShape()->calculateLocalInertia(mass, inertia);
-  btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, m_sun->GetShape(), inertia);
-  btRigidBody *rigidBody = new btRigidBody(shapeRigidBodyCI);
-  dynamicsWorld->addRigidBody(rigidBody);//,COLLIDE_MASK, CollidesWith);
+  //m_sun = new Object(MODEL_DIR + "sphere.obj", 0, 1, 1, 10);
+  m_sun = new Object(MODEL_DIR + "InnerWalls.obj", 0,1,1,1);
+
+  dynamicsWorld->addRigidBody(m_sun->GetRigidBody());//,COLLIDE_MASK, CollidesWith);
 }
 
 bool Graphics::BulletInit(){
@@ -212,7 +209,7 @@ bool Graphics::BulletInit(){
 	dynamicsWorld = 
 		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration); 
 
-	dynamicsWorld->setGravity(btVector3(0, -9.81, 0));
+	dynamicsWorld->setGravity(btVector3(0, -1, 0));
 	return 1;
 }
 

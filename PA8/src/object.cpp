@@ -6,27 +6,23 @@
 
 #include "object.h"
 
-Object::Object(std::string objFilePath, float radius, float speed, float rotation, float scale)
+Object::Object(std::string objFilePath, std::string texFilePath, float Mass, float Inertia)
 {
   if (!LoadObjFile(MODEL_DIR + objFilePath))
   {
     std::cerr << "Failure to load file" << std::endl;
     exit(1);
   }
+  LoadTexFile(texFilePath, 0);
 
   btDefaultMotionState *shapeMotionState = NULL; 
   shapeMotionState = new btDefaultMotionState(btTransform::getIdentity());//(btQuaternion(0, 0, 0, 0), btVector3(0, 0, 0)));
-  btScalar mass(0);
-  btVector3 inertia(100, 100, 100); 
+  btScalar mass(Mass);
+  btVector3 inertia(Inertia, Inertia, Inertia); 
   this->GetShape()->calculateLocalInertia(mass, inertia);
   btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, this->GetShape(), inertia);
   rigidBody = new btRigidBody(shapeRigidBodyCI);
 
-  angle = 0.0f;
-  orbitRadius = radius;
-  orbitSpeed = speed;
-  rotationSpeed = rotation;
-  planetScale = scale;
 }
 
 /*
@@ -46,11 +42,7 @@ Object::Object(const Object& other, float radius, float speed, float rotation, f
   children = other.children;
 
   // each model will have these fields as unique values
-  angle = 0.0f;
-  orbitRadius = radius;
-  orbitSpeed = speed;
-  rotationSpeed = rotation;
-  planetScale = scale;
+
 
   // opengl calls to generate and bind both buffers
   for (int i = 0; i < VB.size(); i++)
@@ -80,7 +72,7 @@ void Object::Update(unsigned int dt, glm::mat4 origin, float timeScale, float or
   trans.getOpenGLMatrix(m); 
   model = glm::make_mat4(m);
 
-  model = glm::scale(model, glm::vec3(planetScale, planetScale, planetScale));
+  //model = glm::scale(model, glm::vec3(planetScale, planetScale, planetScale));
   /*model = origin;
   angle += dt * M_PI/(1000 ) * timeScale;
   if (orbitRadius > 0) {
@@ -139,7 +131,7 @@ void Object::Render(GLint& m_modelMatrix)
   }
 }
 
-Object* Object::AddChild(std::string texture, float radius, float speed, float rotation, float scale) {
+/*Object* Object::AddChild(std::string texture, float radius, float speed, float rotation, float scale) {
   Object* child = new Object(MODEL_DIR + "sphere.obj", radius, speed, rotation, scale);
   child->LoadTexFile(texture, 0);
   children.push_back(child);
@@ -152,7 +144,7 @@ Object* Object::AddRing(float speed, float scale)
   child->LoadTexFile("../models/2kSaturnRing.png", 0);
   children.push_back(child);
   return child;
-}
+}*/
 
 
 bool Object::LoadObjFile(std::string objFilePath)
@@ -176,7 +168,7 @@ bool Object::LoadObjFile(std::string objFilePath)
     aiMesh* mesh = myScene->mMeshes[i];
     modelInfo.push_back(tempModel);
 
-    for (int j = 0; j < mesh->mNumFaces-1; j++)
+    for (int j = 0; j < mesh->mNumFaces; j++)
     {
       aiFace* face = &mesh->mFaces[j];
 
@@ -210,7 +202,7 @@ bool Object::LoadObjFile(std::string objFilePath)
     IB.push_back(buffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * modelInfo[i].Indices.size(), &modelInfo[i].Indices[0], GL_STATIC_DRAW);
 
-    LoadTexFile("../models/2kSun.jpg", i);
+
     
     
   }

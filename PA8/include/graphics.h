@@ -30,7 +30,11 @@ class Graphics
 
     Camera *m_camera;
     Shader *m_shader;
-    Object *m_sun;
+    Object *OutterWalls;
+    Object *InnerWalls;
+    Object *Floor;
+
+    Object *Ball;
 
     GLint m_projectionMatrix;
     GLint m_viewMatrix;

@@ -14,11 +14,11 @@ struct ModelInfo
 class Object
 {
   public:
-    Object(std::string objFilePath, float radius, float speed, float rotation, float scale);
+    Object(std::string objFilePath, std::string texFilePath, float Mass, float Inertia);
     Object(const Object& other, float radius, float speed, float rotation, float scale);
     ~Object();
-    Object* AddChild(std::string texture, float radius, float speed, float rotation, float scale);
-    Object* AddRing(float speed, float scale);
+    //Object* AddChild(std::string texture, float radius, float speed, float rotation, float scale);
+    //Object* AddRing(float speed, float scale);
     void Update(unsigned int dt, glm::mat4 origin, float timeScale, float orbitScale);
     void Render(GLint& m_modelMatrix);
     glm::mat4 GetModel();

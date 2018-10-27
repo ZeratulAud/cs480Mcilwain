@@ -15,10 +15,16 @@ Graphics::~Graphics()
 
   delete m_camera;
   delete m_shader;
-  delete m_sun;
+  delete OutterWalls;
+  delete InnerWalls;
+  delete Floor;
+  delete Ball;
   m_camera = NULL;
   m_shader = NULL;
-  m_sun = NULL;
+  OutterWalls = NULL;
+  InnerWalls = NULL;
+  Floor = NULL;
+  Ball = NULL;
 }
 
 bool Graphics::Initialize(int width, int height)
@@ -123,8 +129,11 @@ void Graphics::Update(unsigned int dt)
   // Update the object
   m_camera->Update();
   dynamicsWorld->stepSimulation(dt, 10); 
-  
-  m_sun->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
+
+  OutterWalls->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
+  InnerWalls->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
+  Floor->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
+  Ball->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
 }
 
 void Graphics::Render()
@@ -141,8 +150,12 @@ void Graphics::Render()
   glUniformMatrix4fv(m_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
 
   // Render the object
-  //glUniformMatrix4fv(m_modelMatrix, 1, GL_FALSE, glm::value_ptr(m_sun->GetModel()));
-  m_sun->Render(m_modelMatrix);
+  //glUniformMatrix4fv(m_modelMatrix, 1, GL_FALSE, glm::value_ptr(InnerWalls->GetModel()));
+  OutterWalls->Render(m_modelMatrix);
+  InnerWalls->Render(m_modelMatrix);
+  Floor->Render(m_modelMatrix);
+  Ball->Render(m_modelMatrix);
+
 
   // Get any errors from OpenGL
   auto error = glGetError();
@@ -187,10 +200,16 @@ std::string Graphics::ErrorString(GLenum error)
 
 void Graphics::CreateObjects()
 {
-  //m_sun = new Object(MODEL_DIR + "sphere.obj", 0, 1, 1, 10);
-  m_sun = new Object(MODEL_DIR + "InnerWalls.obj", 0,1,1,1);
+  //InnerWalls = new Object(MODEL_DIR + "sphere.obj", 0, 1, 1, 10);
+  OutterWalls = new Object(MODEL_DIR + "OutterWalls.obj", MODEL_DIR + "Paint.png", 0,100);
+  InnerWalls  = new Object(MODEL_DIR + "InnerWalls.obj",  MODEL_DIR + "Paint.png", 0,100);
+  Floor       = new Object(MODEL_DIR + "Floor.obj",       MODEL_DIR + "PlayfieldTexture.png", 0,100);
+  Ball        = new Object(MODEL_DIR + "Ball.obj",        MODEL_DIR + "PlayfieldTexture.png", 1,10);
 
-  dynamicsWorld->addRigidBody(m_sun->GetRigidBody());//,COLLIDE_MASK, CollidesWith);
+  dynamicsWorld->addRigidBody(OutterWalls->GetRigidBody());
+  dynamicsWorld->addRigidBody(InnerWalls->GetRigidBody());//,COLLIDE_MASK, CollidesWith);
+  dynamicsWorld->addRigidBody(Floor->GetRigidBody());
+  dynamicsWorld->addRigidBody(Ball->GetRigidBody());
 }
 
 bool Graphics::BulletInit(){
@@ -209,13 +228,13 @@ bool Graphics::BulletInit(){
 	dynamicsWorld = 
 		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration); 
 
-	dynamicsWorld->setGravity(btVector3(0, -1, 0));
+	dynamicsWorld->setGravity(btVector3(-.5, 0, .5));
 	return 1;
 }
 
 Object* Graphics::GetSun() const
 {
-  return m_sun;
+  return InnerWalls;
 }
 
 Camera* Graphics::GetCamera() const

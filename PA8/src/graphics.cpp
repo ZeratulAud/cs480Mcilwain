@@ -18,13 +18,21 @@ Graphics::~Graphics()
   delete OutterWalls;
   delete InnerWalls;
   delete Floor;
+  delete Bumper1;
+  delete Bumper2;
+  delete Bumper3;
   delete Ball;
   m_camera = NULL;
   m_shader = NULL;
   OutterWalls = NULL;
   InnerWalls = NULL;
   Floor = NULL;
+  Bumper1 = NULL;
+  Bumper2 = NULL;
+  Bumper3 = NULL;
   Ball = NULL;
+
+
 }
 
 bool Graphics::Initialize(int width, int height)
@@ -133,6 +141,9 @@ void Graphics::Update(unsigned int dt)
   OutterWalls->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
   InnerWalls->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
   Floor->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
+  Bumper1->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
+  Bumper2->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
+  Bumper3->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
   Ball->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
 }
 
@@ -154,6 +165,11 @@ void Graphics::Render()
   OutterWalls->Render(m_modelMatrix);
   InnerWalls->Render(m_modelMatrix);
   Floor->Render(m_modelMatrix);
+  Bumper1->Render(m_modelMatrix);
+  Bumper2->Render(m_modelMatrix);
+  Bumper3->Render(m_modelMatrix);
+  
+
   Ball->Render(m_modelMatrix);
 
 
@@ -204,11 +220,17 @@ void Graphics::CreateObjects()
   OutterWalls = new Object(MODEL_DIR + "OutterWalls.obj", MODEL_DIR + "Paint.png", 0,100);
   InnerWalls  = new Object(MODEL_DIR + "InnerWalls.obj",  MODEL_DIR + "Paint.png", 0,100);
   Floor       = new Object(MODEL_DIR + "Floor.obj",       MODEL_DIR + "PlayfieldTexture.png", 0,100);
+  Bumper1     = new Object(MODEL_DIR + "Bumper1.obj",        MODEL_DIR + "PlayfieldTexture.png", 0,100);
+  Bumper2     = new Object(MODEL_DIR + "Bumper2.obj",        MODEL_DIR + "PlayfieldTexture.png", 0,100);
+  Bumper3     = new Object(MODEL_DIR + "Bumper3.obj",        MODEL_DIR + "PlayfieldTexture.png", 0,100);
   Ball        = new Object(MODEL_DIR + "Ball.obj",        MODEL_DIR + "2kSun.jpg", 5,10);
 
   dynamicsWorld->addRigidBody(Ball->GetRigidBody());
-  int flags = Ball->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT;
-
+  //int flags = Ball->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT;
+  Ball->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  dynamicsWorld->addRigidBody(Bumper1->GetRigidBody());
+  dynamicsWorld->addRigidBody(Bumper2->GetRigidBody());
+  dynamicsWorld->addRigidBody(Bumper3->GetRigidBody());
   dynamicsWorld->addRigidBody(OutterWalls->GetRigidBody());
   dynamicsWorld->addRigidBody(InnerWalls->GetRigidBody());//,COLLIDE_MASK, CollidesWith);
   dynamicsWorld->addRigidBody(Floor->GetRigidBody());
@@ -223,7 +245,7 @@ void Graphics::CreateObjects()
   //OutterWalls->GetRigidBody()->setCollisionFlags(flags);
  // InnerWalls->GetRigidBody()->setCollisionFlags(flags);
   //Floor->GetRigidBody()->setCollisionFlags(flags);
-  //Ball->GetRigidBody()->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+  //Bumper1->GetRigidBody()->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
   //dynamicsWorld->s
 }
 
@@ -243,7 +265,7 @@ bool Graphics::BulletInit(){
 	dynamicsWorld = 
 		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration); 
 
-	dynamicsWorld->setGravity(btVector3(-1, -2, 0));
+	dynamicsWorld->setGravity(btVector3(-1, -1, 0));
 	return 1;
 }
 
@@ -255,5 +277,10 @@ Object* Graphics::GetSun() const
 Camera* Graphics::GetCamera() const
 {
   return m_camera;
+}
+
+btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
+{
+  return dynamicsWorld;
 }
 

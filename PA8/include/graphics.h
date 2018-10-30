@@ -19,6 +19,7 @@ class Graphics
     void Render();
     Object* GetSun() const;
     Camera* GetCamera() const;
+    btDiscreteDynamicsWorld* GetDynamicsWorld() const;
 
     float timeScale;
     float orbitScale;
@@ -33,6 +34,9 @@ class Graphics
     Object *OutterWalls;
     Object *InnerWalls;
     Object *Floor;
+    Object *Bumper1;
+    Object *Bumper2;
+    Object *Bumper3;
 
     Object *Ball;
 

@@ -199,7 +199,7 @@ bool Object::LoadObjFile(std::string objFilePath)
     //if(mesh->mNumFaces ==130 )
       //tempShape = new btBoxShape (btVector3(1, 1, 1));
     if(mesh->mNumFaces ==224 )
-      tempShape = new btSphereShape (btScalar(1));
+      tempShape = new btSphereShape (btScalar(.25));
 
     shape = tempShape;
 

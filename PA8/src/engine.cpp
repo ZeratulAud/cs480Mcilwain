@@ -87,25 +87,23 @@ void Engine::Keyboard()
     switch(m_event.key.keysym.sym)
     {
       case SDLK_RIGHT:
-        m_graphics->timeScale += 0.1;
+        m_graphics->GetDynamicsWorld()->setGravity(btVector3(0, -1, 1));
         break;
 
       case SDLK_LEFT:
-        m_graphics->timeScale -= 0.1;
+        m_graphics->GetDynamicsWorld()->setGravity(btVector3(0, -1, -1));
         break;
 
       case SDLK_UP:
-        m_graphics->orbitScale -= 0.5;
-        if (m_graphics->orbitScale < 0.5)
-          m_graphics->orbitScale = 0.5;
+        m_graphics->GetDynamicsWorld()->setGravity(btVector3(1, -1, 0));
         break;
 
       case SDLK_DOWN:
-        m_graphics->orbitScale += 0.5;
+        m_graphics->GetDynamicsWorld()->setGravity(btVector3(-1, -1, 0));
         break;
 
       case SDLK_SPACE:
-        m_graphics->timeScale = 1;
+        //m_graphics->dynamicsWorld.x = 1;
         break;
 
       // Stop program

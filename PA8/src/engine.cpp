@@ -1,4 +1,3 @@
-
 #include "engine.h"
 
 Engine::Engine(std::string name, int width, int height)

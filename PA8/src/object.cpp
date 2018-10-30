@@ -15,49 +15,14 @@ Object::Object(std::string objFilePath, std::string texFilePath, float Mass, flo
   }
   LoadTexFile(texFilePath, 0);
 
-  btDefaultMotionState *shapeMotionState = NULL; 
+  btDefaultMotionState *shapeMotionState = NULL;
   shapeMotionState = new btDefaultMotionState(btTransform::getIdentity());//(btQuaternion(0, 0, 0, 0), btVector3(0, 0, 0)));
   btScalar mass(Mass);
-  btVector3 inertia(Inertia, Inertia, Inertia); 
+  btVector3 inertia(Inertia, Inertia, Inertia);
   shape->calculateLocalInertia(mass, inertia);
 
   btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, shape, inertia);
   rigidBody = new btRigidBody(shapeRigidBodyCI);
-
-}
-
-/*
-  This copy constructor performs a deep copy of the object's trivial data fields.
-  This is to reduce the time spent performing multiple model loading's of the same mesh.
-  Might have to make it a local function that returns an instance of a new object.
-  I will debug this function later, unless anyone else has a better idea. Otherwise,
-  just ignore this.
-  */
-Object::Object(const Object& other, float radius, float speed, float rotation, float scale)
-{
-  // these are consistent across all of these models
-  model = other.model;
-  modelInfo = other.modelInfo;
-  VB = other.VB;
-  IB = other.IB;
-  children = other.children;
-
-  // each model will have these fields as unique values
-
-
-  // opengl calls to generate and bind both buffers
-  for (int i = 0; i < VB.size(); i++)
-  {
-    glGenBuffers(1, &VB[i]);
-    glBindBuffer(GL_ARRAY_BUFFER, VB[i]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * modelInfo[i].Vertices.size(), &modelInfo[i].Vertices[i], GL_STATIC_DRAW);
-  }
-  for (int i = 0; i < IB.size(); i++)
-  {
-    glGenBuffers(1, &IB[i]);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB[i]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * modelInfo[i].Indices.size(), &modelInfo[i].Indices[i], GL_STATIC_DRAW);
-  }
 }
 
 Object::~Object()
@@ -70,11 +35,12 @@ void Object::Update(unsigned int dt, glm::mat4 origin, float timeScale, float or
   btTransform trans;
   btScalar m[16];
   rigidBody->getMotionState()->getWorldTransform(trans);
-  trans.getOpenGLMatrix(m); 
+  trans.getOpenGLMatrix(m);
   model = glm::make_mat4(m);
 
-  //model = glm::scale(model, glm::vec3(planetScale, planetScale, planetScale));
-  /*model = origin;
+  /*
+  model = glm::scale(model, glm::vec3(planetScale, planetScale, planetScale));
+  model = origin;
   angle += dt * M_PI/(1000 ) * timeScale;
   if (orbitRadius > 0) {
     model = glm::rotate(model, (angle/orbitRadius) * orbitSpeed, glm::vec3(0.0, 1.0, 0.0)) * glm::translate(glm::mat4(1.0), glm::vec3((-orbitRadius)/orbitScale, 0.0, 0.0));
@@ -85,23 +51,7 @@ void Object::Update(unsigned int dt, glm::mat4 origin, float timeScale, float or
     i->Update(dt, model, timeScale, orbitScale);
   }
   model = glm::rotate(model, angle * rotationSpeed, glm::vec3(0.0, 1.0, 0.0));
-
-*/
-}
-
-glm::mat4 Object::GetModel()
-{
-  return model;
-}
-
-btCollisionShape* Object::GetShape()
-{
-  return shape;
-}
-
-btRigidBody* Object::GetRigidBody()
-{
-  return rigidBody;
+  */
 }
 
 void Object::Render(GLint& m_modelMatrix)
@@ -132,29 +82,12 @@ void Object::Render(GLint& m_modelMatrix)
   }
 }
 
-/*Object* Object::AddChild(std::string texture, float radius, float speed, float rotation, float scale) {
-  Object* child = new Object(MODEL_DIR + "sphere.obj", radius, speed, rotation, scale);
-  child->LoadTexFile(texture, 0);
-  children.push_back(child);
-  return child;
-}
-
-Object* Object::AddRing(float speed, float scale)
-{
-  Object* child = new Object("../models/ring.obj", 0, speed, 1, scale);
-  child->LoadTexFile("../models/2kSaturnRing.png", 0);
-  children.push_back(child);
-  return child;
-}*/
-
-
 bool Object::LoadObjFile(std::string objFilePath)
 {
   GLuint tempGl;
   GLuint buffer;
   ModelInfo tempModel;
   Assimp::Importer importer;
-
 
   btVector3 triArray[3];
   btTriangleMesh *objTriMesh = new btTriangleMesh();
@@ -166,11 +99,9 @@ bool Object::LoadObjFile(std::string objFilePath)
 
   for (int i = 0; i < myScene->mNumMeshes; i++)
   {
-    //std::cout << face->mNumIndices << std::endl;
     texture.push_back(tempGl);
     aiMesh* mesh = myScene->mMeshes[i];
     modelInfo.push_back(tempModel);
-    std::cout << mesh->mNumFaces << std::endl;
 
     for (int j = 0; j < mesh->mNumFaces; j++)
     {
@@ -179,7 +110,6 @@ bool Object::LoadObjFile(std::string objFilePath)
       for (int k = 0; k < face->mNumIndices; k++)
       {
         aiVector3D tempPos = mesh->mVertices[face->mIndices[k]];
-        //std::cout << "loading vert" << std::endl;
         triArray[k] = btVector3(tempPos.x, tempPos.y, tempPos.z);
 
         aiVector3D uv = mesh->mTextureCoords[0][face->mIndices[k]];
@@ -188,17 +118,12 @@ bool Object::LoadObjFile(std::string objFilePath)
         modelInfo[i].Vertices.push_back(tempVert);
         modelInfo[i].Indices.push_back(face->mIndices[k]);
       }
-      //std::cout << "creating triangle" << std::endl;
       objTriMesh->addTriangle(triArray[0], triArray[1], triArray[2]);
     }
-    std::cout << "creating btCollisionShape" << std::endl;
-    
+
     btCollisionShape *tempShape = new btBvhTriangleMeshShape(objTriMesh, true);
-    //if(mesh->mNumFaces ==2 )
-     //tempShape = new btStaticPlaneShape (btVector3(10, 10 , 10), btScalar(1));
-    //if(mesh->mNumFaces ==130 )
-      //tempShape = new btBoxShape (btVector3(1, 1, 1));
-    if(mesh->mNumFaces ==224 )
+
+    if(mesh->mNumFaces == 224)
       tempShape = new btSphereShape (btScalar(.25));
 
     shape = tempShape;
@@ -214,15 +139,10 @@ bool Object::LoadObjFile(std::string objFilePath)
 
     IB.push_back(buffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * modelInfo[i].Indices.size(), &modelInfo[i].Indices[0], GL_STATIC_DRAW);
-
-
-    
-    
   }
 
   return true;
 }
-
 
 bool Object::LoadTexFile(std::string texFilePath, int count)
 {
@@ -243,12 +163,17 @@ bool Object::LoadTexFile(std::string texFilePath, int count)
   return true;
 }
 
-glm::vec3 Object::RandomColor()
+glm::mat4 Object::GetModel()
 {
-  float rgb[3];
+  return model;
+}
 
-  for (int i = 0; i < 3; i++)
-    rgb[i] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+btCollisionShape* Object::GetShape()
+{
+  return shape;
+}
 
-  return glm::vec3(rgb[0], rgb[1], rgb[2]);
+btRigidBody* Object::GetRigidBody()
+{
+  return rigidBody;
 }

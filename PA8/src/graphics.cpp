@@ -1,10 +1,7 @@
-
 #include "graphics.h"
-
 
 Graphics::Graphics()
 {
-  //btBroadphaseInterface *broadphase = new btDbvtBroadphase();
   BulletInit();
   timeScale = 1;
   orbitScale = 2.5;
@@ -31,8 +28,6 @@ Graphics::~Graphics()
   Bumper2 = NULL;
   Bumper3 = NULL;
   Ball = NULL;
-
-
 }
 
 bool Graphics::Initialize(int width, int height)
@@ -136,7 +131,7 @@ void Graphics::Update(unsigned int dt)
 {
   // Update the object
   m_camera->Update();
-  dynamicsWorld->stepSimulation(dt, 5); 
+  dynamicsWorld->stepSimulation(dt, 5);
 
   OutterWalls->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
   InnerWalls->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
@@ -161,17 +156,13 @@ void Graphics::Render()
   glUniformMatrix4fv(m_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
 
   // Render the object
-  //glUniformMatrix4fv(m_modelMatrix, 1, GL_FALSE, glm::value_ptr(InnerWalls->GetModel()));
   OutterWalls->Render(m_modelMatrix);
   InnerWalls->Render(m_modelMatrix);
   Floor->Render(m_modelMatrix);
   Bumper1->Render(m_modelMatrix);
   Bumper2->Render(m_modelMatrix);
   Bumper3->Render(m_modelMatrix);
-  
-
   Ball->Render(m_modelMatrix);
-
 
   // Get any errors from OpenGL
   auto error = glGetError();
@@ -216,17 +207,15 @@ std::string Graphics::ErrorString(GLenum error)
 
 void Graphics::CreateObjects()
 {
-  //InnerWalls = new Object(MODEL_DIR + "sphere.obj", 0, 1, 1, 10);
   OutterWalls = new Object(MODEL_DIR + "OutterWalls.obj", MODEL_DIR + "Paint.png", 0,100);
   InnerWalls  = new Object(MODEL_DIR + "InnerWalls.obj",  MODEL_DIR + "Paint.png", 0,100);
   Floor       = new Object(MODEL_DIR + "Floor.obj",       MODEL_DIR + "PlayfieldTexture.png", 0,100);
-  Bumper1     = new Object(MODEL_DIR + "Bumper1.obj",        MODEL_DIR + "PlayfieldTexture.png", 0,100);
-  Bumper2     = new Object(MODEL_DIR + "Bumper2.obj",        MODEL_DIR + "PlayfieldTexture.png", 0,100);
-  Bumper3     = new Object(MODEL_DIR + "Bumper3.obj",        MODEL_DIR + "PlayfieldTexture.png", 0,100);
+  Bumper1     = new Object(MODEL_DIR + "Bumper1.obj",     MODEL_DIR + "PlayfieldTexture.png", 0,100);
+  Bumper2     = new Object(MODEL_DIR + "Bumper2.obj",     MODEL_DIR + "PlayfieldTexture.png", 0,100);
+  Bumper3     = new Object(MODEL_DIR + "Bumper3.obj",     MODEL_DIR + "PlayfieldTexture.png", 0,100);
   Ball        = new Object(MODEL_DIR + "Ball.obj",        MODEL_DIR + "2kSun.jpg", 5,10);
 
   dynamicsWorld->addRigidBody(Ball->GetRigidBody());
-  //int flags = Ball->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT;
   Ball->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   dynamicsWorld->addRigidBody(Bumper1->GetRigidBody());
   dynamicsWorld->addRigidBody(Bumper2->GetRigidBody());
@@ -234,44 +223,28 @@ void Graphics::CreateObjects()
   dynamicsWorld->addRigidBody(OutterWalls->GetRigidBody());
   dynamicsWorld->addRigidBody(InnerWalls->GetRigidBody());//,COLLIDE_MASK, CollidesWith);
   dynamicsWorld->addRigidBody(Floor->GetRigidBody());
-  
-
-
-
-  
-
-
-
-  //OutterWalls->GetRigidBody()->setCollisionFlags(flags);
- // InnerWalls->GetRigidBody()->setCollisionFlags(flags);
-  //Floor->GetRigidBody()->setCollisionFlags(flags);
-  //Bumper1->GetRigidBody()->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
-  //dynamicsWorld->s
 }
 
-bool Graphics::BulletInit(){
-	std::cout<<"Initializing Bullet"<< std::endl;
-
+bool Graphics::BulletInit()
+{
 	btBroadphaseInterface *broadphase =
 		new btDbvtBroadphase();
+
 	btDefaultCollisionConfiguration *collisionConfiguration =
 		new btDefaultCollisionConfiguration();
 
 	btCollisionDispatcher *dispatcher =
 		new btCollisionDispatcher(collisionConfiguration);
+
 	btSequentialImpulseConstraintSolver *solver =
 		new btSequentialImpulseConstraintSolver();
 
-	dynamicsWorld = 
-		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration); 
+	dynamicsWorld =
+		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
 	dynamicsWorld->setGravity(btVector3(-1, -1, 0));
-	return 1;
-}
 
-Object* Graphics::GetSun() const
-{
-  return InnerWalls;
+	return true;
 }
 
 Camera* Graphics::GetCamera() const

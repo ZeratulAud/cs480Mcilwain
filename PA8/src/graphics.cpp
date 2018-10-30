@@ -128,7 +128,7 @@ void Graphics::Update(unsigned int dt)
 {
   // Update the object
   m_camera->Update();
-  dynamicsWorld->stepSimulation(dt, 10); 
+  dynamicsWorld->stepSimulation(dt, 5); 
 
   OutterWalls->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
   InnerWalls->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
@@ -204,12 +204,27 @@ void Graphics::CreateObjects()
   OutterWalls = new Object(MODEL_DIR + "OutterWalls.obj", MODEL_DIR + "Paint.png", 0,100);
   InnerWalls  = new Object(MODEL_DIR + "InnerWalls.obj",  MODEL_DIR + "Paint.png", 0,100);
   Floor       = new Object(MODEL_DIR + "Floor.obj",       MODEL_DIR + "PlayfieldTexture.png", 0,100);
-  Ball        = new Object(MODEL_DIR + "Ball.obj",        MODEL_DIR + "PlayfieldTexture.png", 1,10);
+  Ball        = new Object(MODEL_DIR + "Ball.obj",        MODEL_DIR + "2kSun.jpg", 5,10);
+
+  dynamicsWorld->addRigidBody(Ball->GetRigidBody());
+  int flags = Ball->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT;
 
   dynamicsWorld->addRigidBody(OutterWalls->GetRigidBody());
   dynamicsWorld->addRigidBody(InnerWalls->GetRigidBody());//,COLLIDE_MASK, CollidesWith);
   dynamicsWorld->addRigidBody(Floor->GetRigidBody());
-  dynamicsWorld->addRigidBody(Ball->GetRigidBody());
+  
+
+
+
+  
+
+
+
+  //OutterWalls->GetRigidBody()->setCollisionFlags(flags);
+ // InnerWalls->GetRigidBody()->setCollisionFlags(flags);
+  //Floor->GetRigidBody()->setCollisionFlags(flags);
+  //Ball->GetRigidBody()->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+  //dynamicsWorld->s
 }
 
 bool Graphics::BulletInit(){
@@ -223,12 +238,12 @@ bool Graphics::BulletInit(){
 	btCollisionDispatcher *dispatcher =
 		new btCollisionDispatcher(collisionConfiguration);
 	btSequentialImpulseConstraintSolver *solver =
-		new btSequentialImpulseConstraintSolver;
+		new btSequentialImpulseConstraintSolver();
 
 	dynamicsWorld = 
 		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration); 
 
-	dynamicsWorld->setGravity(btVector3(-.5, 0, .5));
+	dynamicsWorld->setGravity(btVector3(-1, -2, 0));
 	return 1;
 }
 

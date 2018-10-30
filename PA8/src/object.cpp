@@ -19,8 +19,9 @@ Object::Object(std::string objFilePath, std::string texFilePath, float Mass, flo
   shapeMotionState = new btDefaultMotionState(btTransform::getIdentity());//(btQuaternion(0, 0, 0, 0), btVector3(0, 0, 0)));
   btScalar mass(Mass);
   btVector3 inertia(Inertia, Inertia, Inertia); 
-  this->GetShape()->calculateLocalInertia(mass, inertia);
-  btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, this->GetShape(), inertia);
+  shape->calculateLocalInertia(mass, inertia);
+
+  btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, shape, inertia);
   rigidBody = new btRigidBody(shapeRigidBodyCI);
 
 }
@@ -154,6 +155,7 @@ bool Object::LoadObjFile(std::string objFilePath)
   ModelInfo tempModel;
   Assimp::Importer importer;
 
+
   btVector3 triArray[3];
   btTriangleMesh *objTriMesh = new btTriangleMesh();
 
@@ -164,9 +166,11 @@ bool Object::LoadObjFile(std::string objFilePath)
 
   for (int i = 0; i < myScene->mNumMeshes; i++)
   {
+    //std::cout << face->mNumIndices << std::endl;
     texture.push_back(tempGl);
     aiMesh* mesh = myScene->mMeshes[i];
     modelInfo.push_back(tempModel);
+    std::cout << mesh->mNumFaces << std::endl;
 
     for (int j = 0; j < mesh->mNumFaces; j++)
     {
@@ -188,7 +192,16 @@ bool Object::LoadObjFile(std::string objFilePath)
       objTriMesh->addTriangle(triArray[0], triArray[1], triArray[2]);
     }
     std::cout << "creating btCollisionShape" << std::endl;
-    shape = new btBvhTriangleMeshShape(objTriMesh, true);
+    
+    btCollisionShape *tempShape = new btBvhTriangleMeshShape(objTriMesh, true);
+    //if(mesh->mNumFaces ==2 )
+     //tempShape = new btStaticPlaneShape (btVector3(10, 10 , 10), btScalar(1));
+    //if(mesh->mNumFaces ==130 )
+      //tempShape = new btBoxShape (btVector3(1, 1, 1));
+    if(mesh->mNumFaces ==224 )
+      tempShape = new btSphereShape (btScalar(1));
+
+    shape = tempShape;
 
     VB.push_back(buffer);
     glGenBuffers(1, &VB[i]);

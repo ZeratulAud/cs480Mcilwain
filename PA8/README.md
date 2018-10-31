@@ -9,7 +9,21 @@ This project was ran and tested on the Debian Stretch partition in ECC.
 ```
 
 ## Controls
-Controls yet to be determined.
+```
+ESC - end program
+
+UP - gravity upward
+DOWN - gravity downward
+LEFT - gravity toward left
+RIGHT - gravity toward right
+
+w - pan up
+a - pan left
+s - pan down
+d - pan right
+q - pan out
+e - pan in
+```
 
 # Dependencies, Building, and Running
 

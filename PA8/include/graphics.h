@@ -17,7 +17,6 @@ class Graphics
     bool BulletInit();
     void Update(unsigned int dt);
     void Render();
-    Object* GetSun() const;
     Camera* GetCamera() const;
     btDiscreteDynamicsWorld* GetDynamicsWorld() const;
 
@@ -25,12 +24,14 @@ class Graphics
     float orbitScale;
 
   private:
-    btDiscreteDynamicsWorld *dynamicsWorld;
     std::string ErrorString(GLenum error);
     void CreateObjects();
 
     Camera *m_camera;
     Shader *m_shader;
+
+    btDiscreteDynamicsWorld *dynamicsWorld;
+
     Object *OutterWalls;
     Object *InnerWalls;
     Object *Floor;
@@ -38,7 +39,6 @@ class Graphics
     Object *Bumper1;
     Object *Bumper2;
     Object *Bumper3;
-
     Object *Ball;
     Object *Box;
 

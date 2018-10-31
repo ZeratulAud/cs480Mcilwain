@@ -34,11 +34,13 @@ class Graphics
     Object *OutterWalls;
     Object *InnerWalls;
     Object *Floor;
+    Object *Top;
     Object *Bumper1;
     Object *Bumper2;
     Object *Bumper3;
 
     Object *Ball;
+    Object *Box;
 
     GLint m_projectionMatrix;
     GLint m_viewMatrix;

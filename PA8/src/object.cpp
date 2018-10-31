@@ -6,7 +6,7 @@
 
 #include "object.h"
 
-Object::Object(std::string objFilePath, std::string texFilePath, float Mass, float Inertia)
+Object::Object(std::string objFilePath, std::string texFilePath, float Mass, float Inertia, btVector3 pos)
 {
   if (!LoadObjFile(MODEL_DIR + objFilePath))
   {
@@ -16,12 +16,14 @@ Object::Object(std::string objFilePath, std::string texFilePath, float Mass, flo
   LoadTexFile(texFilePath, 0);
 
   btDefaultMotionState *shapeMotionState = NULL; 
-  shapeMotionState = new btDefaultMotionState(btTransform::getIdentity());//(btQuaternion(0, 0, 0, 0), btVector3(0, 0, 0)));
+  shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion::getIdentity(),btVector3(pos)));
   btScalar mass(Mass);
   btVector3 inertia(Inertia, Inertia, Inertia); 
   shape->calculateLocalInertia(mass, inertia);
 
   btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, shape, inertia);
+  if (Inertia == 0)
+    shapeRigidBodyCI.m_restitution = 1000;
   rigidBody = new btRigidBody(shapeRigidBodyCI);
 
 }
@@ -198,8 +200,10 @@ bool Object::LoadObjFile(std::string objFilePath)
      //tempShape = new btStaticPlaneShape (btVector3(10, 10 , 10), btScalar(1));
     //if(mesh->mNumFaces ==130 )
       //tempShape = new btBoxShape (btVector3(1, 1, 1));
-    if(mesh->mNumFaces ==224 )
+    if(mesh->mNumFaces == 224 )
       tempShape = new btSphereShape (btScalar(.25));
+    if(mesh->mNumFaces == 12 )
+      tempShape = new btBoxShape (btVector3(.5,.5,.5));
 
     shape = tempShape;
 

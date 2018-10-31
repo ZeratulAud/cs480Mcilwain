@@ -14,7 +14,7 @@ struct ModelInfo
 class Object
 {
   public:
-    Object(std::string objFilePath, std::string texFilePath, float Mass, float Inertia);
+    Object(std::string objFilePath, std::string texFilePath, float Mass, float Inertia, btVector3 pos);
     Object(const Object& other, float radius, float speed, float rotation, float scale);
     ~Object();
     //Object* AddChild(std::string texture, float radius, float speed, float rotation, float scale);

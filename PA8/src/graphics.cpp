@@ -22,6 +22,7 @@ Graphics::~Graphics()
   delete Bumper2;
   delete Bumper3;
   delete Ball;
+  delete Box;
   m_camera = NULL;
   m_shader = NULL;
   OutterWalls = NULL;
@@ -31,6 +32,7 @@ Graphics::~Graphics()
   Bumper2 = NULL;
   Bumper3 = NULL;
   Ball = NULL;
+  Box = NULL;
 
 
 }
@@ -141,10 +143,12 @@ void Graphics::Update(unsigned int dt)
   OutterWalls->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
   InnerWalls->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
   Floor->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
+  Top->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
   Bumper1->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
   Bumper2->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
   Bumper3->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
   Ball->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
+  Box->Update(dt,glm::mat4(1.0), timeScale, orbitScale);
 }
 
 void Graphics::Render()
@@ -165,12 +169,14 @@ void Graphics::Render()
   OutterWalls->Render(m_modelMatrix);
   InnerWalls->Render(m_modelMatrix);
   Floor->Render(m_modelMatrix);
+  //Top->Render(m_modelMatrix);
   Bumper1->Render(m_modelMatrix);
   Bumper2->Render(m_modelMatrix);
   Bumper3->Render(m_modelMatrix);
   
 
   Ball->Render(m_modelMatrix);
+  Box->Render(m_modelMatrix);
 
 
   // Get any errors from OpenGL
@@ -178,7 +184,7 @@ void Graphics::Render()
   if ( error != GL_NO_ERROR )
   {
     std::string val = ErrorString( error );
-    std::cout<< "Error initializing OpenGL! " << error << ", " << val << std::endl;
+    //std::cout<< "Error initializing OpenGL! " << error << ", " << val << std::endl;
   }
 }
 
@@ -196,7 +202,7 @@ std::string Graphics::ErrorString(GLenum error)
 
   else if(error == GL_INVALID_OPERATION)
   {
-    return "GL_INVALID_OPERATION: The specified operation is not allowed in the current state.";
+    return "";//GL_INVALID_OPERATION: The specified operation is not allowed in the current state.";
   }
 
   else if(error == GL_INVALID_FRAMEBUFFER_OPERATION)
@@ -217,23 +223,30 @@ std::string Graphics::ErrorString(GLenum error)
 void Graphics::CreateObjects()
 {
   //InnerWalls = new Object(MODEL_DIR + "sphere.obj", 0, 1, 1, 10);
-  OutterWalls = new Object(MODEL_DIR + "OutterWalls.obj", MODEL_DIR + "Paint.png", 0,100);
-  InnerWalls  = new Object(MODEL_DIR + "InnerWalls.obj",  MODEL_DIR + "Paint.png", 0,100);
-  Floor       = new Object(MODEL_DIR + "Floor.obj",       MODEL_DIR + "PlayfieldTexture.png", 0,100);
-  Bumper1     = new Object(MODEL_DIR + "Bumper1.obj",        MODEL_DIR + "PlayfieldTexture.png", 0,100);
-  Bumper2     = new Object(MODEL_DIR + "Bumper2.obj",        MODEL_DIR + "PlayfieldTexture.png", 0,100);
-  Bumper3     = new Object(MODEL_DIR + "Bumper3.obj",        MODEL_DIR + "PlayfieldTexture.png", 0,100);
-  Ball        = new Object(MODEL_DIR + "Ball.obj",        MODEL_DIR + "2kSun.jpg", 5,10);
+  OutterWalls = new Object(MODEL_DIR + "OutterWalls.obj", MODEL_DIR + "Paint.png", 0,0, btVector3(0,0,0));
+  InnerWalls  = new Object(MODEL_DIR + "InnerWalls.obj",  MODEL_DIR + "Paint.png", 0,0, btVector3(0,0,0));
+  Floor       = new Object(MODEL_DIR + "Floor.obj",       MODEL_DIR + "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
+  Top         = new Object(MODEL_DIR + "Top.obj",       MODEL_DIR + "PlayfieldTexture.png", 0,0, btVector3(0,-.5,0));
+  Bumper1     = new Object(MODEL_DIR + "Bumper1.obj",        MODEL_DIR + "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
+  Bumper2     = new Object(MODEL_DIR + "Bumper2.obj",        MODEL_DIR + "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
+  Bumper3     = new Object(MODEL_DIR + "Bumper3.obj",        MODEL_DIR + "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
+  Ball        = new Object(MODEL_DIR + "Ball.obj",        MODEL_DIR + "2kSun.jpg", 5,10, btVector3(-10,.25,7.25));
+  Box        = new Object(MODEL_DIR + "Cube.obj",        MODEL_DIR + "Paint.png", 5,10, btVector3(0,.5,-4));
 
-  dynamicsWorld->addRigidBody(Ball->GetRigidBody());
-  //int flags = Ball->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT;
+ 
+  Bumper1->GetRigidBody()->setCollisionFlags(Bumper1->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  Bumper1->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   Ball->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  Box->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  dynamicsWorld->addRigidBody(Ball->GetRigidBody());
+  dynamicsWorld->addRigidBody(Box->GetRigidBody());
   dynamicsWorld->addRigidBody(Bumper1->GetRigidBody());
   dynamicsWorld->addRigidBody(Bumper2->GetRigidBody());
   dynamicsWorld->addRigidBody(Bumper3->GetRigidBody());
   dynamicsWorld->addRigidBody(OutterWalls->GetRigidBody());
   dynamicsWorld->addRigidBody(InnerWalls->GetRigidBody());//,COLLIDE_MASK, CollidesWith);
   dynamicsWorld->addRigidBody(Floor->GetRigidBody());
+  dynamicsWorld->addRigidBody(Top->GetRigidBody());
   
 
 

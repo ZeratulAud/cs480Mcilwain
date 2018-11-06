@@ -20,9 +20,10 @@ class Graphics
     void Render();
     Camera* GetCamera() const;
     btDiscreteDynamicsWorld* GetDynamicsWorld() const;
-
+    bool switchShader();
     float timeScale;
     float orbitScale;
+    int switcher;
 
   private:
     std::string ErrorString(GLenum error);
@@ -30,6 +31,7 @@ class Graphics
 
     Camera *m_camera;
     Shader *m_shader;
+    Shader *otherShader;
 
     btDiscreteDynamicsWorld *dynamicsWorld;
 
@@ -38,6 +40,10 @@ class Graphics
     GLint m_projectionMatrix;
     GLint m_viewMatrix;
     GLint m_modelMatrix;
+
+    GLint other_projectionMatrix;
+    GLint other_viewMatrix;
+    GLint other_modelMatrix;
 };
 
 #endif /* GRAPHICS_H */

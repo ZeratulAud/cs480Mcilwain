@@ -4,6 +4,7 @@ Graphics::Graphics()
 {
   BulletInit();
   timeScale = 1;
+  switcher = 0;
   orbitScale = 2.5;
 }
 
@@ -58,6 +59,7 @@ bool Graphics::Initialize(int width, int height)
 
   // Set up the shaders
   m_shader = new Shader();
+  otherShader = new Shader();
   if(!m_shader->Initialize())
   {
     printf("Shader Failed to Initialize\n");
@@ -65,14 +67,14 @@ bool Graphics::Initialize(int width, int height)
   }
 
   // Add the vertex shader
-  if(!m_shader->AddShader(GL_VERTEX_SHADER))
+  if(!m_shader->AddShader(GL_VERTEX_SHADER, "../shaders/vert_shader_phong"))
   {
     printf("Vertex Shader failed to Initialize\n");
     return false;
   }
 
   // Add the fragment shader
-  if(!m_shader->AddShader(GL_FRAGMENT_SHADER))
+  if(!m_shader->AddShader(GL_FRAGMENT_SHADER, "../shaders/frag_shader_phong"))
   {
     printf("Fragment Shader failed to Initialize\n");
     return false;
@@ -109,6 +111,57 @@ bool Graphics::Initialize(int width, int height)
     return false;
   }
 
+  if(!otherShader->Initialize())
+  {
+    printf("Shader Failed to Initialize\n");
+    return false;
+  }
+
+  // Add the vertex shader
+  if(!otherShader->AddShader(GL_VERTEX_SHADER, "../shaders/vert_shader_gourand"))
+  {
+    printf("Vertex Shader failed to Initialize\n");
+    return false;
+  }
+
+  // Add the fragment shader
+  if(!otherShader->AddShader(GL_FRAGMENT_SHADER, "../shaders/frag_shader_gourand"))
+  {
+    printf("Fragment Shader failed to Initialize\n");
+    return false;
+  }
+
+  // Connect the program
+  if(!otherShader->Finalize())
+  {
+    printf("Program to Finalize\n");
+    return false;
+  }
+
+  // Locate the projection matrix in the shader
+  other_projectionMatrix = otherShader->GetUniformLocation("projectionMatrix");
+  if (other_projectionMatrix == INVALID_UNIFORM_LOCATION)
+  {
+    printf("other_projectionMatrix not found\n");
+    return false;
+  }
+
+  // Locate the view matrix in the shader
+  other_viewMatrix = otherShader->GetUniformLocation("viewMatrix");
+  if (other_viewMatrix == INVALID_UNIFORM_LOCATION)
+  {
+    printf("other_viewMatrix not found\n");
+    return false;
+  }
+
+  // Locate the model matrix in the shader
+  other_modelMatrix = otherShader->GetUniformLocation("modelMatrix");
+  if (other_modelMatrix == INVALID_UNIFORM_LOCATION)
+  {
+    printf("other_modelMatrix not found\n");
+    return false;
+  }
+
   //enable depth testing
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
@@ -130,20 +183,37 @@ void Graphics::Update(unsigned int dt)
 void Graphics::Render()
 {
   //clear the screen
+  //std::cout << switcher << std::endl;
   glClearColor(0.0, 0.0, 0.2, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  if(switcher == 0)
+  {
+     // Start the correct program
+    m_shader->Enable();
 
-  // Start the correct program
-  m_shader->Enable();
+    // Send in the projection and view to the shader
+    glUniformMatrix4fv(m_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection()));
+    glUniformMatrix4fv(m_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
 
-  // Send in the projection and view to the shader
-  glUniformMatrix4fv(m_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection()));
-  glUniformMatrix4fv(m_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
+    // Render the object
+    for (auto &i : Objects) {
+      if (i->render)
+        i->Render(m_modelMatrix, m_shader);  
+    }
+  }
+  else
+  {
+     otherShader->Enable();
 
-  // Render the object
-  for (auto &i : Objects) {
-    if (i->render)
-      i->Render(m_modelMatrix, m_shader);  
+    // Send in the projection and view to the shader
+    glUniformMatrix4fv(other_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection()));
+    glUniformMatrix4fv(other_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
+
+    // Render the object
+    for (auto &i : Objects) {
+      if (i->render)
+        i->Render(other_modelMatrix, otherShader);  
+    }
   }
   
 
@@ -167,7 +237,6 @@ std::string Graphics::ErrorString(GLenum error)
   {
     return "GL_INVALID_VALUE: A numeric argument is out of range.";
   }
-
   else if(error == GL_INVALID_OPERATION)
   {
     return "GL_INVALID_OPERATION: The specified operation is not allowed in the current state.";
@@ -265,3 +334,19 @@ btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
   return dynamicsWorld;
 }
 
+bool Graphics::switchShader()
+{
+    //std::cout << "switched" << std::endl;
+    if(switcher == 1)
+    {
+      switcher = 0;
+    }
+    else
+    {
+      switcher = 1;
+    }
+
+
+
+    return true;
+}

@@ -4,8 +4,8 @@
 Shader::Shader()
 {
   m_shaderProg = 0;
+    
 }
-
 Shader::~Shader()
 {
   for (std::vector<GLuint>::iterator it = m_shaderObjList.begin() ; it != m_shaderObjList.end() ; it++)
@@ -34,15 +34,25 @@ bool Shader::Initialize()
 }
 
 // Use this method to add shaders to the program. When finished - call finalize()
-bool Shader::AddShader(GLenum ShaderType)
+bool Shader::AddShader(GLenum ShaderType,std::string fileName)
 {
   std::string s;
 
+
   if(ShaderType == GL_VERTEX_SHADER)
-    s = readShaderFile("../shaders/vert_shader_gourand");
+  {
+   
+    s = readShaderFile(fileName.c_str());
+ 
+  }
 
   else if(ShaderType == GL_FRAGMENT_SHADER)
-    s = readShaderFile("../shaders/frag_shader_gourand");
+  {
+   
+    s = readShaderFile(fileName.c_str());
+   
+  }
+	
 
   GLuint ShaderObj = glCreateShader(ShaderType);
 
@@ -75,6 +85,8 @@ bool Shader::AddShader(GLenum ShaderType)
   }
 
   glAttachShader(m_shaderProg, ShaderObj);
+
+
 
   return true;
 }

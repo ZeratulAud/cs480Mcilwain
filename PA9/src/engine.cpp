@@ -101,6 +101,10 @@ void Engine::Keyboard()
         m_graphics->GetDynamicsWorld()->setGravity(btVector3(-1, -1, 0));
         break;
 
+        case SDLK_l:
+        m_graphics->switchShader();
+        break;
+
       case SDLK_SPACE:
         //m_graphics->dynamicsWorld.x = 1;
         break;

@@ -2,6 +2,7 @@
 #define OBJECT_H
 
 #include <vector>
+
 #include "shader.h"
 #include "graphics_headers.h"
 

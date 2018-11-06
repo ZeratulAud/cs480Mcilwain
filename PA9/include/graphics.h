@@ -15,9 +15,10 @@ class Graphics
     Graphics();
     ~Graphics();
     bool Initialize(int width, int height);
-    bool BulletInit();
+    void BulletInit();
     void Update(unsigned int dt);
     void Render();
+    Object* GetObject(int objIndex) const;
     Camera* GetCamera() const;
     btDiscreteDynamicsWorld* GetDynamicsWorld() const;
     bool switchShader();
@@ -35,7 +36,7 @@ class Graphics
 
     btDiscreteDynamicsWorld *dynamicsWorld;
 
-    std::vector <Object*> Objects; 
+    std::vector<Object*> Objects;
 
     GLint m_projectionMatrix;
     GLint m_viewMatrix;

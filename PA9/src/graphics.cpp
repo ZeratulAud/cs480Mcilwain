@@ -15,6 +15,12 @@ Graphics::~Graphics()
   m_shader = NULL;
 
   for (Object *obj : Objects)
+    dynamicsWorld->removeRigidBody(obj->GetRigidBody());
+
+  delete dynamicsWorld;
+  dynamicsWorld = NULL;
+
+  for (Object *obj : Objects)
     delete obj;
 
   Objects.clear();
@@ -254,9 +260,6 @@ void Graphics::BulletInit()
 
 Object* Graphics::GetObject(int objIndex) const
 {
-  if (Objects.empty())
-    return NULL;
-
   return Objects[objIndex];
 }
 

@@ -61,11 +61,18 @@ void Object::Update(unsigned int dt)
 void Object::Render(GLint& m_modelMatrix, Shader *shader)
 {
 
-  shader->GetUniformLocation("MaterialAmbientColor");
-  shader->GetUniformLocation("MaterialDiffuseColor");
-  shader->GetUniformLocation("MaterialSpecularColor");
-  shader->GetUniformLocation("shininess");
-
+  GLint temp = shader->GetUniformLocation("AmbientProduct");
+  glUniform4f(temp, 0, 0, 0, 1);
+  temp = shader->GetUniformLocation("DiffuseProduct");
+  glUniform4f(temp, .1, .1, .1, 1);
+  temp = shader->GetUniformLocation("SpecularProduct");
+  glUniform4f(temp, .6, .6, .6, 1);
+  temp = shader->GetUniformLocation("LightPosition");
+  glUniform4f(temp, 0, 200, 0, 1);
+  //temp = shader->GetUniformLocation("MaterialSpecularColor");
+  //glUniform4f(temp, 1, 1, 1, 1);
+  temp = shader->GetUniformLocation("Shininess");
+  glUniform1f(temp, 100);
 
   for(int i = 0; i < VB.size(); i++)
   {
@@ -122,7 +129,9 @@ bool Object::LoadObjFile(std::string objFilePath)
       for (int k = 0; k < face->mNumIndices; k++)
       {
         aiVector3D tempPos = mesh->mVertices[face->mIndices[k]];
-        aiVector3D& normal = mesh->mNormals[face->mIndices[k]];
+        aiVector3D normal = mesh->mNormals[face->mIndices[k]];
+
+        //std::cout << "normal:x="<<normal.x << " y=" << normal.y << " z=" << normal.z << std::endl;
 
 
         triArray[k] = btVector3(tempPos.x, tempPos.y, tempPos.z);

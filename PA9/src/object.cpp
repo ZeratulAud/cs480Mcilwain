@@ -68,7 +68,7 @@ void Object::Render(GLint& m_modelMatrix, Shader *shader)
   temp = shader->GetUniformLocation("SpecularProduct");
   glUniform4f(temp, .6, .6, .6, 1);
   temp = shader->GetUniformLocation("LightPosition");
-  glUniform4f(temp, 0, 200, 0, 1);
+  glUniform4f(temp, 0, 25, 0, 1);
   //temp = shader->GetUniformLocation("MaterialSpecularColor");
   //glUniform4f(temp, 1, 1, 1, 1);
   temp = shader->GetUniformLocation("Shininess");

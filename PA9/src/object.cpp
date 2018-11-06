@@ -17,7 +17,7 @@ Object::Object(std::string objFilePath, std::string texFilePath, float Mass, flo
 
   render = true;
 
-  btDefaultMotionState *shapeMotionState = NULL; 
+  btDefaultMotionState *shapeMotionState = NULL;
   shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion::getIdentity(),btVector3(pos)));
   btScalar mass(Mass);
   btVector3 inertia(Inertia, Inertia, Inertia);
@@ -128,31 +128,28 @@ bool Object::LoadObjFile(std::string objFilePath)
 
       for (int k = 0; k < face->mNumIndices; k++)
       {
-        aiVector3D tempPos = mesh->mVertices[face->mIndices[k]];
+        aiVector3D tempVert = mesh->mVertices[face->mIndices[k]];
         aiVector3D normal = mesh->mNormals[face->mIndices[k]];
-
-        //std::cout << "normal:x="<<normal.x << " y=" << normal.y << " z=" << normal.z << std::endl;
-
-
-        triArray[k] = btVector3(tempPos.x, tempPos.y, tempPos.z);
-
         aiVector3D uv = mesh->mTextureCoords[0][face->mIndices[k]];
-        Vertex tempVert(glm::vec3(tempPos.x, tempPos.y, tempPos.z), glm::vec2(uv.x, uv.y), glm::vec3(normal.x, normal.y, normal.z) );
 
-        modelInfo[i].Vertices.push_back(tempVert);
+        triArray[k] = btVector3(tempVert.x, tempVert.y, tempVert.z);
+
+        Vertex vert(glm::vec3(tempVert.x, tempVert.y, tempVert.z),
+                    glm::vec3(normal.x, normal.y, normal.z),
+                    glm::vec2(uv.x, uv.y));
+
+        modelInfo[i].Vertices.push_back(vert);
         modelInfo[i].Indices.push_back(face->mIndices[k]);
-        //modelInfo[i].Normals.push_back(normal);
       }
       objTriMesh->addTriangle(triArray[0], triArray[1], triArray[2]);
     }
 
     btCollisionShape *tempShape = new btBvhTriangleMeshShape(objTriMesh, true);
 
-
     if(mesh->mNumFaces == 224 )
-      tempShape = new btSphereShape (btScalar(.25));
-    if(mesh->mNumFaces == 12 )
-      tempShape = new btBoxShape (btVector3(.5,.5,.5));
+      tempShape = new btSphereShape(btScalar(.25));
+    else if(mesh->mNumFaces == 12 )
+      tempShape = new btBoxShape(btVector3(.5,.5,.5));
 
     shape = tempShape;
 
@@ -168,7 +165,6 @@ bool Object::LoadObjFile(std::string objFilePath)
     IB.push_back(buffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * modelInfo[i].Indices.size(), &modelInfo[i].Indices[0], GL_STATIC_DRAW);
   }
-
   return true;
 }
 
@@ -176,8 +172,7 @@ bool Object::LoadTexFile(std::string texFilePath, int count)
 {
   Magick::InitializeMagick("");
   Magick::Blob blob;
-  Magick::Image *my_image;
-  my_image = new Magick::Image(texFilePath);
+  Magick::Image *my_image = new Magick::Image(texFilePath);
   my_image->write(&blob, "RGBA");
 
   glGenTextures(1, &texture[count]);

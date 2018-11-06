@@ -1,4 +1,4 @@
-# PA8: Pinball (Bullet)
+# PA9: Pinball (Lighting)
 
 ### Enzo Arata
 ### Evan Brown

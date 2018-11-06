@@ -9,14 +9,15 @@ Graphics::Graphics()
 
 Graphics::~Graphics()
 {
-
   delete m_camera;
   delete m_shader;
-  //delete Objects;
   m_camera = NULL;
   m_shader = NULL;
-  Objects.clear();
 
+  for (Object *obj : Objects)
+    delete obj;
+
+  Objects.clear();
 }
 
 bool Graphics::Initialize(int width, int height)
@@ -143,9 +144,9 @@ void Graphics::Render()
   // Render the object
   for (auto &i : Objects) {
     if (i->render)
-      i->Render(m_modelMatrix, m_shader);  
+      i->Render(m_modelMatrix, m_shader);
   }
-  
+
 
   // Get any errors from OpenGL
   auto error = glGetError();
@@ -203,7 +204,7 @@ void Graphics::CreateObjects()
   Objects.push_back(tempObject);
 
   tempObject = new Object( "Top.obj",          "PlayfieldTexture.png", 0,0, btVector3(0,-.5,0));
-  tempObject->render=false;
+  tempObject->render = false;
   Objects.push_back(tempObject);
 
   //tempObject = new Object( "Bumper1.obj",      "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
@@ -222,18 +223,16 @@ void Graphics::CreateObjects()
   tempObject = new Object( "Cube.obj",         "Paint.png", 5,10, btVector3(0,.5,-4));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   Objects.push_back(tempObject);
- 
+
   //Bumper1->GetRigidBody()->setCollisionFlags(Bumper1->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   //Bumper1->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
 
   for (auto &i : Objects) {
     dynamicsWorld->addRigidBody(i->GetRigidBody());
   }
-
-
 }
 
-bool Graphics::BulletInit()
+void Graphics::BulletInit()
 {
 	btBroadphaseInterface *broadphase =
 		new btDbvtBroadphase();
@@ -251,8 +250,14 @@ bool Graphics::BulletInit()
 		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
 	dynamicsWorld->setGravity(btVector3(-1, -1, 0));
+}
 
-	return true;
+Object* Graphics::GetObject(int objIndex) const
+{
+  if (Objects.empty())
+    return NULL;
+
+  return Objects[objIndex];
 }
 
 Camera* Graphics::GetCamera() const

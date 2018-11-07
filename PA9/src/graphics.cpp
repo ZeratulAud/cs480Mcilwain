@@ -255,19 +255,19 @@ std::string Graphics::ErrorString(GLenum error)
 
 void Graphics::CreateObjects()
 {
-  Object* tempObject = new Object( "OutterWalls.obj",  "Paint.png", 0,0, btVector3(0,0,0)) ;
+  Object* tempObject = new Object("OutterWalls.obj", "Paint.png", 0,0, btVector3(0,0,0));
   Objects.push_back(tempObject);
 
-  tempObject = new Object( "OutterWalls.obj",  "Paint.png", 0,0, btVector3(0,0,0));
+  tempObject = new Object( "OutterWalls.obj", "Paint.png", 0,0, btVector3(0,0,0));
   Objects.push_back(tempObject);
 
-  tempObject = new Object( "InnerWalls.obj",   "Paint.png", 0,0, btVector3(0,0,0));
+  tempObject = new Object( "InnerWalls.obj", "Paint.png", 0,0, btVector3(0,0,0));
   Objects.push_back(tempObject);
 
-  tempObject = new Object( "Floor.obj",        "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
+  tempObject = new Object( "Floor.obj", "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
   Objects.push_back(tempObject);
 
-  tempObject = new Object( "Top.obj",          "PlayfieldTexture.png", 0,0, btVector3(0,-.5,0));
+  tempObject = new Object( "Top.obj", "PlayfieldTexture.png", 0,0, btVector3(0,-.5,0));
   tempObject->render = false;
   Objects.push_back(tempObject);
 
@@ -280,11 +280,11 @@ void Graphics::CreateObjects()
   //tempObject = new Object( "Bumper3.obj",      "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
   //Objects.push_back(tempObject);
 
-  tempObject = new Object( "Ball.obj",         "2kSun.jpg", 5,10, btVector3(-10,.25,7.25));
+  tempObject = new Object( "Ball.obj", "2kSun.jpg", 5,10, btVector3(-10,.25,7.25));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   Objects.push_back(tempObject);
 
-  tempObject = new Object( "Cube.obj",         "Paint.png", 5,10, btVector3(0,.5,-4));
+  tempObject = new Object( "Cube.obj", "Paint.png", 5,10, btVector3(0,.5,-4));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   Objects.push_back(tempObject);
 

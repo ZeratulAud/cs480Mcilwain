@@ -102,7 +102,7 @@ void Engine::Keyboard()
         break;
 
         case SDLK_l:
-        m_graphics->switchShader();
+        m_graphics->SwitchShader();
         break;
 
       case SDLK_SPACE:

@@ -17,6 +17,8 @@ DOWN - gravity downward
 LEFT - gravity toward left
 RIGHT - gravity toward right
 
+l - toggle shaders
+
 w - pan up
 a - pan left
 s - pan down

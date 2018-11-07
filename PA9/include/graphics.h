@@ -21,10 +21,11 @@ class Graphics
     Object* GetObject(int objIndex) const;
     Camera* GetCamera() const;
     btDiscreteDynamicsWorld* GetDynamicsWorld() const;
-    bool switchShader();
+    void SwitchShader();
+
     float timeScale;
     float orbitScale;
-    int switcher;
+    bool switcher;
 
   private:
     std::string ErrorString(GLenum error);

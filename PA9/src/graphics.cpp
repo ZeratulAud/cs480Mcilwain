@@ -190,12 +190,11 @@ void Graphics::Update(unsigned int dt)
 void Graphics::Render()
 {
   //clear the screen
-  //std::cout << switcher << std::endl;
   glClearColor(0.0, 0.0, 0.2, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   if(switcher == 0)
   {
-     // Start the correct program
+    // Start the correct program
     m_shader->Enable();
 
     // Send in the projection and view to the shader
@@ -205,13 +204,12 @@ void Graphics::Render()
     // Render the object
     for (auto &i : Objects) {
       if (i->render)
-        i->Render(m_modelMatrix, m_shader);  
+        i->Render(m_modelMatrix, m_shader);
     }
   }
   else
   {
-     otherShader->Enable();
-
+    otherShader->Enable();
 
     // Send in the projection and view to the shader
     glUniformMatrix4fv(other_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection()));
@@ -220,11 +218,9 @@ void Graphics::Render()
     // Render the object
     for (auto &i : Objects) {
       if (i->render)
-        i->Render(other_modelMatrix, otherShader);  
+        i->Render(other_modelMatrix, otherShader);
     }
-
   }
-
 
   // Get any errors from OpenGL
   auto error = glGetError();
@@ -344,19 +340,7 @@ btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
   return dynamicsWorld;
 }
 
-bool Graphics::switchShader()
+void Graphics::SwitchShader()
 {
-    //std::cout << "switched" << std::endl;
-    if(switcher == 1)
-    {
-      switcher = 0;
-    }
-    else
-    {
-      switcher = 1;
-    }
-
-
-
-    return true;
+  switcher ? switcher = false : switcher = true;
 }

@@ -79,9 +79,8 @@ void Object::Render(GLint& m_modelMatrix, Shader *shader)
 
   temp = shader->GetUniformLocation("LightPosition");
   glUniform4f(temp, 0, 25, 0, 1);
-  //temp = shader->GetUniformLocation("MaterialSpecularColor");
-  //glUniform4f(temp, 1, 1, 1, 1);
-  std::cout << "Shininess: " << shineIntensity << std::endl;
+
+  std::cout << "Shininess: " << shineIntensity << std::endl << std::endl;
   temp = shader->GetUniformLocation("Shininess");
   glUniform1f(temp, shineIntensity);
 
@@ -130,8 +129,8 @@ bool Object::LoadObjFile(std::string objFilePath)
   for (int i = 0; i < myScene->mNumMeshes; i++)
   {
     texture.push_back(tempGl);
-    aiMesh* mesh = myScene->mMeshes[i];
     modelInfo.push_back(tempModel);
+    aiMesh* mesh = myScene->mMeshes[i];
 
     for (int j = 0; j < mesh->mNumFaces; j++)
     {

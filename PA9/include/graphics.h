@@ -18,10 +18,10 @@ class Graphics
     void BulletInit();
     void Update(unsigned int dt);
     void Render();
+    void SwitchShader();
     std::vector<Object*> GetObjects() const;
     Camera* GetCamera() const;
     btDiscreteDynamicsWorld* GetDynamicsWorld() const;
-    void SwitchShader();
 
     float timeScale;
     float orbitScale;

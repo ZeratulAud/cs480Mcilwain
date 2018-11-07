@@ -83,6 +83,10 @@ void Engine::Keyboard()
   // Keyboard
   else if (m_event.type == SDL_KEYDOWN)
   {
+
+    Camera();
+    Lighting();
+
     // handle key down events here
     switch(m_event.key.keysym.sym)
     {

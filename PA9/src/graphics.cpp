@@ -4,8 +4,8 @@ Graphics::Graphics()
 {
   BulletInit();
   timeScale = 1;
-  switcher = 0;
   orbitScale = 2.5;
+  switcher = false;
 }
 
 Graphics::~Graphics()
@@ -316,6 +316,11 @@ void Graphics::BulletInit()
 	dynamicsWorld->setGravity(btVector3(-1, -1, 0));
 }
 
+void Graphics::SwitchShader()
+{
+  switcher ? switcher = false : switcher = true;
+}
+
 std::vector<Object*> Graphics::GetObjects() const
 {
   return Objects;
@@ -329,9 +334,4 @@ Camera* Graphics::GetCamera() const
 btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
 {
   return dynamicsWorld;
-}
-
-void Graphics::SwitchShader()
-{
-  switcher ? switcher = false : switcher = true;
 }

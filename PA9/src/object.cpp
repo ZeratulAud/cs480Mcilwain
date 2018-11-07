@@ -64,7 +64,7 @@ void Object::Render(GLint& m_modelMatrix, Shader *shader)
   GLint temp = shader->GetUniformLocation("AmbientProduct");
   glUniform4f(temp, 0, 0, 0, 1);
   temp = shader->GetUniformLocation("DiffuseProduct");
-  glUniform4f(temp, .1, .1, .1, 1);
+  glUniform4f(temp, .5, .5, .5, 1);
   temp = shader->GetUniformLocation("SpecularProduct");
   glUniform4f(temp, .6, .6, .6, 1);
   temp = shader->GetUniformLocation("LightPosition");
@@ -72,7 +72,7 @@ void Object::Render(GLint& m_modelMatrix, Shader *shader)
   //temp = shader->GetUniformLocation("MaterialSpecularColor");
   //glUniform4f(temp, 1, 1, 1, 1);
   temp = shader->GetUniformLocation("Shininess");
-  glUniform1f(temp, 100);
+  glUniform1f(temp, 300);
 
   for(int i = 0; i < VB.size(); i++)
   {

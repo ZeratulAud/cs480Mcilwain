@@ -16,9 +16,9 @@ Object::Object(std::string objFilePath, std::string texFilePath, float Mass, flo
   LoadTexFile(MODEL_DIR + texFilePath, 0);
 
   ambIntensity = 0.0;
-  diffIntensity = .5;
+  diffIntensity = .2;
   specIntensity = .6;
-  shineIntensity = 300;
+  shineIntensity = 125;
 
   render = true;
 
@@ -65,16 +65,23 @@ void Object::Update(unsigned int dt)
 
 void Object::Render(GLint& m_modelMatrix, Shader *shader)
 {
+  std::cout << "Ambient: " << ambIntensity << std::endl;
   GLint temp = shader->GetUniformLocation("AmbientProduct");
   glUniform4f(temp, ambIntensity, ambIntensity, ambIntensity, 1);
+
+  std::cout << "Diffuse: " << diffIntensity << std::endl;
   temp = shader->GetUniformLocation("DiffuseProduct");
   glUniform4f(temp, diffIntensity, diffIntensity, diffIntensity, 1);
+
+  std::cout << "Specular: " << specIntensity << std::endl;
   temp = shader->GetUniformLocation("SpecularProduct");
   glUniform4f(temp, specIntensity, specIntensity, specIntensity, 1);
+
   temp = shader->GetUniformLocation("LightPosition");
   glUniform4f(temp, 0, 25, 0, 1);
   //temp = shader->GetUniformLocation("MaterialSpecularColor");
   //glUniform4f(temp, 1, 1, 1, 1);
+  std::cout << "Shininess: " << shineIntensity << std::endl;
   temp = shader->GetUniformLocation("Shininess");
   glUniform1f(temp, shineIntensity);
 

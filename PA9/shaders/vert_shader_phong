@@ -8,6 +8,10 @@ smooth out vec2 texture;
 smooth out vec3 fN;
 smooth out vec3 fE;
 smooth out vec3 fL;
+
+smooth out vec3 fN2;
+smooth out vec3 fL2;
+
 out mat4 ModelView;
 
 uniform mat4 projectionMatrix; 
@@ -21,17 +25,14 @@ void main(void)
 { 
   vec4 v = vec4(v_position, 1.0); 
   gl_Position = (projectionMatrix * viewMatrix * modelMatrix) * v; 
-  vec3 pos = (viewMatrix * modelMatrix * v).xyz;
-  ModelView = modelMatrix;
-  fN = (viewMatrix * modelMatrix * vec4(v_Normal,0)).xyz;
-  fE = pos;
+  vec3 pos = (modelMatrix * v).xyz;
+  vec3 vPos = (viewMatrix*modelMatrix * v).xyz;
+  fN = (modelMatrix * vec4(v_Normal,0.0)).xyz;
+  fE = -vPos;
   fL = LightPosition.xyz - pos;
-  
-  if( LightPosition.w != 0.0 ) {
-    fL = LightPosition.xyz - v_position.xyz;
-  }
 
-
+  fN2 = (viewMatrix*modelMatrix * vec4(v_Normal,0.0)).xyz;
+  fL2 = LightPosition.xyz;
 
   texture = v_texture; 
 } 

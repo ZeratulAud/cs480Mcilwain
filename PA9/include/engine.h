@@ -17,6 +17,7 @@ class Engine
     void Run();
     void Keyboard();
     void Camera();
+    void Lighting();
     unsigned int getDT();
     long long GetCurrentTimeMillis();
 

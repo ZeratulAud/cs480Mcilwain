@@ -17,14 +17,23 @@ DOWN - gravity downward
 LEFT - gravity toward left
 RIGHT - gravity toward right
 
-l - toggle shaders
-
 w - pan up
 a - pan left
 s - pan down
 d - pan right
 q - pan out
 e - pan in
+
+p - toggle shaders
+
+y - increase ambient intensity
+h - decrease ambient intensity
+u - increase diffuse intensity
+j - decrease diffuse intensity
+i - increase specular intensity
+k - decrease specular intensity
+o - increase spotlight intensity
+l - decrease spotlight intensity
 ```
 
 # Dependencies, Building, and Running

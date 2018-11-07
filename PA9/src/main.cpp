@@ -6,7 +6,7 @@
 int main(int argc, char **argv)
 {
   // Start an engine and run it then cleanup after
-  Engine *engine = new Engine("PA8: Pinball (Lighting)", 1080, 920);
+  Engine *engine = new Engine("PA9: Pinball (Lighting)", 1080, 920);
   if(!engine->Initialize())
   {
     printf("The engine failed to start.\n");

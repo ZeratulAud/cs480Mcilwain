@@ -63,6 +63,7 @@ void Engine::Run()
     {
       Keyboard();
       Camera();
+      Lighting();
     }
 
     // Update and render the graphics
@@ -101,17 +102,65 @@ void Engine::Keyboard()
         m_graphics->GetDynamicsWorld()->setGravity(btVector3(-1, -1, 0));
         break;
 
-        case SDLK_l:
-        m_graphics->SwitchShader();
-        break;
-
-      case SDLK_SPACE:
-        //m_graphics->dynamicsWorld.x = 1;
-        break;
-
       // Stop program
       case SDLK_ESCAPE:
         m_running = false;
+        break;
+    }
+  }
+}
+
+void Engine::Lighting()
+{
+  if (m_event.type == SDL_QUIT)
+    m_running = false;
+
+  else if (m_event.type == SDL_KEYDOWN)
+  {
+    switch (m_event.key.keysym.sym)
+    {
+      case SDLK_p:
+        m_graphics->SwitchShader();
+        break;
+
+      case SDLK_y:
+        for (Object *obj : m_graphics->GetObjects())
+          obj->ambIntensity += .1;
+        break;
+
+      case SDLK_h:
+        for (Object *obj : m_graphics->GetObjects())
+          obj->ambIntensity -= .1;
+        break;
+
+      case SDLK_u:
+        for (Object *obj : m_graphics->GetObjects())
+          obj->diffIntensity += .1;
+        break;
+
+      case SDLK_j:
+        for (Object *obj : m_graphics->GetObjects())
+          obj->diffIntensity -= .1;
+        break;
+
+      case SDLK_i:
+        for (Object *obj : m_graphics->GetObjects())
+          obj->specIntensity += .1;
+        break;
+
+      case SDLK_k:
+        for (Object *obj : m_graphics->GetObjects())
+          obj->specIntensity -= .1;
+        break;
+
+      case SDLK_o:
+        for (Object *obj : m_graphics->GetObjects())
+          obj->shineIntensity -= 15;
+        break;
+
+      case SDLK_l:
+        for (Object *obj : m_graphics->GetObjects())
+          obj->shineIntensity += 15;
         break;
     }
   }

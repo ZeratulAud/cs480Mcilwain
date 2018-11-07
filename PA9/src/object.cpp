@@ -15,6 +15,11 @@ Object::Object(std::string objFilePath, std::string texFilePath, float Mass, flo
   }
   LoadTexFile(MODEL_DIR + texFilePath, 0);
 
+  ambIntensity = 0.0;
+  diffIntensity = .5;
+  specIntensity = .6;
+  shineIntensity = 300;
+
   render = true;
 
   btDefaultMotionState *shapeMotionState = NULL;
@@ -60,19 +65,18 @@ void Object::Update(unsigned int dt)
 
 void Object::Render(GLint& m_modelMatrix, Shader *shader)
 {
-
   GLint temp = shader->GetUniformLocation("AmbientProduct");
-  glUniform4f(temp, 0, 0, 0, 1);
+  glUniform4f(temp, ambIntensity, ambIntensity, ambIntensity, 1);
   temp = shader->GetUniformLocation("DiffuseProduct");
-  glUniform4f(temp, .5, .5, .5, 1);
+  glUniform4f(temp, diffIntensity, diffIntensity, diffIntensity, 1);
   temp = shader->GetUniformLocation("SpecularProduct");
-  glUniform4f(temp, .6, .6, .6, 1);
+  glUniform4f(temp, specIntensity, specIntensity, specIntensity, 1);
   temp = shader->GetUniformLocation("LightPosition");
   glUniform4f(temp, 0, 25, 0, 1);
   //temp = shader->GetUniformLocation("MaterialSpecularColor");
   //glUniform4f(temp, 1, 1, 1, 1);
   temp = shader->GetUniformLocation("Shininess");
-  glUniform1f(temp, 300);
+  glUniform1f(temp, shineIntensity);
 
   for(int i = 0; i < VB.size(); i++)
   {
@@ -85,8 +89,8 @@ void Object::Render(GLint& m_modelMatrix, Shader *shader)
 
     glBindBuffer(GL_ARRAY_BUFFER, VB[i]);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex,texture));
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex,normal));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex,texture));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB[i]);
 

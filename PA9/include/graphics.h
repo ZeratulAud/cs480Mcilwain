@@ -18,7 +18,7 @@ class Graphics
     void BulletInit();
     void Update(unsigned int dt);
     void Render();
-    Object* GetObject(int objIndex) const;
+    std::vector<Object*> GetObjects() const;
     Camera* GetCamera() const;
     btDiscreteDynamicsWorld* GetDynamicsWorld() const;
     void SwitchShader();

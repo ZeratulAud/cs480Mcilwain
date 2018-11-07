@@ -24,6 +24,11 @@ class Object
     btCollisionShape* GetShape();
     btRigidBody* GetRigidBody();
 
+    float ambIntensity;
+    float diffIntensity;
+    float specIntensity;
+    int shineIntensity;
+
     bool render;
 
   private:

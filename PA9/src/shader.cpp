@@ -4,8 +4,9 @@
 Shader::Shader()
 {
   m_shaderProg = 0;
-    
+
 }
+
 Shader::~Shader()
 {
   for (std::vector<GLuint>::iterator it = m_shaderObjList.begin() ; it != m_shaderObjList.end() ; it++)
@@ -41,18 +42,17 @@ bool Shader::AddShader(GLenum ShaderType,std::string fileName)
 
   if(ShaderType == GL_VERTEX_SHADER)
   {
-   
+
     s = readShaderFile(fileName.c_str());
- 
+
   }
 
   else if(ShaderType == GL_FRAGMENT_SHADER)
   {
-   
+
     s = readShaderFile(fileName.c_str());
-   
+
   }
-	
 
   GLuint ShaderObj = glCreateShader(ShaderType);
 
@@ -85,9 +85,6 @@ bool Shader::AddShader(GLenum ShaderType,std::string fileName)
   }
 
   glAttachShader(m_shaderProg, ShaderObj);
-
-
-
   return true;
 }
 
@@ -102,6 +99,7 @@ bool Shader::Finalize()
   glLinkProgram(m_shaderProg);
 
   glGetProgramiv(m_shaderProg, GL_LINK_STATUS, &Success);
+
   if (Success == 0)
   {
     glGetProgramInfoLog(m_shaderProg, sizeof(ErrorLog), NULL, ErrorLog);
@@ -125,7 +123,6 @@ bool Shader::Finalize()
   }
 
   m_shaderObjList.clear();
-
   return true;
 }
 

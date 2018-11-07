@@ -192,7 +192,8 @@ void Graphics::Render()
   //clear the screen
   glClearColor(0.0, 0.0, 0.2, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  if(switcher == 0)
+
+  if (!switcher)
   {
     // Start the correct program
     m_shader->Enable();
@@ -234,32 +235,22 @@ void Graphics::Render()
 std::string Graphics::ErrorString(GLenum error)
 {
   if(error == GL_INVALID_ENUM)
-  {
     return "GL_INVALID_ENUM: An unacceptable value is specified for an enumerated argument.";
-  }
 
   else if(error == GL_INVALID_VALUE)
-  {
     return "GL_INVALID_VALUE: A numeric argument is out of range.";
-  }
+
   else if(error == GL_INVALID_OPERATION)
-  {
     return "GL_INVALID_OPERATION: The specified operation is not allowed in the current state.";
-  }
 
   else if(error == GL_INVALID_FRAMEBUFFER_OPERATION)
-  {
     return "GL_INVALID_FRAMEBUFFER_OPERATION: The framebuffer object is not complete.";
-  }
 
   else if(error == GL_OUT_OF_MEMORY)
-  {
     return "GL_OUT_OF_MEMORY: There is not enough memory left to execute the command.";
-  }
+
   else
-  {
     return "None";
-  }
 }
 
 void Graphics::CreateObjects()
@@ -325,9 +316,9 @@ void Graphics::BulletInit()
 	dynamicsWorld->setGravity(btVector3(-1, -1, 0));
 }
 
-Object* Graphics::GetObject(int objIndex) const
+std::vector<Object*> Graphics::GetObjects() const
 {
-  return Objects[objIndex];
+  return Objects;
 }
 
 Camera* Graphics::GetCamera() const

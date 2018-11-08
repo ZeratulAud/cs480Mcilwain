@@ -92,11 +92,21 @@ void Engine::Run()
     // My menu
     {
       ImGui::Begin("Project 10");
-      ImGui::Text("Enzo Arata");
-      ImGui::Text("Evan Brown");
-     // ImGui::set
-      ImGui::Text("Zachary Mcilwain");
-
+      //ImGui::Text("Enzo Arata");
+      //ImGui::Text("Evan Brown");
+      // ImGui::set
+      //ImGui::Text("Zachary Mcilwain");
+      if (ImGui::Button("Switch Shader"))
+      {
+        m_graphics->SwitchShader();
+      }
+       if (ImGui::Button("Reset Light Values"))
+      {
+        ambientVal =0 ;
+        diffuseVal = 0.2;
+        specularVal = 0.6;
+        shininessVal = 125;
+      }
       ImGui::SliderFloat("Ambient Value", &ambientVal, -2, 2, "%.05f");      
       ImGui::SliderFloat("Diffuse Value", &diffuseVal, -2, 2, "%.05f");
       ImGui::SliderFloat("Specular Value", &specularVal, -2, 2, "%.05f");

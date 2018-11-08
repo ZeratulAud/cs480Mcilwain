@@ -20,6 +20,7 @@ class Engine
     void Lighting();
     unsigned int getDT();
     long long GetCurrentTimeMillis();
+    void LightingUpdate();
 
   private:
     // Window related variables
@@ -29,6 +30,7 @@ class Engine
     int m_WINDOW_HEIGHT;
     bool m_FULLSCREEN;
     SDL_Event m_event;
+    
 
     Graphics *m_graphics;
     unsigned int m_DT;

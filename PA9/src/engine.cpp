@@ -3,6 +3,12 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 
+
+static float ambientVal =0 ;
+static float diffuseVal = 0.2;
+static float specularVal = 0.6;
+static float shininessVal = 125;
+
 Engine::Engine(std::string name, int width, int height)
 {
   m_WINDOW_NAME = name;
@@ -90,12 +96,19 @@ void Engine::Run()
       ImGui::Text("Evan Brown");
      // ImGui::set
       ImGui::Text("Zachary Mcilwain");
+
+      ImGui::SliderFloat("Ambient Value", &ambientVal, -2, 2, "%.05f");      
+      ImGui::SliderFloat("Diffuse Value", &diffuseVal, -2, 2, "%.05f");
+      ImGui::SliderFloat("Specular Value", &specularVal, -2, 2, "%.05f");
+      ImGui::SliderFloat("Shininess Value", &shininessVal, -200, 350, "%.0f");
       ImGui::End();
     }
+
 
     // Update and render the graphics
     m_graphics->Update(m_DT);
     m_graphics->Render();
+    LightingUpdate();
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -247,3 +260,17 @@ long long Engine::GetCurrentTimeMillis()
   long long ret = t.tv_sec * 1000 + t.tv_usec / 1000;
   return ret;
 }
+
+ void Engine::LightingUpdate()
+ {
+    for (Object *obj : m_graphics->GetObjects())
+    {
+          obj->ambIntensity = ambientVal;
+          obj->diffIntensity = diffuseVal;
+          obj->specIntensity = specularVal;
+          obj->shineIntensity = shininessVal;
+
+    }
+
+
+ }

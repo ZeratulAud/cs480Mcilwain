@@ -1,4 +1,7 @@
 #include "engine.h"
+#include "imgui.h"
+#include "imgui_impl_sdl.h"
+#include "imgui_impl_opengl3.h"
 
 Engine::Engine(std::string name, int width, int height)
 {
@@ -22,6 +25,10 @@ Engine::~Engine()
   delete m_graphics;
   m_window = NULL;
   m_graphics = NULL;
+
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplSDL2_Shutdown();
+  ImGui::DestroyContext();
 }
 
 bool Engine::Initialize()
@@ -45,6 +52,12 @@ bool Engine::Initialize()
   // Set the time
   m_currentTimeMillis = GetCurrentTimeMillis();
 
+   ImGui::CreateContext();
+  ImGuiIO& imgui_io = ImGui::GetIO(); (void)imgui_io;
+  ImGui_ImplSDL2_InitForOpenGL(m_window->getSDLWindow(), m_window->getGLContext());
+  ImGui_ImplOpenGL3_Init("#version 130"); // GL 3.0 + GLSL 130
+  ImGui::StyleColorsDark(); // Set
+
   // No errors
   return true;
 }
@@ -58,6 +71,10 @@ void Engine::Run()
     // Update the DT
     m_DT = getDT();
 
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL2_NewFrame(m_window->getSDLWindow());
+    ImGui::NewFrame();
+
     // Check the keyboard input
     while(SDL_PollEvent(&m_event) != 0)
     {
@@ -66,9 +83,22 @@ void Engine::Run()
       Lighting();
     }
 
+    // My menu
+    {
+      ImGui::Begin("Project 10");
+      ImGui::Text("Enzo Arata");
+      ImGui::Text("Evan Brown");
+     // ImGui::set
+      ImGui::Text("Zachary Mcilwain");
+      ImGui::End();
+    }
+
     // Update and render the graphics
     m_graphics->Update(m_DT);
     m_graphics->Render();
+
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     // Swap to the Window
     m_window->Swap();

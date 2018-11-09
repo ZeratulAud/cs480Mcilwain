@@ -45,9 +45,9 @@ This project uses OpenGL 3.3. Some computers, such as virtual machines in the EC
 
 ### Ubuntu/Linux
 
-#### OpenGL, GLM, SDL2 Installation
+#### OpenGL, GLFW, GLM, SDL2 Installation
 ```bash
-sudo apt-get install libglew-dev libglm-dev libsdl2-dev
+sudo apt-get install libglew-dev libglfw3-dev libglm-dev libsdl2-dev
 ```
 
 #### Assimp Installation

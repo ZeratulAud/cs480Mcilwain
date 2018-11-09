@@ -17,12 +17,16 @@ class Engine
     void Run();
     void Keyboard();
     void Camera();
-    void Lighting();
+    void LightingUpdate();
     unsigned int getDT();
     long long GetCurrentTimeMillis();
-    void LightingUpdate();
 
   private:
+    float ambientVal = 0;
+    float diffuseVal = 0.2;
+    float specularVal = 0.6;
+    float shininessVal = 125;
+
     // Window related variables
     Window *m_window;
     std::string m_WINDOW_NAME;
@@ -30,7 +34,7 @@ class Engine
     int m_WINDOW_HEIGHT;
     bool m_FULLSCREEN;
     SDL_Event m_event;
-    
+
 
     Graphics *m_graphics;
     unsigned int m_DT;

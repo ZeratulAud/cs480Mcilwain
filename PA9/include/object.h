@@ -28,7 +28,8 @@ class Object
     float diffIntensity;
     float specIntensity;
     int shineIntensity;
-
+    float lightHeight;
+    
     bool render;
 
   private:

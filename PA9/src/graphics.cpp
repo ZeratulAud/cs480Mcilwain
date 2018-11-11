@@ -180,7 +180,10 @@ void Graphics::Update(unsigned int dt)
 {
   // Update the object
   m_camera->Update();
-  dynamicsWorld->stepSimulation(dt, 5);
+  //flipper1->GetRigidBody()->applyTorque(btVector3(1,1,1));
+
+  dynamicsWorld->stepSimulation(dt, 10);
+
 
   for (auto &i : Objects) {
     i->Update(dt);
@@ -199,6 +202,15 @@ void Graphics::Render()
     m_shader->Enable();
 
     // Send in the projection and view to the shader
+    GLint temp = m_shader->GetUniformLocation("eyePos");
+    glUniform3f(temp, m_camera->eyePos.x, m_camera->eyePos.y, m_camera->eyePos.z);
+
+    temp = m_shader->GetUniformLocation("ballPos");
+    glUniform3f(temp, (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(), 
+                      (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(), 
+                      (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z());
+
+
     glUniformMatrix4fv(m_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection()));
     glUniformMatrix4fv(m_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
 
@@ -213,6 +225,14 @@ void Graphics::Render()
     otherShader->Enable();
 
     // Send in the projection and view to the shader
+    GLint temp = otherShader->GetUniformLocation("eyePos");
+    glUniform3f(temp, m_camera->eyePos.x, m_camera->eyePos.y, m_camera->eyePos.z);
+
+    temp = otherShader->GetUniformLocation("ballPos");
+    glUniform3f(temp, (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(), 
+                      (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(), 
+                      (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z());
+
     glUniformMatrix4fv(other_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection()));
     glUniformMatrix4fv(other_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
 
@@ -280,11 +300,17 @@ void Graphics::CreateObjects()
   //tempObject = new Object( "Bumper3.obj",      "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
   //Objects.push_back(tempObject);
 
-  tempObject = new Object( "Ball.obj", "2kSun.jpg", 5,10, btVector3(-10,.25,7.25));
+  ball = tempObject = new Object( "Ball.obj", "2kSun.jpg", 5,10, btVector3(-10,.25,7.25));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   Objects.push_back(tempObject);
 
   tempObject = new Object( "Cube.obj", "Paint.png", 5,10, btVector3(0,.5,-4));
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  Objects.push_back(tempObject);
+
+
+  flipper1 = tempObject = new Object( "Flipper.obj", "Paint.png", 5,10, btVector3(-11,.25,1.75));
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   Objects.push_back(tempObject);
 

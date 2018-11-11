@@ -19,6 +19,7 @@ Object::Object(std::string objFilePath, std::string texFilePath, float Mass, flo
   diffIntensity = .2;
   specIntensity = .6;
   shineIntensity = 125;
+  lightHeight = 25;
 
   render = true;
 
@@ -65,22 +66,27 @@ void Object::Update(unsigned int dt)
 
 void Object::Render(GLint& m_modelMatrix, Shader *shader)
 {
-  std::cout << "Ambient: " << ambIntensity << std::endl;
   GLint temp = shader->GetUniformLocation("AmbientProduct");
   glUniform4f(temp, ambIntensity, ambIntensity, ambIntensity, 1);
 
-  std::cout << "Diffuse: " << diffIntensity << std::endl;
   temp = shader->GetUniformLocation("DiffuseProduct");
   glUniform4f(temp, diffIntensity, diffIntensity, diffIntensity, 1);
 
-  std::cout << "Specular: " << specIntensity << std::endl;
   temp = shader->GetUniformLocation("SpecularProduct");
   glUniform4f(temp, specIntensity, specIntensity, specIntensity, 1);
 
   temp = shader->GetUniformLocation("LightPosition");
-  glUniform4f(temp, 0, 25, 0, 1);
+  glUniform3f(temp, 0, lightHeight, 0);
 
-  std::cout << "Shininess: " << shineIntensity << std::endl << std::endl;
+  temp = shader->GetUniformLocation("coneDirection");
+  glUniform3f(temp, 0, -lightHeight, 0);
+
+  temp = shader->GetUniformLocation("coneCutOff");
+  glUniform1f(temp, .995);
+
+  temp = shader->GetUniformLocation("spotExponent");
+  glUniform1f(temp, .1);
+
   temp = shader->GetUniformLocation("Shininess");
   glUniform1f(temp, shineIntensity);
 
@@ -155,11 +161,13 @@ bool Object::LoadObjFile(std::string objFilePath)
     }
 
     btCollisionShape *tempShape = new btBvhTriangleMeshShape(objTriMesh, true);
-
+    std::cout << mesh->mNumFaces << std::endl;
     if(mesh->mNumFaces == 224 )
       tempShape = new btSphereShape(btScalar(.25));
     else if(mesh->mNumFaces == 12 )
       tempShape = new btBoxShape(btVector3(.5,.5,.5));
+    else if(mesh->mNumFaces == 260 )
+      tempShape = new btConvexTriangleMeshShape(objTriMesh, true);//btBoxShape(btVector3(.3,.3,.6));
 
     shape = tempShape;
 

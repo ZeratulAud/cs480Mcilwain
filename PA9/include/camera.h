@@ -13,7 +13,8 @@ class Camera
     glm::mat4 GetProjection();
     glm::mat4 GetView();
 
-  	glm::vec3 translate;
+    glm::vec3 translate;
+    glm::vec3 eyePos;
 
   private:
     glm::mat4 projection;

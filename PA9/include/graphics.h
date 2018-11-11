@@ -43,6 +43,13 @@ class Graphics
     GLint m_viewMatrix;
     GLint m_modelMatrix;
 
+    Object* ball;
+    Object* bumper1;
+    Object* bumper2;
+    Object* bumper3;
+    Object* flipper1;
+    Object* flipper2;
+
     GLint other_projectionMatrix;
     GLint other_viewMatrix;
     GLint other_modelMatrix;

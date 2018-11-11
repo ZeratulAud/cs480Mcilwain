@@ -8,6 +8,7 @@ static float ambientVal =0 ;
 static float diffuseVal = 0.2;
 static float specularVal = 0.6;
 static float shininessVal = 125;
+static float lightHeight = 25;
 
 Engine::Engine(std::string name, int width, int height)
 {
@@ -81,14 +82,6 @@ void Engine::Run()
     ImGui_ImplSDL2_NewFrame(m_window->getSDLWindow());
     ImGui::NewFrame();
 
-    // Check the keyboard input
-    while(SDL_PollEvent(&m_event) != 0)
-    {
-      Keyboard();
-      Camera();
-      Lighting();
-    }
-
     // My menu
     {
       ImGui::Begin("Project 10");
@@ -106,19 +99,29 @@ void Engine::Run()
         diffuseVal = 0.2;
         specularVal = 0.6;
         shininessVal = 125;
+        lightHeight = 25;
       }
       ImGui::SliderFloat("Ambient Value", &ambientVal, -2, 2, "%.05f");      
       ImGui::SliderFloat("Diffuse Value", &diffuseVal, -2, 2, "%.05f");
       ImGui::SliderFloat("Specular Value", &specularVal, -2, 2, "%.05f");
-      ImGui::SliderFloat("Shininess Value", &shininessVal, -200, 350, "%.0f");
+      ImGui::SliderFloat("Shininess Value", &shininessVal, 0, 3000, "%.0f");
+      ImGui::SliderFloat("Light Height", &lightHeight, 0, 200, "%.0f");
       ImGui::End();
     }
+    LightingUpdate();
 
+    // Check the keyboard input
+    while(SDL_PollEvent(&m_event) != 0)
+    {
+      Keyboard();
+      Camera();
+      Lighting();
+    }
 
     // Update and render the graphics
     m_graphics->Update(m_DT);
     m_graphics->Render();
-    LightingUpdate();
+    
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -279,6 +282,7 @@ long long Engine::GetCurrentTimeMillis()
           obj->diffIntensity = diffuseVal;
           obj->specIntensity = specularVal;
           obj->shineIntensity = shininessVal;
+          obj->lightHeight = lightHeight;
 
     }
 

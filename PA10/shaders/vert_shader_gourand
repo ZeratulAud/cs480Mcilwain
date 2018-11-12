@@ -1,0 +1,64 @@
+#version 330
+
+layout (location = 0) in vec3 v_position; 
+layout (location = 1) in vec2 v_texture; 
+layout (location = 2) in vec3 v_Normal;
+
+smooth out vec2 texture; 
+smooth out vec4 color;
+
+uniform mat4 projectionMatrix; 
+uniform mat4 viewMatrix; 
+uniform mat4 modelMatrix; 
+uniform vec4 AmbientProduct, DiffuseProduct, SpecularProduct;
+uniform vec3 LightPosition;
+uniform vec3 eyePos; 
+uniform vec3 ballPos; 
+uniform float Shininess;
+uniform float coneCutOff;
+uniform float spotExponent;
+
+void main(void) 
+{ 
+  vec4 v = vec4(v_position, 1.0); 
+  gl_Position = (projectionMatrix * viewMatrix * modelMatrix) * v; 
+  vec3 pos = (modelMatrix * v).xyz;
+	
+  vec3 L = normalize( LightPosition - pos);
+  vec3 E = normalize( eyePos -pos );
+  vec3 H = normalize( L + E );
+  vec3 C = normalize( LightPosition - ballPos);
+
+
+  vec3 N = normalize( modelMatrix * vec4(v_Normal, 0.0) ).xyz;
+
+  vec4 ambient = AmbientProduct;
+
+  float Kd = max( dot(N, L), 0.0 );
+  vec4  diffuse = Kd*DiffuseProduct;
+
+  float Ks = pow( max(dot(N, H), 0.0), Shininess );
+  vec4  specular = Ks * SpecularProduct;
+
+  float spotLight = .3;
+  float spotCos = dot(L, C);
+  if (spotCos < coneCutOff){
+      spotLight = 0;
+  } else {
+      spotLight *= pow(spotCos, spotExponent);
+  }
+
+  if( dot(N, L) < 0.0 ) {
+    specular = vec4(0.0, 0.0, 0.0, 1.0); 
+    spotLight = 0;
+
+  }  
+
+  color =  ambient + diffuse + specular + spotLight;
+  color.a = 1;
+ 
+
+
+  texture = v_texture; 
+} 
+          

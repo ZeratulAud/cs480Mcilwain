@@ -37,7 +37,7 @@ class Graphics
     Camera *m_camera;
     Shader *m_shader;
     Shader *otherShader;
-
+    int lives;
     btDiscreteDynamicsWorld *dynamicsWorld;
 
     std::vector<Object*> Objects;

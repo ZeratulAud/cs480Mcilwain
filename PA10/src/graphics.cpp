@@ -8,6 +8,7 @@ Graphics::Graphics()
   switcher = false;
   paddleFlag = false;
   paddleBuffer = 0;
+  lives =5;
 }
 
 Graphics::~Graphics()
@@ -182,10 +183,37 @@ void Graphics::Update(unsigned int dt)
 {
   // Update the object
   m_camera->Update();
+  
   //flipper1->GetRigidBody()->applyTorque(btVector3(1,1,1));
 
-  dynamicsWorld->stepSimulation(dt, 1);
 
+  dynamicsWorld->stepSimulation(dt, 5);
+  /*std::cout << ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() << 
+  " , " << ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() << 
+  " , " << ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() << std::endl;*/
+  if(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() < -12 && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() < 6.8)
+  {
+  	if(lives>0)
+  	{
+  		lives--;
+  		btTransform transform;		
+		dynamicsWorld->removeCollisionObject(ball->GetRigidBody());
+		Objects.erase(Objects.begin() + Objects.size() -1);
+  		std::cout << "Current Lives: " << lives << std::endl;
+
+	    ball = new Object( "Ball.obj", "2kSun.jpg", 5,10, btVector3(-10,.25,7.25));
+	    ball->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+	    Objects.push_back(ball);
+	    dynamicsWorld->addRigidBody(ball->GetRigidBody());
+			 
+
+  	}
+  	else
+  	{
+  		std::cout <<"Game over bitch" << std::endl;
+  	}
+
+  }
 
   for (auto &i : Objects) {
     i->Update(dt);
@@ -302,13 +330,12 @@ void Graphics::CreateObjects()
   //tempObject = new Object( "Bumper3.obj",      "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
   //Objects.push_back(tempObject);
 
-  ball = tempObject = new Object( "Ball.obj", "2kSun.jpg", 5,10, btVector3(-10,.25,7.25));
-  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  Objects.push_back(tempObject);
 
   tempObject = new Object( "Cube.obj", "Paint.png", 5,10, btVector3(0,.5,-4));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
  // Objects.push_back(tempObject);
+
+
 
 
   flipper1 = tempObject = new Object( "Flipper.obj", "Paint.png", 5,10, btVector3(-11, 0,1.75));
@@ -317,6 +344,9 @@ void Graphics::CreateObjects()
   Objects.push_back(tempObject);
   btRigidBody *body = flipper1->GetRigidBody();
 
+  ball = tempObject = new Object( "Ball.obj", "2kSun.jpg", 5,10, btVector3(-10,.25,7.25));
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  Objects.push_back(tempObject);
   
 
   /*btHingeConstraint* constraint = new btHingeConstraint(*body, btVector3(0, 0, 0), btVector3(0.0, 1.0, 0.0));
@@ -376,7 +406,11 @@ btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
 }
 
 void Graphics::launchBall(){
-  ball->GetRigidBody()->applyCentralImpulse( btVector3( 100.f, 0.f, 0.f ) );
+  if(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() < -12 && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() > 6.8)
+  {
+    int force = std::rand() % 35 + 30;
+    ball->GetRigidBody()->applyCentralImpulse( btVector3( force, 0.f, 0.f ) );
+  }
 }
 
 void Graphics::flipPaddle(unsigned int dt)
@@ -392,7 +426,7 @@ void Graphics::flipPaddle(unsigned int dt)
   flipper1->GetRigidBody()->getMotionState()->getWorldTransform( turn );
   if(paddleFlag == true)
   {
-    y += dt * -M_PI/100;
+    y += dt * -M_PI/200;
       
     if( y > 0.6 )
     {

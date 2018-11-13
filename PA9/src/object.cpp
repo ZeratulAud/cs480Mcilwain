@@ -47,7 +47,6 @@ void Object::Update(unsigned int dt)
   rigidBody->getMotionState()->getWorldTransform(trans);
   trans.getOpenGLMatrix(m);
   model = glm::make_mat4(m);
-
   /*
   model = glm::scale(model, glm::vec3(planetScale, planetScale, planetScale));
   model = origin;
@@ -97,7 +96,6 @@ void Object::Render(GLint& m_modelMatrix, Shader *shader)
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
-
 
     glBindBuffer(GL_ARRAY_BUFFER, VB[i]);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);

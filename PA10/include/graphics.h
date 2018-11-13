@@ -19,7 +19,7 @@ class Graphics
     void Update(unsigned int dt);
     void Render();
     void SwitchShader();
-    void flipPaddle(unsigned int dt);
+    void FlipPaddle(unsigned int dt);
     std::vector<Object*> GetObjects() const;
     Camera* GetCamera() const;
     btDiscreteDynamicsWorld* GetDynamicsWorld() const;
@@ -28,6 +28,7 @@ class Graphics
     float orbitScale;
     bool switcher;
     bool paddleFlag;
+    int lives;
 
   private:
     std::string ErrorString(GLenum error);
@@ -36,7 +37,7 @@ class Graphics
     Camera *m_camera;
     Shader *m_shader;
     Shader *otherShader;
-    int lives;
+
     btDiscreteDynamicsWorld *dynamicsWorld;
 
     std::vector<Object*> Objects;
@@ -44,7 +45,7 @@ class Graphics
     GLint m_projectionMatrix;
     GLint m_viewMatrix;
     GLint m_modelMatrix;
-    int paddleBuffer;
+
     Object* ball;
     Object* bumper1;
     Object* bumper2;

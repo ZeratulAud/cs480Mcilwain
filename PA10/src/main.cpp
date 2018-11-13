@@ -28,7 +28,5 @@ int main(int argc, char **argv)
   }
   while (playAgain == "yes");
 
-
   return 0;
-
 }

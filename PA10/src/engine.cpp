@@ -91,9 +91,7 @@ void Engine::Run()
     ImGui::Begin("Lighting menu");
 
     if (ImGui::Button("Switch Shader"))
-    {
       m_graphics->SwitchShader();
-    }
 
     if (ImGui::Button("Reset Light Values"))
     {
@@ -104,17 +102,26 @@ void Engine::Run()
       shininessVal = 125.0;
       lightHeight = 25;
     }
-    LightingUpdate();
+
+    if (m_graphics->lives < 0)
+    {
+      if (ImGui::Button("Game Over! New Game"))
+      {
+        m_graphics->lives = 5;
+      }
+    }
 
     ImGui::SliderFloat("Ambient Value", &ambientVal, -1, 1, "%.05f");
     ImGui::SliderFloat("Diffuse Value", &diffuseVal, -1, 1, "%.05f");
     ImGui::SliderFloat("Specular Value", &specularVal, -1, 1, "%.05f");
     ImGui::SliderFloat("Shininess Value", &shininessVal, -200, 350, "%.0f");
 
+    LightingUpdate();
+
     ImGui::End();
 
     // Update and render the graphics
-    m_graphics->flipPaddle(m_DT);
+    m_graphics->FlipPaddle(m_DT);
     m_graphics->Update(m_DT);
     m_graphics->Render();
 

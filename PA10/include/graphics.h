@@ -19,6 +19,7 @@ class Graphics
     void Update(unsigned int dt);
     void Render();
     void SwitchShader();
+    void launchBall();
     void flipPaddle(unsigned int dt);
     std::vector<Object*> GetObjects() const;
     Camera* GetCamera() const;

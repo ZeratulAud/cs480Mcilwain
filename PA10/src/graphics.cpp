@@ -184,7 +184,7 @@ void Graphics::Update(unsigned int dt)
   m_camera->Update();
   //flipper1->GetRigidBody()->applyTorque(btVector3(1,1,1));
 
-  dynamicsWorld->stepSimulation(dt, 5);
+  dynamicsWorld->stepSimulation(dt, 1);
 
 
   for (auto &i : Objects) {
@@ -373,6 +373,10 @@ Camera* Graphics::GetCamera() const
 btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
 {
   return dynamicsWorld;
+}
+
+void Graphics::launchBall(){
+  ball->GetRigidBody()->applyCentralImpulse( btVector3( 100.f, 0.f, 0.f ) );
 }
 
 void Graphics::flipPaddle(unsigned int dt)

@@ -114,8 +114,9 @@ void Engine::Run()
     ImGui::End();
 
     // Update and render the graphics
+        m_graphics->flipPaddle(m_DT);
+
     m_graphics->Update(m_DT);
-    m_graphics->flipPaddle(m_DT);
     m_graphics->Render();
 
     LightingUpdate();
@@ -139,19 +140,19 @@ void Engine::Keyboard()
     switch(m_event.key.keysym.sym)
     {
       case SDLK_RIGHT:
-        m_graphics->GetDynamicsWorld()->setGravity(btVector3(0, -1, 1));
+        m_graphics->GetDynamicsWorld()->setGravity(btVector3(0, -5, 5));
         break;
 
       case SDLK_LEFT:
-        m_graphics->GetDynamicsWorld()->setGravity(btVector3(0, -1, -1));
+        m_graphics->GetDynamicsWorld()->setGravity(btVector3(0, -5, -5));
         break;
 
       case SDLK_UP:
-        m_graphics->GetDynamicsWorld()->setGravity(btVector3(1, -1, 0));
+        m_graphics->GetDynamicsWorld()->setGravity(btVector3(5, -5, 0));
         break;
 
       case SDLK_DOWN:
-        m_graphics->GetDynamicsWorld()->setGravity(btVector3(-1, -1, 0));
+        m_graphics->GetDynamicsWorld()->setGravity(btVector3(-5, -5, 0));
         break;
 
       case SDLK_SPACE:
@@ -211,6 +212,11 @@ void Engine::Camera()
       case SDLK_e:
         m_graphics->GetCamera()->translate.y += 1.0;
         break;
+
+      case SDLK_f:
+        m_graphics->launchBall();
+        break;
+
     }
   }
 }

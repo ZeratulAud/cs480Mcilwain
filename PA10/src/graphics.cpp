@@ -184,8 +184,7 @@ void Graphics::Update(unsigned int dt)
   m_camera->Update();
   //flipper1->GetRigidBody()->applyTorque(btVector3(1,1,1));
 
-  dynamicsWorld->stepSimulation(dt, 5);
-
+  dynamicsWorld->stepSimulation(dt, 2);
 
   for (auto &i : Objects) {
     i->Update(dt);
@@ -208,8 +207,8 @@ void Graphics::Render()
     glUniform3f(temp, m_camera->eyePos.x, m_camera->eyePos.y, m_camera->eyePos.z);
 
     temp = m_shader->GetUniformLocation("ballPos");
-    glUniform3f(temp, (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(), 
-                      (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(), 
+    glUniform3f(temp, (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
+                      (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(),
                       (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z());
 
 
@@ -231,8 +230,8 @@ void Graphics::Render()
     glUniform3f(temp, m_camera->eyePos.x, m_camera->eyePos.y, m_camera->eyePos.z);
 
     temp = otherShader->GetUniformLocation("ballPos");
-    glUniform3f(temp, (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(), 
-                      (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(), 
+    glUniform3f(temp, (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
+                      (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(),
                       (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z());
 
     glUniformMatrix4fv(other_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection()));
@@ -317,7 +316,7 @@ void Graphics::CreateObjects()
   Objects.push_back(tempObject);
   btRigidBody *body = flipper1->GetRigidBody();
 
-  
+
 
   /*btHingeConstraint* constraint = new btHingeConstraint(*body, btVector3(0, 0, 0), btVector3(0.0, 1.0, 0.0));
   constraint->enableAngularMotor(true, 5, 5 );
@@ -378,10 +377,10 @@ btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
 void Graphics::flipPaddle(unsigned int dt)
 {
 
-  
+
   btTransform turn;
   turn.setIdentity();
-  btQuaternion quat;  
+  btQuaternion quat;
   btScalar x, y, z;
   paddleBuffer++;
   flipper1->GetRigidBody()->getWorldTransform().getBasis().getEulerZYX(z, y, x);
@@ -389,14 +388,14 @@ void Graphics::flipPaddle(unsigned int dt)
   if(paddleFlag == true)
   {
     y += dt * -M_PI/100;
-      
+
     if( y > 0.6 )
     {
-     y = 0.6;     
+     y = 0.6;
     }
     if( y < -1.3 )
     {
-     y = -1.3;     
+     y = -1.3;
     }
     quat.setEulerZYX( 0, y , 0 );
     turn.setRotation(quat);
@@ -406,21 +405,21 @@ void Graphics::flipPaddle(unsigned int dt)
   else if(paddleBuffer>10)
   {
     y += dt * M_PI/700;
-      
+
     if( y > 0.6 )
     {
-     y = 0.6;     
+     y = 0.6;
     }
     if( y < -1.3 )
     {
-     y = -1.3;     
+     y = -1.3;
     }
     quat.setEulerZYX( 0, y , 0 );
     turn.setRotation(quat);
     flipper1->GetRigidBody()->getMotionState( )->setWorldTransform( turn );
   }
 
-  
+
 
   /*glm::vec3 glmImpVector =  flipper1->GetPosition() -  this->GetCamera()->GetEyePos();
   glmImpVector.y = 0;

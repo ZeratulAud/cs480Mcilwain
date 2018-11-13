@@ -19,7 +19,7 @@ Engine::Engine(std::string name)
   m_FULLSCREEN = true;
 
   ambientVal = 0.0;
-  diffuseVal = 0.2;
+  diffuseVal = 0.1;
   specularVal = 0.6;
   shininessVal = 125.0;
 }
@@ -99,23 +99,23 @@ void Engine::Run()
     {
 
       ambientVal = 0.0;
-      diffuseVal = 0.2;
+      diffuseVal = 0.1;
       specularVal = 0.6;
       shininessVal = 125.0;
       lightHeight = 25;
     }
     LightingUpdate();
 
-    ImGui::SliderFloat("Ambient Value", &ambientVal, -2, 2, "%.05f");
-    ImGui::SliderFloat("Diffuse Value", &diffuseVal, -2, 2, "%.05f");
-    ImGui::SliderFloat("Specular Value", &specularVal, -2, 2, "%.05f");
+    ImGui::SliderFloat("Ambient Value", &ambientVal, -1, 1, "%.05f");
+    ImGui::SliderFloat("Diffuse Value", &diffuseVal, -1, 1, "%.05f");
+    ImGui::SliderFloat("Specular Value", &specularVal, -1, 1, "%.05f");
     ImGui::SliderFloat("Shininess Value", &shininessVal, -200, 350, "%.0f");
 
     ImGui::End();
 
     // Update and render the graphics
-    m_graphics->Update(m_DT);
     m_graphics->flipPaddle(m_DT);
+    m_graphics->Update(m_DT);
     m_graphics->Render();
 
     LightingUpdate();
@@ -158,14 +158,11 @@ void Engine::Keyboard()
         m_graphics->paddleFlag = true;
         break;
 
-
-
       // Stop program
       case SDLK_ESCAPE:
         m_running = false;
         break;
     }
-
   }
   if (m_event.type == SDL_KEYUP)
   {
@@ -174,7 +171,6 @@ void Engine::Keyboard()
       case SDLK_SPACE:
         m_graphics->paddleFlag = false;
         break;
-
     }
   }
 }

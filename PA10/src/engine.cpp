@@ -92,9 +92,7 @@ void Engine::Run()
     ImGui::Begin("Lighting menu");
 
     if (ImGui::Button("Switch Shader"))
-    {
       m_graphics->SwitchShader();
-    }
 
     if (ImGui::Button("Reset Light Values"))
     {
@@ -105,7 +103,14 @@ void Engine::Run()
       shininessVal = 125.0;
       lightHeight = 25;
     }
-    LightingUpdate();
+
+    if (m_graphics->lives < 0)
+    {
+      if (ImGui::Button("Game Over! New Game"))
+      {
+        m_graphics->lives = 5;
+      }
+    }
 
     ImGui::SliderFloat("Ambient Value", &ambientVal, -1, 1, "%.05f");
     ImGui::SliderFloat("Diffuse Value", &diffuseVal, -1, 1, "%.05f");
@@ -113,11 +118,12 @@ void Engine::Run()
     ImGui::SliderFloat("Shininess Value", &shininessVal, -200, 350, "%.0f");
     ImGui::SliderFloat("Light Height", &lightHeight, -0.1, 150, "%.0f");
 
+    LightingUpdate();
+
     ImGui::End();
 
     // Update and render the graphics
-
-    m_graphics->flipPaddle(m_DT);
+    m_graphics->FlipPaddle(m_DT);
     m_graphics->Update(m_DT);
     m_graphics->Render();
 
@@ -159,6 +165,10 @@ void Engine::Keyboard()
 
       case SDLK_SPACE:
         m_graphics->paddleFlag = true;
+        break;
+
+      case SDLK_f:
+        m_graphics->LaunchBall();
         break;
 
       // Stop program
@@ -209,10 +219,6 @@ void Engine::Camera()
 
       case SDLK_e:
         m_graphics->GetCamera()->translate.y += 1.0;
-        break;
-
-      case SDLK_f:
-        m_graphics->launchBall();
         break;
 
     }

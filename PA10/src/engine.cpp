@@ -114,8 +114,9 @@ void Engine::Run()
     ImGui::End();
 
     // Update and render the graphics
-    m_graphics->Update(m_DT);
     m_graphics->flipPaddle(m_DT);
+    m_graphics->Update(m_DT);
+   
     m_graphics->Render();
 
     LightingUpdate();

@@ -195,14 +195,14 @@ void Graphics::Update(unsigned int dt)
   {
     blocker = new Object( "Blocker.obj", "Paint.png", 0,0, btVector3(0,0,0));
     blocker->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-    std::cout << "spawning block" << std::endl;
+    //std::cout << "spawning block" << std::endl;
     //blocker->render = false;
     Objects.push_back(blocker);
     dynamicsWorld->addRigidBody(blocker->GetRigidBody());
     blockerSpawned = true;
   }
 
-  dynamicsWorld->stepSimulation(dt, 1);
+  dynamicsWorld->stepSimulation(dt, 5);
 
   if(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() < -12 && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() < 6.8)
   {
@@ -231,6 +231,7 @@ void Graphics::Update(unsigned int dt)
     {
       gameScore += 5;
       scoreFlag = true;
+      std::cout << "Score: " << gameScore << std::endl;
     }
   }
 
@@ -334,7 +335,7 @@ void Graphics::CreateObjects()
   tempObject = new Object( "Floor.obj", "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
   Objects.push_back(tempObject);
 
-  tempObject = new Object( "Top.obj", "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
+  tempObject = new Object( "Top.obj", "PlayfieldTexture.png", 0,0, btVector3(0,-0.25,0));
   tempObject->render = false;
   Objects.push_back(tempObject);
 

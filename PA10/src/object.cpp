@@ -161,7 +161,7 @@ bool Object::LoadObjFile(std::string objFilePath)
     }
 
     btCollisionShape *tempShape = new btBvhTriangleMeshShape(objTriMesh, true);
-    std::cout << mesh->mNumFaces << std::endl;
+    //std::cout << mesh->mNumFaces << std::endl;
     if(mesh->mNumFaces == 224 )
       tempShape = new btSphereShape(btScalar(.25));
     else if(mesh->mNumFaces == 12 )

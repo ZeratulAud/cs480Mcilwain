@@ -29,6 +29,7 @@ class Graphics
     float timeScale;
     float orbitScale;
     float plungerforce;
+    bool blockerSpawned;
     bool switcher;
     bool paddleFlag;
     bool impulseFlag;
@@ -51,6 +52,7 @@ class Graphics
     GLint m_modelMatrix;
 
     Object* ball;
+    Object* blocker;
     Object* bumper1;
     Object* bumper2;
     Object* bumper3;

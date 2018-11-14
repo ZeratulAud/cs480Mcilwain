@@ -9,6 +9,7 @@ Graphics::Graphics()
   switcher = false;
   paddleFlag = false;
   impulseFlag = false;
+  blockerSpawned = false;
   lives = 5;
 }
 
@@ -187,19 +188,38 @@ void Graphics::Update(unsigned int dt)
 
   //flipperR->GetRigidBody()->applyTorque(btVector3(1,1,1));
 
+
+  if(!blockerSpawned && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() < 6.8)
+  {
+
+    blocker = new Object( "Blocker.obj", "Paint.png", 5,10, btVector3(0,0,0));
+    blocker->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+    std::cout << "spawning block" << std::endl;
+    //blocker->render = false;
+    Objects.push_back(blocker);
+    dynamicsWorld->addRigidBody(blocker->GetRigidBody());
+    blockerSpawned = true;
+  }
+
   dynamicsWorld->stepSimulation(dt, 5);
   if(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() < -12 && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() < 6.8)
   {
 		lives--;
 		btTransform transform;
 	  dynamicsWorld->removeCollisionObject(ball->GetRigidBody());
+    dynamicsWorld->removeCollisionObject(blocker->GetRigidBody());
+
 	  Objects.erase(Objects.begin() + Objects.size() - 1);
+    Objects.erase(Objects.begin() + Objects.size() - 1);
     ball = new Object( "Ball.obj", "2kSun.jpg", 5,10, btVector3(-10,.25,7.25));
     ball->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
     ball->GetRigidBody()->setRestitution(0.5);
     Objects.push_back(ball);
     dynamicsWorld->addRigidBody(ball->GetRigidBody());
+    blockerSpawned = false;
   }
+
+
 
   for (auto &i : Objects) {
     i->Update(dt);

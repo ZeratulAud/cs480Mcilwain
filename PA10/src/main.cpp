@@ -4,29 +4,17 @@
 
 int main(int argc, char **argv)
 {
-  std::string playAgain;
-  Engine *engine;
-
-  do
+  Engine *engine = new Engine("PA10: Pinball", 1080, 920);
+  if(!engine->Initialize())
   {
-    engine = new Engine("PA10: Pinball", 1080, 920);
-    if(!engine->Initialize())
-    {
-      printf("The engine failed to start.\n");
-      delete engine;
-      engine = NULL;
-      return 1;
-    }
-
-    engine->Run();
-
-    std::cout << "Would you like to play again?" << std::endl;
-    std::cin >> playAgain;
-
+    printf("The engine failed to start.\n");
     delete engine;
     engine = NULL;
+    return 1;
   }
-  while (playAgain == "yes");
 
+  engine->Run();
+  delete engine;
+  engine = NULL;
   return 0;
 }

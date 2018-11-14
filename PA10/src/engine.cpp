@@ -89,7 +89,7 @@ void Engine::Run()
     }
 
     // My menu
-    ImGui::Begin("Lighting menu");
+    ImGui::Begin("Lighting Menu");
 
     if (ImGui::Button("Switch Shader"))
       m_graphics->SwitchShader();
@@ -104,13 +104,17 @@ void Engine::Run()
       lightHeight = 25;
     }
 
-    if (m_graphics->lives < 0)
+    if (m_graphics->lives == 0)
     {
-      if (ImGui::Button("Game Over! New Game"))
+      if (ImGui::Button("Game over. Play Again?"))
       {
-        m_graphics->lives = 5;
+        m_graphics->lives = 3;
+        m_graphics->gameScore = 0;
       }
     }
+
+    ImGui::Text("Score: %d", m_graphics->gameScore);
+    ImGui::Text("Lives: %d", m_graphics->lives);
 
     ImGui::SliderFloat("Ambient Value", &ambientVal, -1, 1, "%.05f");
     ImGui::SliderFloat("Diffuse Value", &diffuseVal, -1, 1, "%.05f");
@@ -118,16 +122,14 @@ void Engine::Run()
     ImGui::SliderFloat("Shininess Value", &shininessVal, -200, 350, "%.0f");
     ImGui::SliderFloat("Light Height", &lightHeight, -0.1, 150, "%.0f");
 
-    LightingUpdate();
-
     ImGui::End();
 
     // Update and render the graphics
     m_graphics->FlipPaddle(m_DT);
     m_graphics->Update(m_DT);
     m_graphics->Render();
-
     LightingUpdate();
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

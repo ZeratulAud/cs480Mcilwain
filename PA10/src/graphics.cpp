@@ -12,7 +12,7 @@ Graphics::Graphics()
   impulseFlagR = false;
   paddleFlagL = false;
   impulseFlagL = false;
-  lives = 5;
+  lives = 3;
   gameScore = 0;
 }
 
@@ -193,7 +193,7 @@ void Graphics::Update(unsigned int dt)
 
   if(!blockerSpawned && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() < 6.8)
   {
-    blocker = new Object( "Blocker.obj", "Paint.png", 0,0, btVector3(0,0,0));
+    blocker = new Object("Blocker.obj", "Paint.png", 0,0, btVector3(0,0,0));
     blocker->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
     //std::cout << "spawning block" << std::endl;
     //blocker->render = false;
@@ -204,7 +204,8 @@ void Graphics::Update(unsigned int dt)
 
   dynamicsWorld->stepSimulation(dt, 5);
 
-  if(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() < -12 && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() < 6.8)
+  if(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() < -12 &&
+     ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() < 6.8)
   {
 		lives--;
 		btTransform transform;
@@ -213,7 +214,7 @@ void Graphics::Update(unsigned int dt)
 
 	  Objects.erase(Objects.begin() + Objects.size() - 1);
     Objects.erase(Objects.begin() + Objects.size() - 1);
-    ball = new Object( "Ball.obj", "2kSun.jpg", 5,10, btVector3(-10,.25,7.25));
+    ball = new Object("Ball.obj", "2kSun.jpg", 5,10, btVector3(-10,.25,7.25));
     ball->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
     ball->GetRigidBody()->setRestitution(0.5);
     Objects.push_back(ball);
@@ -231,7 +232,6 @@ void Graphics::Update(unsigned int dt)
     {
       gameScore += 5;
       scoreFlag = true;
-      std::cout << "Score: " << gameScore << std::endl;
     }
   }
 
@@ -326,46 +326,43 @@ void Graphics::CreateObjects()
   Object* tempObject = new Object("OutterWalls.obj", "Paint.png", 0,0, btVector3(0,0,0));
   Objects.push_back(tempObject);
 
-  tempObject = new Object( "OutterWalls.obj", "Paint.png", 0,0, btVector3(0,0,0));
+  tempObject = new Object("OutterWalls.obj", "Paint.png", 0,0, btVector3(0,0,0));
   Objects.push_back(tempObject);
 
-  tempObject = new Object( "InnerWalls.obj", "Paint.png", 0,0, btVector3(0,0,0));
+  tempObject = new Object("InnerWalls.obj", "Paint.png", 0,0, btVector3(0,0,0));
   Objects.push_back(tempObject);
 
-  tempObject = new Object( "Floor.obj", "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
+  tempObject = new Object("Floor.obj", "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
   Objects.push_back(tempObject);
 
-  tempObject = new Object( "Top.obj", "PlayfieldTexture.png", 0,0, btVector3(0,-0.25,0));
+  tempObject = new Object("Top.obj", "PlayfieldTexture.png", 0,0, btVector3(0,-0.25,0));
   tempObject->render = false;
   Objects.push_back(tempObject);
 
-  tempObject = new Object( "Bumper1.obj", "Paint.png", 5,10, btVector3(-3, 0,0));
-  bumper1 = tempObject;
+  bumper1 = tempObject = new Object("Bumper1.obj", "Paint.png", 5,10, btVector3(-3, 0,0));
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setRestitution(5.0);
   Objects.push_back(tempObject);
 
-  tempObject = new Object( "Bumper1.obj", "Paint.png", 5,10, btVector3(0, 0,-3));
-  bumper2 = tempObject;
+  bumper2 = tempObject = new Object( "Bumper1.obj", "Paint.png", 5,10, btVector3(0, 0,-3));
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setRestitution(5.0);
   Objects.push_back(tempObject);
 
-  tempObject = new Object( "Bumper1.obj", "Paint.png", 5,10, btVector3(0, 0, 3));
-  bumper3 = tempObject;
+  bumper3 = tempObject = new Object( "Bumper1.obj", "Paint.png", 5,10, btVector3(0, 0, 3));
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setRestitution(5.0);
   Objects.push_back(tempObject);
 
-  flipperR = tempObject = new Object( "Flipper.obj", "Paint.png", 5,10, btVector3(-11.25, .1,1.2));
+  flipperR = tempObject = new Object( "Flipper.obj", "Paint.png", 5,10, btVector3(-11.25,.1,1.3));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   //tempObject->GetRigidBody()->setRestitution(2);
   Objects.push_back(tempObject);
 
-  flipperL = tempObject = new Object( "FlipperL.obj", "Paint.png", 5,10, btVector3(-11.25, .1,-2.5));
+  flipperL = tempObject = new Object( "FlipperL.obj", "Paint.png", 5,10, btVector3(-11.25,.1,-2.5));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   //tempObject->GetRigidBody()->setRestitution(2);
   Objects.push_back(tempObject);
@@ -374,20 +371,18 @@ void Graphics::CreateObjects()
   //plunger = tempObject ;
   //tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 
-
   ball = tempObject = new Object( "Ball.obj", "2kSun.jpg", 5,1, btVector3(-10,.25,7.25));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setRestitution(0.5);
   Objects.push_back(tempObject);
 
-  constraintR = new btHingeConstraint(*flipperR->GetRigidBody(), btVector3(0, 0 ,0), btVector3(0, 1 , 0));
-  constraintR->enableAngularMotor(true, 1, 1 );
+  constraintR = new btHingeConstraint(*flipperR->GetRigidBody(), btVector3(0,0,0), btVector3(0,1,0));
+  constraintR->enableAngularMotor(true, 1, 1);
   constraintR->setLimit(-M_PI/2, M_PI/6);
   dynamicsWorld->addConstraint(constraintR);
 
-
-  constraintL = new btHingeConstraint(*flipperL->GetRigidBody(), btVector3(0, 0 ,0), btVector3(0, 1 , 0));
-  constraintL->enableAngularMotor(true, 1, 1 );
+  constraintL = new btHingeConstraint(*flipperL->GetRigidBody(), btVector3(0,0,0), btVector3(0,1,0));
+  constraintL->enableAngularMotor(true, 1, 1);
   constraintL->setLimit(-M_PI/20, M_PI/2);
   dynamicsWorld->addConstraint(constraintL);
 

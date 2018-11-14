@@ -14,6 +14,7 @@ class Engine
     Engine(std::string name);
     ~Engine();
     bool Initialize();
+    bool GameOver();
     void Run();
     void Keyboard();
     void Camera();

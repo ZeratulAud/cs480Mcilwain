@@ -68,6 +68,11 @@ bool Engine::Initialize()
   return true;
 }
 
+bool Engine::GameOver()
+{
+  return (m_graphics->lives == 0);
+}
+
 void Engine::Run()
 {
   m_running = true;
@@ -84,11 +89,8 @@ void Engine::Run()
     // Check the keyboard input
     while(SDL_PollEvent(&m_event) != 0)
     {
-      if (m_graphics->lives > 0)
-      {
-        Keyboard();
-        Camera();
-      }
+      Keyboard();
+      Camera();
     }
 
     // My menu
@@ -107,7 +109,7 @@ void Engine::Run()
       lightHeight = 25;
     }
 
-    if (m_graphics->lives == 0)
+    if (GameOver())
     {
       if (ImGui::Button("Game over. Play Again?"))
       {
@@ -149,6 +151,12 @@ void Engine::Keyboard()
   // Keyboard
   else if (m_event.type == SDL_KEYDOWN)
   {
+    if (m_event.key.keysym.sym == SDLK_ESCAPE)
+      m_running = false;
+
+    if (GameOver())
+      return;
+
     // handle key down events here
     switch(m_event.key.keysym.sym)
     {
@@ -163,14 +171,10 @@ void Engine::Keyboard()
       case SDLK_DOWN:
         m_graphics->PullPlunger();
         break;
-
-      case SDLK_ESCAPE:
-        m_running = false;
-        break;
     }
   }
 
-  if (m_event.type == SDL_KEYUP)
+  else if (m_event.type == SDL_KEYUP)
   {
     switch(m_event.key.keysym.sym)
     {
@@ -193,6 +197,9 @@ void Engine::Camera()
 {
   if(m_event.type == SDL_QUIT)
     m_running = false;
+
+  else if(GameOver())
+    return;
 
   else if (m_event.type == SDL_KEYDOWN)
   {

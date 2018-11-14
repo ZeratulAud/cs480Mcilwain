@@ -357,12 +357,12 @@ void Graphics::CreateObjects()
   tempObject->GetRigidBody()->setRestitution(5.0);
   Objects.push_back(tempObject);
 
-  flipperR = tempObject = new Object( "Flipper.obj", "Paint.png", 5,10, btVector3(-11.25,.1,1.3));
+  flipperR = tempObject = new Object( "Flipper.obj", "Paint.png", 5,10, btVector3(-11.25,.1,1.4));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   //tempObject->GetRigidBody()->setRestitution(2);
   Objects.push_back(tempObject);
 
-  flipperL = tempObject = new Object( "FlipperL.obj", "Paint.png", 5,10, btVector3(-11.25,.1,-2.5));
+  flipperL = tempObject = new Object( "FlipperL.obj", "Paint.png", 5,10, btVector3(-11.25,.1,-2.7));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   //tempObject->GetRigidBody()->setRestitution(2);
   Objects.push_back(tempObject);
@@ -378,12 +378,12 @@ void Graphics::CreateObjects()
 
   constraintR = new btHingeConstraint(*flipperR->GetRigidBody(), btVector3(0,0,0), btVector3(0,1,0));
   constraintR->enableAngularMotor(true, 1, 1);
-  constraintR->setLimit(-M_PI/2, M_PI/6);
+  constraintR->setLimit(-M_PI/4.5, M_PI/6);
   dynamicsWorld->addConstraint(constraintR);
 
   constraintL = new btHingeConstraint(*flipperL->GetRigidBody(), btVector3(0,0,0), btVector3(0,1,0));
   constraintL->enableAngularMotor(true, 1, 1);
-  constraintL->setLimit(-M_PI/20, M_PI/2);
+  constraintL->setLimit(-M_PI/20, M_PI/3);
   dynamicsWorld->addConstraint(constraintL);
 
   for (auto &i : Objects) {
@@ -425,7 +425,8 @@ void Graphics::PullPlunger()
 
 void Graphics::LaunchBall()
 {
-  if(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() < -12 && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() > 6.8)
+  if(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() < -12 &&
+     ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() > 6.8)
   {
     ball->GetRigidBody()->applyCentralImpulse( btVector3( plungerforce, 0.f, 0.f ) );
     plungerforce = 0;

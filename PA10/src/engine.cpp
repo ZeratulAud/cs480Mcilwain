@@ -84,8 +84,11 @@ void Engine::Run()
     // Check the keyboard input
     while(SDL_PollEvent(&m_event) != 0)
     {
-      Keyboard();
-      Camera();
+      if (m_graphics->lives > 0)
+      {
+        Keyboard();
+        Camera();
+      }
     }
 
     // My menu

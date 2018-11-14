@@ -30,8 +30,8 @@ Object::Object(std::string objFilePath, std::string texFilePath, float Mass, flo
   shape->calculateLocalInertia(mass, inertia);
 
   btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, shape, inertia);
-  if (Inertia == 0)
-    shapeRigidBodyCI.m_restitution = 1000;
+  //if (Inertia == 0)
+    //shapeRigidBodyCI.m_restitution = 1000;
   rigidBody = new btRigidBody(shapeRigidBodyCI);
 }
 

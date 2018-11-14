@@ -27,6 +27,7 @@ class Graphics
 
     float timeScale;
     float orbitScale;
+    float plungerforce;
     bool switcher;
     bool paddleFlag;
     int lives;
@@ -51,8 +52,8 @@ class Graphics
     Object* bumper1;
     Object* bumper2;
     Object* bumper3;
-    Object* flipper1;
-    Object* flipper2;
+    Object* flipperL;
+    Object* flipperR;
 
     GLint other_projectionMatrix;
     GLint other_viewMatrix;

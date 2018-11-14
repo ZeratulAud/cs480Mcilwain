@@ -183,7 +183,7 @@ void Graphics::Update(unsigned int dt)
   // Update the object
   m_camera->Update();
 
-  //flipper1->GetRigidBody()->applyTorque(btVector3(1,1,1));
+  //flipperR->GetRigidBody()->applyTorque(btVector3(1,1,1));
 
   dynamicsWorld->stepSimulation(dt, 5);
   if(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() < -12 && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() < 6.8)
@@ -304,14 +304,41 @@ void Graphics::CreateObjects()
   tempObject->render = false;
   Objects.push_back(tempObject);
 
-  flipper1 = tempObject = new Object( "Flipper.obj", "Paint.png", 5,10, btVector3(-11, 0,1.75));
+  tempObject = new Object( "Bumper1.obj", "Paint.png", 5,10, btVector3(3, 0,0));
+  bumper1 = tempObject;
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  tempObject->GetRigidBody()->setRestitution(7.0);
+  Objects.push_back(tempObject);
+
+  tempObject = new Object( "Bumper1.obj", "Paint.png", 5,10, btVector3(0, 0,-3));
+  bumper2 = tempObject;
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  tempObject->GetRigidBody()->setRestitution(7.0);
+  Objects.push_back(tempObject);
+
+  tempObject = new Object( "Bumper1.obj", "Paint.png", 5,10, btVector3(0, 0, 3));
+  bumper3 = tempObject;
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  tempObject->GetRigidBody()->setRestitution(7.0);
+  Objects.push_back(tempObject);
+
+  flipperR = tempObject = new Object( "Flipper.obj", "Paint.png", 5,10, btVector3(-11, 0,2));
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   Objects.push_back(tempObject);
-  btRigidBody *body = flipper1->GetRigidBody();
+
+  flipperL = tempObject = new Object( "FlipperL.obj", "Paint.png", 5,10, btVector3(-11, 0,-3.25));
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  Objects.push_back(tempObject);
+
 
   ball = tempObject = new Object( "Ball.obj", "2kSun.jpg", 5,10, btVector3(-10,.25,7.25));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  tempObject->GetRigidBody()->setRestitution(0.5);
   Objects.push_back(tempObject);
 
   for (auto &i : Objects) {
@@ -351,8 +378,8 @@ void Graphics::FlipPaddle(unsigned int dt)
   btQuaternion quat;
   btScalar x, y, z;
   turn.setIdentity();
-  flipper1->GetRigidBody()->getWorldTransform().getBasis().getEulerZYX(z, y, x);
-  flipper1->GetRigidBody()->getMotionState()->getWorldTransform(turn);
+  flipperR->GetRigidBody()->getWorldTransform().getBasis().getEulerZYX(z, y, x);
+  flipperR->GetRigidBody()->getMotionState()->getWorldTransform(turn);
 
   if (paddleFlag == true)
     y += dt * -M_PI/100;
@@ -366,9 +393,9 @@ void Graphics::FlipPaddle(unsigned int dt)
 
   quat.setEulerZYX(0, y, 0);
   turn.setRotation(quat);
-  flipper1->GetRigidBody()->getMotionState()->setWorldTransform(turn);
+  flipperR->GetRigidBody()->getMotionState()->setWorldTransform(turn);
 
-  /*glm::vec3 glmImpVector =  flipper1->GetPosition() -  this->GetCamera()->GetEyePos();
+  /*glm::vec3 glmImpVector =  flipperR->GetPosition() -  this->GetCamera()->GetEyePos();
   glmImpVector.y = 0;
   glmImpVector = glm::normalize(glmImpVector);
   glmImpVector *= 10;
@@ -376,11 +403,11 @@ void Graphics::FlipPaddle(unsigned int dt)
   btVector3 impVector(glmImpVector.x, glmImpVector.y, glmImpVector.z);
   impVector *= 100;
   btVector3 locVector(pickedPosition.x, pickedPosition.y, pickedPosition.z);*/
-  /*float directionScalar = 10 * (1/(flipper1->GetRigidBody()->getInvMass() ));
+  /*float directionScalar = 10 * (1/(flipperR->GetRigidBody()->getInvMass() ));
   btVector3 directionVector(-1,0,1);
   directionVector *= directionScalar;
   btVector3 locationVector(-10, 8.25,1.75);
-  flipper1->GetRigidBody()->applyImpulse(directionVector, locationVector);*/
+  flipperR->GetRigidBody()->applyImpulse(directionVector, locationVector);*/
 
 }
 
@@ -399,10 +426,15 @@ btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
   return dynamicsWorld;
 }
 
-void Graphics::LaunchBall(){
+//void Graphics::PullPlunger(){
+
+//}
+
+
+void Graphics::LaunchBall() { //float force){
   if(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() < -12 && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() > 6.8)
   {
-    int force = std::rand() % 35 + 30;
+    float force = std::rand() % 45 + 30;
     ball->GetRigidBody()->applyCentralImpulse( btVector3( force, 0.f, 0.f ) );
   }
 }

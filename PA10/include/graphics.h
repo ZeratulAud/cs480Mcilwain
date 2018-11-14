@@ -31,6 +31,7 @@ class Graphics
     float plungerforce;
     bool switcher;
     bool paddleFlag;
+    bool impulseFlag;
     int lives;
 
   private:
@@ -56,6 +57,8 @@ class Graphics
     Object* flipperL;
     Object* flipperR;
     Object* plunger;
+
+    btHingeConstraint* constraint;
 
     GLint other_projectionMatrix;
     GLint other_viewMatrix;

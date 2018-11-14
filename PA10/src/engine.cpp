@@ -148,11 +148,11 @@ void Engine::Keyboard()
     switch(m_event.key.keysym.sym)
     {
       case SDLK_RIGHT:
-        m_graphics->GetDynamicsWorld()->setGravity(btVector3(0, -1, 1));
+        m_graphics->paddleFlagR = true;
         break;
 
       case SDLK_LEFT:
-        m_graphics->GetDynamicsWorld()->setGravity(btVector3(0, -1, -1));
+        m_graphics->paddleFlagL = true;
         break;
 
       case SDLK_UP:
@@ -163,9 +163,7 @@ void Engine::Keyboard()
         m_graphics->GetDynamicsWorld()->setGravity(btVector3(-1, -1, 0));
         break;
 
-      case SDLK_SPACE:
-        m_graphics->paddleFlag = true;
-        break;
+     
 
       case SDLK_f:
         m_graphics->PullPlunger();
@@ -181,8 +179,11 @@ void Engine::Keyboard()
   {
     switch(m_event.key.keysym.sym)
     {
-      case SDLK_SPACE:
-        m_graphics->paddleFlag = false;
+      case SDLK_RIGHT:
+        m_graphics->paddleFlagR = false;
+        break;
+      case SDLK_LEFT:
+        m_graphics->paddleFlagL = false;
         break;
 
       case SDLK_f:

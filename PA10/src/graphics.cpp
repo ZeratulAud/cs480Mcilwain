@@ -7,9 +7,10 @@ Graphics::Graphics()
   timeScale = 1;
   orbitScale = 2.5;
   switcher = false;
-  paddleFlag = false;
-  impulseFlag = false;
-  blockerSpawned = false;
+  paddleFlagR = false;
+  impulseFlagR = false;
+  paddleFlagL = false;
+  impulseFlagL = false;
   lives = 5;
 }
 
@@ -353,7 +354,7 @@ void Graphics::CreateObjects()
   //tempObject->GetRigidBody()->setRestitution(2);
   Objects.push_back(tempObject);
 
-  flipperL = tempObject = new Object( "FlipperL.obj", "Paint.png", 5,10, btVector3(-10.8, .5,-3.1));
+  flipperL = tempObject = new Object( "FlipperL.obj", "Paint.png", 5,10, btVector3(-11.25, .1,-2.5));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   //tempObject->GetRigidBody()->setRestitution(2);
   Objects.push_back(tempObject);
@@ -368,10 +369,16 @@ void Graphics::CreateObjects()
   tempObject->GetRigidBody()->setRestitution(0.5);
   Objects.push_back(tempObject);
 
-  constraint = new btHingeConstraint(*flipperR->GetRigidBody(), btVector3(0, 0 ,0), btVector3(0, 1 , 0));
-  constraint->enableAngularMotor(true, 1, 1 );
-  constraint->setLimit(-M_PI/2, M_PI/6);
-  dynamicsWorld->addConstraint(constraint);
+  constraintR = new btHingeConstraint(*flipperR->GetRigidBody(), btVector3(0, 0 ,0), btVector3(0, 1 , 0));
+  constraintR->enableAngularMotor(true, 1, 1 );
+  constraintR->setLimit(-M_PI/2, M_PI/6);
+  dynamicsWorld->addConstraint(constraintR);
+
+
+  constraintL = new btHingeConstraint(*flipperL->GetRigidBody(), btVector3(0, 0 ,0), btVector3(0, 1 , 0));
+  constraintL->enableAngularMotor(true, 1, 1 );
+  constraintL->setLimit(-M_PI/20, M_PI/2);
+  dynamicsWorld->addConstraint(constraintL);
 
   for (auto &i : Objects) {
     dynamicsWorld->addRigidBody(i->GetRigidBody());
@@ -405,27 +412,47 @@ void Graphics::SwitchShader()
 
 void Graphics::FlipPaddle(unsigned int dt)
 {
-  if(paddleFlag == true)
+  if(paddleFlagR == true)
   {
     
     float directionScalar = 10 * (1/(flipperR->GetRigidBody()->getInvMass() ));
     btVector3 directionVector(-5,1,5);
     directionVector *= directionScalar;
     btVector3 locationVector(0, 1, 0);
-    if(impulseFlag == false)
+    if(impulseFlagR == false)
     {
-      flipperR->GetRigidBody()->applyTorqueImpulse(btVector3(0, 300, 0));
-      constraint->enableAngularMotor(true, -5, 5 );
-      impulseFlag = true;
+      //flipperR->GetRigidBody()->applyTorqueImpulse(btVector3(0, 300, 0));
+      constraintR->enableAngularMotor(true, -5, 5 );
+      impulseFlagR = true;
     }
 
   }
   else
   {
-    constraint->enableAngularMotor(true, 5, 5 );
-    impulseFlag = false;
+    constraintR->enableAngularMotor(true, 5, 5 );
+    impulseFlagR = false;
   }
 
+  if(paddleFlagL == true)
+  {
+    
+    float directionScalar = 10 * (1/(flipperL->GetRigidBody()->getInvMass() ));
+    btVector3 directionVector(-5,1,5);
+    directionVector *= directionScalar;
+    btVector3 locationVector(0, 1, 0);
+    if(impulseFlagL == false)
+    {
+      //flipperL->GetRigidBody()->applyTorqueImpulse(btVector3(0, 300, 0));
+      constraintL->enableAngularMotor(true, 5, 5 );
+      impulseFlagL = true;
+    }
+
+  }
+  else
+  {
+    constraintL->enableAngularMotor(true, -5, 5 );
+    impulseFlagL = false;
+  }
 
 
 

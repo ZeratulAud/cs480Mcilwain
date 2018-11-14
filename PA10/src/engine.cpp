@@ -155,26 +155,16 @@ void Engine::Keyboard()
         m_graphics->paddleFlagL = true;
         break;
 
-      case SDLK_UP:
-        m_graphics->GetDynamicsWorld()->setGravity(btVector3(1, -1, 0));
-        break;
-
       case SDLK_DOWN:
-        m_graphics->GetDynamicsWorld()->setGravity(btVector3(-1, -1, 0));
-        break;
-
-     
-
-      case SDLK_f:
         m_graphics->PullPlunger();
         break;
 
-      // Stop program
       case SDLK_ESCAPE:
         m_running = false;
         break;
     }
   }
+
   if (m_event.type == SDL_KEYUP)
   {
     switch(m_event.key.keysym.sym)
@@ -182,11 +172,12 @@ void Engine::Keyboard()
       case SDLK_RIGHT:
         m_graphics->paddleFlagR = false;
         break;
+
       case SDLK_LEFT:
         m_graphics->paddleFlagL = false;
         break;
 
-      case SDLK_f:
+      case SDLK_DOWN:
         m_graphics->LaunchBall();
         break;
     }
@@ -225,7 +216,6 @@ void Engine::Camera()
       case SDLK_e:
         m_graphics->GetCamera()->translate.y += 1.0;
         break;
-
     }
   }
 }

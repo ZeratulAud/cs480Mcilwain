@@ -7,11 +7,13 @@ Graphics::Graphics()
   timeScale = 1;
   orbitScale = 2.5;
   switcher = false;
+  scoreFlag = false;
   paddleFlagR = false;
   impulseFlagR = false;
   paddleFlagL = false;
   impulseFlagL = false;
   lives = 5;
+  gameScore = 0;
 }
 
 Graphics::~Graphics()
@@ -189,10 +191,8 @@ void Graphics::Update(unsigned int dt)
 
   //flipperR->GetRigidBody()->applyTorque(btVector3(1,1,1));
 
-
   if(!blockerSpawned && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() < 6.8)
   {
-
     blocker = new Object( "Blocker.obj", "Paint.png", 0,0, btVector3(0,0,0));
     blocker->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
     std::cout << "spawning block" << std::endl;
@@ -202,7 +202,8 @@ void Graphics::Update(unsigned int dt)
     blockerSpawned = true;
   }
 
-  dynamicsWorld->stepSimulation(dt, 5);
+  dynamicsWorld->stepSimulation(dt, 1);
+
   if(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() < -12 && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() < 6.8)
   {
 		lives--;
@@ -220,11 +221,20 @@ void Graphics::Update(unsigned int dt)
     blockerSpawned = false;
   }
 
-
-
   for (auto &i : Objects) {
     i->Update(dt);
   }
+
+  if (CheckBumperCollision())
+  {
+    if (!scoreFlag)
+    {
+      gameScore += 5;
+      scoreFlag = true;
+    }
+  }
+
+  else scoreFlag = false;
 }
 
 void Graphics::Render()
@@ -410,11 +420,27 @@ void Graphics::SwitchShader()
   switcher ? switcher = false : switcher = true;
 }
 
+void Graphics::PullPlunger()
+{
+  plungerforce += std::rand() % 1 + 7;
+  if (plungerforce > 55)
+    plungerforce = 55;
+}
+
+void Graphics::LaunchBall()
+{
+  if(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() < -12 && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() > 6.8)
+  {
+    ball->GetRigidBody()->applyCentralImpulse( btVector3( plungerforce, 0.f, 0.f ) );
+    plungerforce = 0;
+  }
+}
+
 void Graphics::FlipPaddle(unsigned int dt)
 {
   if(paddleFlagR == true)
   {
-    
+
     float directionScalar = 10 * (1/(flipperR->GetRigidBody()->getInvMass() ));
     btVector3 directionVector(-5,1,5);
     directionVector *= directionScalar;
@@ -435,7 +461,7 @@ void Graphics::FlipPaddle(unsigned int dt)
 
   if(paddleFlagL == true)
   {
-    
+
     float directionScalar = 10 * (1/(flipperL->GetRigidBody()->getInvMass() ));
     btVector3 directionVector(-5,1,5);
     directionVector *= directionScalar;
@@ -453,9 +479,6 @@ void Graphics::FlipPaddle(unsigned int dt)
     constraintL->enableAngularMotor(true, -5, 5 );
     impulseFlagL = false;
   }
-
-
-
   /*btTransform turn;
   btQuaternion quat;
   btScalar x, y, z;
@@ -490,7 +513,27 @@ void Graphics::FlipPaddle(unsigned int dt)
   directionVector *= directionScalar;
   btVector3 locationVector(-10, 8.25,1.75);
   flipperR->GetRigidBody()->applyImpulse(directionVector, locationVector);*/
+}
 
+bool Graphics::CheckBumperCollision()
+{
+  if (GetObjectDistance(ball, bumper1) < 1.3 ||
+      GetObjectDistance(ball, bumper2) < 1.3 ||
+      GetObjectDistance(ball, bumper3) < 1.3)
+    return true;
+
+  else return false;
+}
+
+float Graphics::GetObjectDistance(Object* obj1, Object* obj2)
+{
+  float x = obj1->GetRigidBody()->getCenterOfMassTransform().getOrigin().x()
+            - obj2->GetRigidBody()->getCenterOfMassTransform().getOrigin().x();
+
+  float z = obj1->GetRigidBody()->getCenterOfMassTransform().getOrigin().z()
+            - obj2->GetRigidBody()->getCenterOfMassTransform().getOrigin().z();
+
+  return sqrt(pow(x, 2.0) + pow(z, 2.0));
 }
 
 std::vector<Object*> Graphics::GetObjects() const
@@ -508,18 +551,3 @@ btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
   return dynamicsWorld;
 }
 
-void Graphics::PullPlunger(){
-  plungerforce += std::rand() % 1 + 7;
-  if (plungerforce > 55)
-    plungerforce = 55;
-
-}
-
-
-void Graphics::LaunchBall() { //float force){
-  if(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() < -12 && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() > 6.8)
-  {
-    ball->GetRigidBody()->applyCentralImpulse( btVector3( plungerforce, 0.f, 0.f ) );
-    plungerforce = 0;
-  }
-}

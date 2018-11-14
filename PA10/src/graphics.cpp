@@ -514,9 +514,9 @@ void Graphics::FlipPaddle(unsigned int dt)
 
 bool Graphics::CheckBumperCollision()
 {
-  if (GetObjectDistance(ball, bumper1) < 1.3 ||
-      GetObjectDistance(ball, bumper2) < 1.3 ||
-      GetObjectDistance(ball, bumper3) < 1.3)
+  if (GetObjectDistance(ball, bumper1) < 1.1 ||
+      GetObjectDistance(ball, bumper2) < 1.1 ||
+      GetObjectDistance(ball, bumper3) < 1.1)
     return true;
 
   else return false;

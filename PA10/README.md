@@ -9,31 +9,24 @@ This project was ran and tested on the Debian Stretch partition in ECC.
 ```
 
 ## Controls
+
+### Game
 ```
 ESC - end program
 
-UP - gravity upward
-DOWN - gravity downward
-LEFT - gravity toward left
-RIGHT - gravity toward right
+DOWN - launch ball
+LEFT - left paddle
+RIGHT - right paddle
+```
 
+### Camera
+```
 w - pan up
 a - pan left
 s - pan down
 d - pan right
 q - pan out
 e - pan in
-
-p - toggle shaders
-
-y - increase ambient intensity
-h - decrease ambient intensity
-u - increase diffuse intensity
-j - decrease diffuse intensity
-i - increase specular intensity
-k - decrease specular intensity
-o - increase spotlight intensity
-l - decrease spotlight intensity
 ```
 
 # Dependencies, Building, and Running

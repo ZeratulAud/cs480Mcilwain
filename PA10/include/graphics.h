@@ -20,6 +20,7 @@ class Graphics
     void Render();
     void SwitchShader();
     void LaunchBall();
+    void PullPlunger();
     void FlipPaddle(unsigned int dt);
     std::vector<Object*> GetObjects() const;
     Camera* GetCamera() const;
@@ -54,6 +55,7 @@ class Graphics
     Object* bumper3;
     Object* flipperL;
     Object* flipperR;
+    Object* plunger;
 
     GLint other_projectionMatrix;
     GLint other_viewMatrix;

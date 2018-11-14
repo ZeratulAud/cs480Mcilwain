@@ -3,6 +3,7 @@
 Graphics::Graphics()
 {
   BulletInit();
+  plungerforce = 0;
   timeScale = 1;
   orbitScale = 2.5;
   switcher = false;
@@ -338,6 +339,10 @@ void Graphics::CreateObjects()
   tempObject->GetRigidBody()->setRestitution(2);
   Objects.push_back(tempObject);
 
+  tempObject = new Object( "plunger.obj", "Paint.jpg", 0,0, btVector3(-10,.25,7.25));
+  plunger = tempObject 
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+
 
   ball = tempObject = new Object( "Ball.obj", "2kSun.jpg", 5,10, btVector3(-10,.25,7.25));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
@@ -429,15 +434,18 @@ btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
   return dynamicsWorld;
 }
 
-//void Graphics::PullPlunger(){
+void Graphics::PullPlunger(){
+  plungerforce += std::rand() % 1 + 7;
+  if (plungerforce > 55)
+    plungerforce = 55;
 
-//}
+}
 
 
 void Graphics::LaunchBall() { //float force){
   if(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() < -12 && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() > 6.8)
   {
-    float force = std::rand() % 45 + 30;
-    ball->GetRigidBody()->applyCentralImpulse( btVector3( force, 0.f, 0.f ) );
+    ball->GetRigidBody()->applyCentralImpulse( btVector3( plungerforce, 0.f, 0.f ) );
+    plungerforce = 0;
   }
 }

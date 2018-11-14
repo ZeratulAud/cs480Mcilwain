@@ -168,7 +168,7 @@ void Engine::Keyboard()
         break;
 
       case SDLK_f:
-        m_graphics->LaunchBall();
+        m_graphics->PullPlunger();
         break;
 
       // Stop program
@@ -183,6 +183,10 @@ void Engine::Keyboard()
     {
       case SDLK_SPACE:
         m_graphics->paddleFlag = false;
+        break;
+
+      case SDLK_f:
+        m_graphics->LaunchBall();
         break;
     }
   }

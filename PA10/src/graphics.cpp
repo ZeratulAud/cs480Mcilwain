@@ -193,7 +193,7 @@ void Graphics::Update(unsigned int dt)
   if(!blockerSpawned && ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z() < 6.8)
   {
 
-    blocker = new Object( "Blocker.obj", "Paint.png", 5,10, btVector3(0,0,0));
+    blocker = new Object( "Blocker.obj", "Paint.png", 0,0, btVector3(0,0,0));
     blocker->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
     std::cout << "spawning block" << std::endl;
     //blocker->render = false;

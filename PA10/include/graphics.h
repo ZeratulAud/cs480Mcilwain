@@ -22,6 +22,8 @@ class Graphics
     void LaunchBall();
     void PullPlunger();
     void FlipPaddle(unsigned int dt);
+    bool CheckBumperCollision();
+    float GetObjectDistance(Object* obj1, Object* obj2);
     std::vector<Object*> GetObjects() const;
     Camera* GetCamera() const;
     btDiscreteDynamicsWorld* GetDynamicsWorld() const;
@@ -31,11 +33,13 @@ class Graphics
     float plungerforce;
     bool blockerSpawned;
     bool switcher;
+    bool scoreFlag;
     bool paddleFlagR;
     bool impulseFlagR;
     bool paddleFlagL;
     bool impulseFlagL;
     int lives;
+    int gameScore;
 
   private:
     std::string ErrorString(GLenum error);

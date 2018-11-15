@@ -23,6 +23,7 @@ Engine::Engine(std::string name)
   specularVal = 0.6;
   shininessVal = 125.0;
   lightHeight = 25;
+  plungerPower = 25;
 }
 
 Engine::~Engine()
@@ -107,6 +108,7 @@ void Engine::Run()
       specularVal = 0.6;
       shininessVal = 125.0;
       lightHeight = 25;
+      plungerPower = 0;
     }
 
     if (GameOver())
@@ -125,7 +127,9 @@ void Engine::Run()
     ImGui::SliderFloat("Diffuse Value", &diffuseVal, -1, 1, "%.05f");
     ImGui::SliderFloat("Specular Value", &specularVal, -1, 1, "%.05f");
     ImGui::SliderFloat("Shininess Value", &shininessVal, -200, 350, "%.0f");
-    ImGui::SliderFloat("Light Height", &lightHeight, -0.1, 150, "%.0f");
+    ImGui::SliderFloat("Light Height", &lightHeight, 0.1, 150, "%.0f");
+    ImGui::SliderFloat("Plunger Power", &plungerPower, 0, 75, "%.0f");
+
 
     ImGui::End();
 
@@ -241,6 +245,7 @@ void Engine::LightingUpdate()
     obj->specIntensity = specularVal;
     obj->shineIntensity = shininessVal;
     obj->lightHeight = lightHeight;
+    plungerPower = m_graphics->plungerforce;
   }
 }
 

@@ -38,6 +38,7 @@ class Graphics
     bool impulseFlagR;
     bool paddleFlagL;
     bool impulseFlagL;
+    bool increasePlunger;
     int lives;
     int gameScore;
 

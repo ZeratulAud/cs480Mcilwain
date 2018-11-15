@@ -12,6 +12,7 @@ Graphics::Graphics()
   impulseFlagR = false;
   paddleFlagL = false;
   impulseFlagL = false;
+  increasePlunger = false;
   lives = 3;
   gameScore = 0;
 }
@@ -339,32 +340,32 @@ void Graphics::CreateObjects()
   tempObject->render = false;
   Objects.push_back(tempObject);
 
-  bumper1 = tempObject = new Object("Bumper1.obj", "Paint.png", 5,10, btVector3(-3, 0,0));
+  bumper1 = tempObject = new Object("Bumper1.obj", "Paint.png", 5,10, btVector3(1, 0,-.3));
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  tempObject->GetRigidBody()->setRestitution(5.0);
+  tempObject->GetRigidBody()->setRestitution(7.0);
   Objects.push_back(tempObject);
 
-  bumper2 = tempObject = new Object( "Bumper1.obj", "Paint.png", 5,10, btVector3(0, 0,-3));
+  bumper2 = tempObject = new Object( "Bumper1.obj", "Paint.png", 5,10, btVector3(-2, 0,-3));
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  tempObject->GetRigidBody()->setRestitution(5.0);
+  tempObject->GetRigidBody()->setRestitution(7.0);
   Objects.push_back(tempObject);
 
-  bumper3 = tempObject = new Object( "Bumper1.obj", "Paint.png", 5,10, btVector3(0, 0, 3));
+  bumper3 = tempObject = new Object( "Bumper1.obj", "Paint.png", 5,10, btVector3(-2, 0, 2.4));
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  tempObject->GetRigidBody()->setRestitution(5.0);
+  tempObject->GetRigidBody()->setRestitution(7.0);
   Objects.push_back(tempObject);
 
   flipperR = tempObject = new Object( "Flipper.obj", "Paint.png", 5,10, btVector3(-11.25,.1,1.4));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  //tempObject->GetRigidBody()->setRestitution(2);
+  tempObject->GetRigidBody()->setRestitution(1.5);
   Objects.push_back(tempObject);
 
   flipperL = tempObject = new Object( "FlipperL.obj", "Paint.png", 5,10, btVector3(-11.25,.1,-2.7));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  //tempObject->GetRigidBody()->setRestitution(2);
+  tempObject->GetRigidBody()->setRestitution(1.5);
   Objects.push_back(tempObject);
 
   //tempObject = new Object( "plunger.obj", "Paint.jpg", 0,0, btVector3(-10,.25,7.25));
@@ -418,9 +419,21 @@ void Graphics::SwitchShader()
 
 void Graphics::PullPlunger()
 {
-  plungerforce += std::rand() % 1 + 7;
-  if (plungerforce > 55)
-    plungerforce = 55;
+  if (increasePlunger){
+    plungerforce += std::rand() % 1 + 3;
+    if (plungerforce > 75){
+      plungerforce = 75;
+      increasePlunger = false;
+    }
+  } else {
+    plungerforce -= std::rand() % 1 + 3;
+
+    if (plungerforce < 0){
+      plungerforce = 0;
+      increasePlunger = true;
+    }
+  }
+
 }
 
 void Graphics::LaunchBall()

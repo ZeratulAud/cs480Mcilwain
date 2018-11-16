@@ -215,7 +215,7 @@ void Graphics::Update(unsigned int dt)
 
 	  Objects.erase(Objects.begin() + Objects.size() - 1);
     Objects.erase(Objects.begin() + Objects.size() - 1);
-    ball = new Object("Ball.obj", "2kSun.jpg", 5,10, btVector3(-10,.25,7.25));
+    ball = new Object("Ball.obj", "greybaby.jpg", 5,10, btVector3(-10,.25,7.25));
     ball->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
     ball->GetRigidBody()->setRestitution(0.5);
     Objects.push_back(ball);
@@ -324,46 +324,46 @@ std::string Graphics::ErrorString(GLenum error)
 
 void Graphics::CreateObjects()
 {
-  Object* tempObject = new Object("OutterWalls.obj", "Paint.png", 0,0, btVector3(0,0,0));
+  Object* tempObject = new Object("OutterWalls.obj", "reddy.jpg", 0,0, btVector3(0,0,0));
+  //Objects.push_back(tempObject);
+
+  //tempObject = new Object("OutterWalls.obj", "rednice.jpg", 0,0, btVector3(0,0,0));
   Objects.push_back(tempObject);
 
-  tempObject = new Object("OutterWalls.obj", "Paint.png", 0,0, btVector3(0,0,0));
+  tempObject = new Object("InnerWalls.obj", "reddy.jpg", 0,0, btVector3(0,0,0));
   Objects.push_back(tempObject);
 
-  tempObject = new Object("InnerWalls.obj", "Paint.png", 0,0, btVector3(0,0,0));
-  Objects.push_back(tempObject);
-
-  tempObject = new Object("Floor.obj", "PlayfieldTexture.png", 0,0, btVector3(0,0,0));
+  tempObject = new Object("Floor.obj", "bluebaby.jpg", 0,0, btVector3(0,0,0));
   Objects.push_back(tempObject);
 
   tempObject = new Object("Top.obj", "PlayfieldTexture.png", 0,0, btVector3(0,-0.25,0));
   tempObject->render = false;
   Objects.push_back(tempObject);
 
-  bumper1 = tempObject = new Object("Bumper1.obj", "Paint.png", 5,10, btVector3(1, 0,-.3));
+  bumper1 = tempObject = new Object("Bumper1.obj", "rednice.jpg", 5,10, btVector3(1, 0,-.3));
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setRestitution(7.0);
   Objects.push_back(tempObject);
 
-  bumper2 = tempObject = new Object( "Bumper1.obj", "Paint.png", 5,10, btVector3(-2, 0,-3));
+  bumper2 = tempObject = new Object( "Bumper1.obj", "rednice.jpg", 5,10, btVector3(-2, 0,-3));
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setRestitution(7.0);
   Objects.push_back(tempObject);
 
-  bumper3 = tempObject = new Object( "Bumper1.obj", "Paint.png", 5,10, btVector3(-2, 0, 2.4));
+  bumper3 = tempObject = new Object( "Bumper1.obj", "rednice.jpg", 5,10, btVector3(-2, 0, 2.4));
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setRestitution(7.0);
   Objects.push_back(tempObject);
 
-  flipperR = tempObject = new Object( "Flipper.obj", "Paint.png", 5,10, btVector3(-11.25,.1,1.4));
+  flipperR = tempObject = new Object( "Flipper.obj", "rednice.jpg", 5,10, btVector3(-11.25,.1,1.4));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setRestitution(1.5);
   Objects.push_back(tempObject);
 
-  flipperL = tempObject = new Object( "FlipperL.obj", "Paint.png", 5,10, btVector3(-11.25,.1,-2.7));
+  flipperL = tempObject = new Object( "FlipperL.obj", "rednice.jpg", 5,10, btVector3(-11.25,.1,-2.7));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setRestitution(1.5);
   Objects.push_back(tempObject);
@@ -372,7 +372,7 @@ void Graphics::CreateObjects()
   //plunger = tempObject ;
   //tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 
-  ball = tempObject = new Object( "Ball.obj", "2kSun.jpg", 5,1, btVector3(-10,.25,7.25));
+  ball = tempObject = new Object( "Ball.obj", "greybaby.jpg", 5,1, btVector3(-10,.25,7.25));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setRestitution(0.5);
   Objects.push_back(tempObject);

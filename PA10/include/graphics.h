@@ -63,6 +63,8 @@ class Graphics
     Object* bumper1;
     Object* bumper2;
     Object* bumper3;
+    Object* bumper4;
+    Object* bumper5;
     Object* flipperL;
     Object* flipperR;
     Object* plunger;

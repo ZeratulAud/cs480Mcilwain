@@ -358,6 +358,18 @@ void Graphics::CreateObjects()
   tempObject->GetRigidBody()->setRestitution(7.0);
   Objects.push_back(tempObject);
 
+  bumper4 = tempObject = new Object( "Bumper1.obj", "rednice.jpg", 5,10, btVector3(-7.75, 0,-5));
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  tempObject->GetRigidBody()->setRestitution(7.0);
+  Objects.push_back(tempObject);
+
+  bumper5 = tempObject = new Object( "Bumper1.obj", "rednice.jpg", 5,10, btVector3(-7.75, 0,3.5));
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  tempObject->GetRigidBody()->setRestitution(7.0);
+  Objects.push_back(tempObject);
+
   flipperR = tempObject = new Object( "Flipper.obj", "rednice.jpg", 5,10, btVector3(-11.25,.1,1.4));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setRestitution(1.5);

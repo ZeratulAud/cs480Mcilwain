@@ -40,10 +40,13 @@
 struct Vertex
 {
   glm::vec3 vertex;
+  glm::vec3 normal;
   glm::vec2 texture;
 
   Vertex() {}
-  Vertex(glm::vec3 v, glm::vec2 t): vertex(v), texture(t) {}
+  Vertex(glm::vec3 v, glm::vec3 n, glm::vec2 t):
+    vertex(v), normal(n), texture(t)
+  {}
 };
 
 #endif /* GRAPHICS_HEADERS_H */

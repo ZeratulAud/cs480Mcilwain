@@ -19,6 +19,10 @@ Object::Object(std::string objFilePath, float radius, float speed, float rotatio
   orbitSpeed = speed;
   rotationSpeed = rotation;
   planetScale = scale;
+  ambIntensity = -0.25;
+  diffIntensity = .5;
+  specIntensity = .6;
+  shineIntensity = 125;
 }
 
 /*
@@ -86,10 +90,23 @@ glm::mat4 Object::GetModel()
   return model;
 }
 
-void Object::Render(GLint& m_modelMatrix)
+void Object::Render(GLint& m_modelMatrix, Shader *shader)
 {
+  GLint temp = shader->GetUniformLocation("AmbientProduct");
+  glUniform4f(temp, ambIntensity, ambIntensity, ambIntensity, 1);
+
+  temp = shader->GetUniformLocation("DiffuseProduct");
+  glUniform4f(temp, diffIntensity, diffIntensity, diffIntensity, 1);
+
+  temp = shader->GetUniformLocation("SpecularProduct");
+  glUniform4f(temp, specIntensity, specIntensity, specIntensity, 1);
+
+  temp = shader->GetUniformLocation("Shininess");
+  glUniform1f(temp, shineIntensity);
+
+
   for (auto &i : children)
-    i->Render(m_modelMatrix);
+    i->Render(m_modelMatrix, shader);
 
   for(int i = 0; i < VB.size(); i++)
   {
@@ -97,10 +114,13 @@ void Object::Render(GLint& m_modelMatrix)
 
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
 
     glBindBuffer(GL_ARRAY_BUFFER, VB[i]);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex,normal));
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex,texture));
+
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB[i]);
 
@@ -111,6 +131,8 @@ void Object::Render(GLint& m_modelMatrix)
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
+
   }
 }
 
@@ -153,12 +175,15 @@ bool Object::LoadObjFile(std::string objFilePath)
 
       for (int k = 0; k < face->mNumIndices; k++)
       {
-        aiVector3D tempPos = mesh->mVertices[face->mIndices[k]];
-
+        aiVector3D tempVert = mesh->mVertices[face->mIndices[k]];
+        aiVector3D normal = mesh->mNormals[face->mIndices[k]];
         aiVector3D uv = mesh->mTextureCoords[0][face->mIndices[k]];
-        Vertex tempVert(glm::vec3(tempPos.x, tempPos.y, tempPos.z), glm::vec2(uv.x, uv.y));
 
-        modelInfo[i].Vertices.push_back(tempVert);
+        Vertex vert(glm::vec3(tempVert.x, tempVert.y, tempVert.z),
+                    glm::vec3(normal.x, normal.y, normal.z),
+                    glm::vec2(uv.x, uv.y));
+
+        modelInfo[i].Vertices.push_back(vert);
         modelInfo[i].Indices.push_back(face->mIndices[k]);
       }
     }

@@ -2,6 +2,7 @@
 
 Camera::Camera()
 {
+  eyePos = glm::vec3(100, 100.0, 0.0);
   translate = glm::vec3(0.0,0.0,0.0);
 }
 
@@ -31,12 +32,15 @@ bool Camera::Initialize(int w, int h)
 void Camera::Update()
 {
   view = glm::translate(view, translate);
+  eyePos -= translate;
   translate = glm::vec3(0.0,0.0,0.0);
 }
 
 void Camera::SnapToPlanet(float x1, float y1, float z1,
                           float x2, float y2, float z2)
 {
+  eyePos = glm::vec3(x1, y1, z1);
+
   view = glm::lookAt(glm::vec3(x1, y1, z1),
                      glm::vec3(x2, y2, z2),
                      glm::vec3(0.0, 1.0, 0.0));

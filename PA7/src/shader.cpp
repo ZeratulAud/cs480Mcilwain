@@ -39,10 +39,10 @@ bool Shader::AddShader(GLenum ShaderType)
   std::string s;
 
   if(ShaderType == GL_VERTEX_SHADER)
-    s = readShaderFile("../shaders/vert_shader");
+    s = readShaderFile("../shaders/vert_shader_phong");
 
   else if(ShaderType == GL_FRAGMENT_SHADER)
-    s = readShaderFile("../shaders/frag_shader");
+    s = readShaderFile("../shaders/frag_shader_phong");
 
   GLuint ShaderObj = glCreateShader(ShaderType);
 

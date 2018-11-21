@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "shader.h"
 #include "graphics_headers.h"
 
 struct ModelInfo
@@ -20,7 +21,7 @@ class Object
     Object* AddChild(std::string texture, float radius, float speed, float rotation, float scale);
     Object* AddRing(float speed, float scale);
     void Update(unsigned int dt, glm::mat4 origin, float timeScale, float orbitScale);
-    void Render(GLint& m_modelMatrix);
+    void Render(GLint& m_modelMatrix, Shader *shader);
     glm::mat4 GetModel();
     std::vector<Object*> children;
 
@@ -36,6 +37,10 @@ class Object
     float orbitSpeed;
     float rotationSpeed;
     float planetScale;
+    float ambIntensity;
+    float diffIntensity;
+    float specIntensity;
+    float shineIntensity;
 
     bool LoadObjFile(std::string objFilePath);
     bool LoadTexFile(std::string texFilePath, int count);

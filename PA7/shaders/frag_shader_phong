@@ -42,7 +42,7 @@ void main(void)
     
     vec4 FragColor = ambient + diffuse + specular;
     FragColor.a = 1.0;
-    //frag_color = vec4(N,1);
+    //frag_color = vec4(N,0);
     frag_color = texture2D(sampler, texture) + FragColor;
 } 
           

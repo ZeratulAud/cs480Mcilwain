@@ -19,10 +19,10 @@ Object::Object(std::string objFilePath, float radius, float speed, float rotatio
   orbitSpeed = speed;
   rotationSpeed = rotation;
   planetScale = scale;
-  ambIntensity = -0.25;
+  ambIntensity = -0.5;
   diffIntensity = .5;
-  specIntensity = .6;
-  shineIntensity = 125;
+  specIntensity = 1;
+  shineIntensity = 75;
 }
 
 /*
@@ -137,7 +137,7 @@ void Object::Render(GLint& m_modelMatrix, Shader *shader)
 }
 
 Object* Object::AddChild(std::string texture, float radius, float speed, float rotation, float scale) {
-  Object* child = new Object(MODEL_DIR + "sphere.obj", radius, speed, rotation, scale);
+  Object* child = new Object(MODEL_DIR + "Sphere.obj", radius, speed, rotation, scale);
   child->LoadTexFile(texture, 0);
   children.push_back(child);
   return child;

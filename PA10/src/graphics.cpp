@@ -231,7 +231,7 @@ void Graphics::Update(unsigned int dt)
   {
     if (!scoreFlag)
     {
-      gameScore += 5;
+      gameScore += 10;
       scoreFlag = true;
     }
   }
@@ -541,7 +541,9 @@ bool Graphics::CheckBumperCollision()
 {
   if (GetObjectDistance(ball, bumper1) < 1.1 ||
       GetObjectDistance(ball, bumper2) < 1.1 ||
-      GetObjectDistance(ball, bumper3) < 1.1)
+      GetObjectDistance(ball, bumper3) < 1.1 ||
+      GetObjectDistance(ball, bumper4) < 1.1 ||
+      GetObjectDistance(ball, bumper5) < 1.1)
     return true;
 
   else return false;

@@ -291,8 +291,67 @@ std::string Graphics::ErrorString(GLenum error)
 
 void Graphics::CreateObjects()
 {
-  //Object* tempObject = new Object("OutterWalls.obj", "reddy.jpg", 0,0, btVector3(0,0,0));
-  //Objects.push_back(tempObject);
+  Object* tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(8,2,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(4,1,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(0,0,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(-4,-1,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(-8,-2,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+
+  tempObject = new Object("Ramp2x1Flipped.obj", "reddy.jpg", 0,0, btVector3(-16,-7,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+  tempObject = new Object("Ramp2x1Flipped.obj", "reddy.jpg", 0,0, btVector3(-12,-8,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+  tempObject = new Object("Ramp2x1Flipped.obj", "reddy.jpg", 0,0, btVector3(-8,-9,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+  tempObject = new Object("Ramp2x1Flipped.obj", "reddy.jpg", 0,0, btVector3(-4,-10,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+  tempObject = new Object("Ramp2x1Flipped.obj", "reddy.jpg", 0,0, btVector3(0,-11,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+
+  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(8,-16,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(4,-17,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(0,-18,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(-4,-19,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(-8,-20,0));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
+
+  tempObject = new Object("LevelWall.obj", "reddy.jpg", 0,0, btVector3(0,0,1.1));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  tempObject->render = false;
+  Objects.push_back(tempObject);
+  tempObject = new Object("LevelWall.obj", "reddy.jpg", 0,0, btVector3(0,0,-1.1));
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  tempObject->render = false;
+  Objects.push_back(tempObject);
+
+  ball = tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 5, 0));
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+  Objects.push_back(tempObject);
 
   //tempObject = new Object("OutterWalls.obj", "rednice.jpg", 0,0, btVector3(0,0,0));
 
@@ -303,9 +362,9 @@ void Graphics::CreateObjects()
   Objects.push_back(tempObject);*/
 
 
-  /*for (auto &i : Objects) {
+  for (auto &i : Objects) {
     dynamicsWorld->addRigidBody(i->GetRigidBody());
-  }*/
+  }
 }
 
 void Graphics::BulletInit()
@@ -325,7 +384,7 @@ void Graphics::BulletInit()
 	dynamicsWorld =
 		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
-	dynamicsWorld->setGravity(btVector3(-1, -1, 0));
+	dynamicsWorld->setGravity(btVector3(0, -2.5, 0));
 }
 
 void Graphics::SwitchShader()

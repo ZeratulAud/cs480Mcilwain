@@ -191,27 +191,27 @@ void Graphics::CreateObjects()
 
   Object *temp = m_sun->AddChild(MODEL_DIR + "2kMars.jpg", 200, .80, .96, .5);
   for(int i = 0; i < 2; i++){
-    //temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
   }
 
   temp = m_sun->AddChild(MODEL_DIR + "2kJupiter.jpg", 800, .43, 2.4, 11.2);
   for(int i = 0; i < 79; i++){
-    //temp->AddChild(MODEL_DIR + "2kMoon.jpg", 15+i*4, 1, 1, 0.3);
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 15+i*4, 1, 1, 0.3);
   }
 
   temp = m_sun->AddChild(MODEL_DIR + "2kSaturn.jpg", 1500, .32, 2.18,  9.4)->AddRing(1, 9.4);
   for(int i = 0; i < 53; i++){
-    //temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
   }
 
   temp = m_sun->AddChild(MODEL_DIR + "2kUranus.jpg", 2900, .22, 1.41, 4);
   for(int i = 0; i < 27; i++){
-    //temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
   }
 
   temp = m_sun->AddChild(MODEL_DIR + "2kNeptune.jpg", 4500, .18, 1.5, 3.9);
   for(int i = 0; i < 13; i++){
-    //temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
+    temp->AddChild(MODEL_DIR + "2kMoon.jpg", 7+i*3, 1, 1, 0.3);
   }
 
   m_sun->AddChild(MODEL_DIR + "2kPluto.jpg", 6000, 1, .15, .3);

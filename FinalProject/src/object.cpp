@@ -161,11 +161,11 @@ bool Object::LoadObjFile(std::string objFilePath)
     }
 
     btCollisionShape *tempShape = new btBvhTriangleMeshShape(objTriMesh, true);
-    //std::cout << mesh->mNumFaces << std::endl;
+    std::cout << mesh->mNumFaces << std::endl;
     if(mesh->mNumFaces == 224 )
       tempShape = new btSphereShape(btScalar(.25));
-    else if(mesh->mNumFaces == 12 )
-      tempShape = new btBoxShape(btVector3(.5,.5,.5));
+    else if(mesh->mNumFaces == 124 )
+      tempShape = new btConvexTriangleMeshShape(objTriMesh, true);
     else if(mesh->mNumFaces == 260 )
       tempShape = new btConvexTriangleMeshShape(objTriMesh, true);//btBoxShape(btVector3(.3,.3,.6));
 

@@ -1,0 +1,69 @@
+#version 330
+
+smooth in vec2 texture; 
+smooth in vec4 color; 
+smooth in vec3 fN;
+smooth in vec3 fL;
+smooth in vec3 fE;
+
+smooth in vec3 fN2;
+smooth in vec3 fL2;
+in vec3 coneDir;
+
+in mat4 ModelView;
+uniform sampler2D sampler;
+uniform vec4 AmbientProduct, DiffuseProduct, SpecularProduct;
+uniform mat4 modelMatrix; 
+
+uniform vec3 coneDirection;
+uniform float coneCutOff;
+uniform float spotExponent;
+
+//uniform vec3 LightPosition;
+uniform float Shininess;
+
+out vec4 frag_color; 
+
+void main(void) 
+{ 
+   vec3 N = normalize(fN);
+    vec3 E = normalize(fE);
+    vec3 L = normalize(fL);
+    vec3 C = normalize(coneDir);
+
+      
+    vec4 ambient = AmbientProduct;
+
+    float Kd = max(dot(N, L), 0.0);
+    vec4 diffuse = Kd*DiffuseProduct;
+
+    vec3 H = normalize( L + E ); 
+    //vec3 R = reflect(-L,N);
+
+
+    float spotLight = .3;
+    float spotCos = dot(L, C);
+    if (spotCos < coneCutOff){
+        spotLight = 0;
+    } else {
+        spotLight *= pow(spotCos, spotExponent);
+    }
+
+    float Ks = pow(max(dot(N, H), 0.0), Shininess);
+    vec4 specular = Ks*SpecularProduct;
+
+
+    // discard the specular highlight if the light's behind the vertex
+    if( dot(L, N) < 0.0 ) {
+	   specular = vec4(0.0, 0.0, 0.0, 1.0);
+       spotLight = 0;
+    }
+
+
+    
+    vec4 FragColor = ambient + diffuse + specular + spotLight;
+    FragColor.a = 1.0;
+
+   frag_color = texture2D(sampler, texture) + FragColor;
+} 
+          

@@ -19,6 +19,7 @@ class Graphics
     void Update(unsigned int dt);
     void Render();
     void SwitchShader();
+    void spawnBarrel();
     float GetObjectDistance(Object* obj1, Object* obj2);
     std::vector<Object*> GetObjects() const;
     Camera* GetCamera() const;
@@ -42,6 +43,7 @@ class Graphics
     std::string ErrorString(GLenum error);
     void CreateObjects();
 
+
     Camera *m_camera;
     Shader *m_shader;
     Shader *otherShader;
@@ -64,6 +66,7 @@ class Graphics
     Object* flipperL;
     Object* flipperR;
     Object* plunger;
+    Object* player;
 
     btHingeConstraint* constraintR;
     btHingeConstraint* constraintL;

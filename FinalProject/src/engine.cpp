@@ -172,6 +172,10 @@ void Engine::Keyboard()
         m_graphics->paddleFlagL = true;
         break;
 
+      case SDLK_DOWN:
+        m_graphics->spawnBarrel();
+        break;
+
      
     }
   }

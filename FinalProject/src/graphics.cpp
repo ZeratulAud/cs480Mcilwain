@@ -222,10 +222,10 @@ void Graphics::Render()
     glUniform3f(temp, m_camera->eyePos.x, m_camera->eyePos.y, m_camera->eyePos.z);
 
     temp = m_shader->GetUniformLocation("ballPos");
-    /*glUniform3f(temp, (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
+    glUniform3f(temp, (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
                       (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(),
                       (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z());
-	*/
+	
 
     glUniformMatrix4fv(m_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection()));
     glUniformMatrix4fv(m_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
@@ -353,6 +353,8 @@ void Graphics::CreateObjects()
   //tempObject->GetRigidBody()->setRestitution(1.0);
   Objects.push_back(tempObject);
 
+
+
   //tempObject = new Object("OutterWalls.obj", "rednice.jpg", 0,0, btVector3(0,0,0));
 
   /*bumper1 = tempObject = new Object("Bumper1.obj", "rednice.jpg", 5,10, btVector3(1, 0,-.3));
@@ -385,6 +387,17 @@ void Graphics::BulletInit()
 		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
 	dynamicsWorld->setGravity(btVector3(0, -2.5, 0));
+}
+
+void Graphics::spawnBarrel()
+{
+
+  Object* tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 5, 0));
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  Objects.push_back(tempObject);
+  dynamicsWorld->addRigidBody(tempObject->GetRigidBody());
+  
+
 }
 
 void Graphics::SwitchShader()

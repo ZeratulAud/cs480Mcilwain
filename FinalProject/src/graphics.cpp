@@ -350,12 +350,15 @@ void Graphics::CreateObjects()
   tempObject->render = false;
   Objects.push_back(tempObject);
 
-  ball = tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 5, 0));
+  tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 5, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   //tempObject->GetRigidBody()->setRestitution(1.0);
   Objects.push_back(tempObject);
 
-
+  ball = tempObject = new Object("Ball.obj", "greybaby.jpg", 5,5, btVector3(5, 11, 0));
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  tempObject->GetRigidBody()->setAngularFactor(btVector3(0,1,0));
+  Objects.push_back(tempObject);
 
   //tempObject = new Object("OutterWalls.obj", "rednice.jpg", 0,0, btVector3(0,0,0));
 
@@ -434,4 +437,24 @@ btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
 {
   return dynamicsWorld;
 }
+
+void Graphics::moveLeft()
+{
+    
+    ball->GetRigidBody()->setLinearVelocity(btVector3(1, 0, 0));
+}
+void Graphics::moveRight()
+{
+    
+    ball->GetRigidBody()->setLinearVelocity(btVector3(-1, 0, 0));
+}
+void Graphics::moveDown()
+{ 
+
+}
+void Graphics::jump()
+{
+    ball->GetRigidBody()->applyCentralImpulse( btVector3( 0, 25, 0 ) );
+}
+
 

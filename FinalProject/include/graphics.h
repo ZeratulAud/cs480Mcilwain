@@ -20,6 +20,10 @@ class Graphics
     void Render();
     void SwitchShader();
     void spawnBarrel();
+    void moveLeft();
+    void moveRight();
+    void moveDown();
+    void jump();
     float GetObjectDistance(Object* obj1, Object* obj2);
     std::vector<Object*> GetObjects() const;
     Camera* GetCamera() const;
@@ -66,7 +70,7 @@ class Graphics
     Object* flipperL;
     Object* flipperR;
     Object* plunger;
-    Object* player;
+
 
     btHingeConstraint* constraintR;
     btHingeConstraint* constraintL;

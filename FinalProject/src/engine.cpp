@@ -204,19 +204,19 @@ void Engine::Camera()
     switch(m_event.key.keysym.sym)
     {
       case SDLK_w:
-        m_graphics->GetCamera()->translate.x -= 1.0;
+        m_graphics->jump();
         break;
 
       case SDLK_a:
-        m_graphics->GetCamera()->translate.z += 1.0;
+        m_graphics->moveLeft();
         break;
 
       case SDLK_s:
-        m_graphics->GetCamera()->translate.x += 1.0;
+        m_graphics->moveDown();
         break;
 
       case SDLK_d:
-        m_graphics->GetCamera()->translate.z -= 1.0;
+         m_graphics->moveRight();
         break;
 
       case SDLK_q:

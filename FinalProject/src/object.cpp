@@ -168,6 +168,8 @@ bool Object::LoadObjFile(std::string objFilePath)
       tempShape = new btConvexTriangleMeshShape(objTriMesh, true);
     else if(mesh->mNumFaces == 260 )
       tempShape = new btConvexTriangleMeshShape(objTriMesh, true);//btBoxShape(btVector3(.3,.3,.6));
+    else if(mesh->mNumFaces == 12 && objFilePath == (MODEL_DIR + "Cube.obj") )
+      tempShape = new btBoxShape(btVector3(.3,.3,.6));
 
     shape = tempShape;
 

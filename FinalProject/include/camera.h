@@ -9,7 +9,7 @@ class Camera
     Camera();
     ~Camera();
     bool Initialize(int w, int h);
-    void Update();
+    void Update(glm::vec3 ballPos);
     glm::mat4 GetProjection();
     glm::mat4 GetView();
     glm::vec3 GetEyePos();

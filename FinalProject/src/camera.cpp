@@ -29,11 +29,12 @@ bool Camera::Initialize(int w, int h)
 }
 
 
-void Camera::Update()
+void Camera::Update(glm::vec3 ballPos)
 {
-  view = glm::translate(view, translate);
-  eyePos -= translate;
-  translate = glm::vec3(0.0,0.0,0.0);
+  eyePos = glm::vec3(ballPos.x,ballPos.y,-20);
+  view = glm::lookAt( eyePos, //Eye Position
+                      ballPos, //Focus point
+                      glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up
 }
 
 glm::mat4 Camera::GetProjection()

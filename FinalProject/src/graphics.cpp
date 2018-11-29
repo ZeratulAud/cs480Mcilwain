@@ -188,7 +188,9 @@ bool Graphics::Initialize(int width, int height)
 void Graphics::Update(unsigned int dt)
 {
   // Update the object
-  m_camera->Update();
+  m_camera->Update(glm::vec3(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
+                      		 ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(),
+                    		 ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z()));
 
   //flipperR->GetRigidBody()->applyTorque(btVector3(1,1,1));
 

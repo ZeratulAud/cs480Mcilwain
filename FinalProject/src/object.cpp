@@ -22,6 +22,7 @@ Object::Object(std::string objFilePath, std::string texFilePath, float Mass, flo
   lightHeight = 25;
 
   render = true;
+  destroy = false;
 
   btDefaultMotionState *shapeMotionState = NULL;
   shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion::getIdentity(),btVector3(pos)));

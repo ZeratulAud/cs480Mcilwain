@@ -15,6 +15,9 @@ Graphics::Graphics()
   increasePlunger = false;
   lives = 3;
   gameScore = 0;
+  timeBtwSpawns = 1000.0;
+  timeSinceSpawn = 0.0;
+  despawnHeight =-25;
 }
 
 Graphics::~Graphics()
@@ -193,17 +196,28 @@ void Graphics::Update(unsigned int dt)
                     		 ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z()));
 
   //flipperR->GetRigidBody()->applyTorque(btVector3(1,1,1));
+  barrelSpawner(dt);
+  for (auto &i : Objects) {
+  	if(i->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight){
+  		i->destroy = true;
+  	} else {
+  		i->Update(dt);
+  	}
+  }
 
-  
+
+  for (it=Objects.begin() ; it != Objects.end(); ) {
+	if ((*it)->destroy) {
+	  dynamicsWorld->removeRigidBody((*it)->GetRigidBody());
+	  it = Objects.erase(it);
+	} else {
+	  ++it;
+	}
+  }
+
 
   dynamicsWorld->stepSimulation(dt, 5);
 
-
-  for (auto &i : Objects) {
-    i->Update(dt);
-  }
-
-  
 
   
 }
@@ -392,6 +406,15 @@ void Graphics::BulletInit()
 		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
 	dynamicsWorld->setGravity(btVector3(0, -2.5, 0));
+}
+
+void Graphics::barrelSpawner(unsigned int dt){
+	timeSinceSpawn += dt;
+	
+	if (timeBtwSpawns<timeSinceSpawn){
+		timeSinceSpawn = 0;
+		spawnBarrel();
+	} 
 }
 
 void Graphics::spawnBarrel()

@@ -42,11 +42,15 @@ class Graphics
     bool increasePlunger;
     int lives;
     int gameScore;
+    int despawnHeight;
 
   private:
     std::string ErrorString(GLenum error);
     void CreateObjects();
 
+    void barrelSpawner(unsigned int dt);
+    float timeBtwSpawns;
+    float timeSinceSpawn;
 
     Camera *m_camera;
     Shader *m_shader;
@@ -55,6 +59,7 @@ class Graphics
     btDiscreteDynamicsWorld *dynamicsWorld;
 
     std::vector<Object*> Objects;
+    std::vector <Object*>::iterator it;
 
     GLint m_projectionMatrix;
     GLint m_viewMatrix;

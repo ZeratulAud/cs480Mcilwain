@@ -32,6 +32,7 @@ class Object
     float lightHeight;
     
     bool render;
+    bool destroy;
 
   private:
     bool LoadObjFile(std::string objFilePath);

@@ -16,7 +16,7 @@ Graphics::Graphics()
   gameScore = 0;
   timeBtwJump = 1000.0;
   timeSinceJump = 0.0;
-  timeBtwSpawns = 10000.0;
+  timeBtwSpawns = 2500.0;
   timeSinceSpawn = 0.0;
   timeBtwDrop = 750.0;
   timeSinceDrop = 0.0;
@@ -312,40 +312,13 @@ std::string Graphics::ErrorString(GLenum error)
 
 void Graphics::CreateObjects()
 {
+	platformSpawner(5, glm::vec3(8,18,0), true);
+	platformSpawner(5, glm::vec3(-16,10,0), false);
 	platformSpawner(5, glm::vec3(8,2,0), true);
+	platformSpawner(5, glm::vec3(-16,-6,0), false);
+	platformSpawner(5, glm::vec3(8,-14,0), true);
 
-  Object* tempObject = new Object("Ramp2x1Flipped.obj", "reddy.jpg", 0,0, btVector3(-16,-7,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
-  tempObject = new Object("Ramp2x1Flipped.obj", "reddy.jpg", 0,0, btVector3(-12,-8,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
-  tempObject = new Object("Ramp2x1Flipped.obj", "reddy.jpg", 0,0, btVector3(-8,-9,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
-  tempObject = new Object("Ramp2x1Flipped.obj", "reddy.jpg", 0,0, btVector3(-4,-10,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
-  tempObject = new Object("Ramp2x1Flipped.obj", "reddy.jpg", 0,0, btVector3(0,-11,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
-
-  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(8,-16,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
-  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(4,-17,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
-  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(0,-18,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
-  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(-4,-19,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
-  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(-8,-20,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
-
+  Object* tempObject;
   tempObject = new Object("LevelWall.obj", "reddy.jpg", 0,0, btVector3(0,0,1.1));
   //tempObject->GetRigidBody()->setRestitution(1.0);
   tempObject->render = false;
@@ -360,7 +333,7 @@ void Graphics::CreateObjects()
   //tempObject->GetRigidBody()->setRestitution(1.0);
   Objects.push_back(tempObject);
 
-  ball = tempObject = new Object("Ball.obj", "greybaby.jpg", 1,5, btVector3(5, 11, 0));
+  ball = tempObject = new Object("Ball.obj", "greybaby.jpg", 1,5, btVector3(5, -12, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setAngularFactor(btVector3(0,1,0));
   Objects.push_back(tempObject);
@@ -411,14 +384,19 @@ void Graphics::barrelSpawner(unsigned int dt){
 void Graphics::platformSpawner(int platforms, glm::vec3 origin, bool down){
 	Object* tempObject;
 	glm::vec3 platformOffset;
-	if (down)
+	std::string modelName;
+	if (down){
 		platformOffset = glm::vec3(-4,-1, 0);
-	else 
-		platformOffset = glm::vec3( 4, 1, 0);
+		modelName = "Ramp2x1.obj";
+	}
+	else {
+		platformOffset = glm::vec3( 4, -1, 0);
+		modelName = "Ramp2x1Flipped.obj";
+	}
 
 	for (int i = 0; i<platforms; i++){
 		btVector3 pos = btVector3(origin.x+platformOffset.x*i, origin.y+platformOffset.y*i, origin.z+platformOffset.z*i);
-		tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, pos);
+		tempObject = new Object(modelName, "reddy.jpg", 0,0, pos);
 		Objects.push_back(tempObject);
 	}
 	//tempObject->GetRigidBody()->setRestitution(1.0);
@@ -427,7 +405,7 @@ void Graphics::platformSpawner(int platforms, glm::vec3 origin, bool down){
 void Graphics::spawnBarrel()
 {
 
-  Object* tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 5, 0));
+  Object* tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 20, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   Objects.push_back(tempObject);
   dynamicsWorld->addRigidBody(tempObject->GetRigidBody());

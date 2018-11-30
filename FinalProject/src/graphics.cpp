@@ -291,7 +291,7 @@ void Graphics::Render()
         i->Render(other_modelMatrix, otherShader);
     }
 
-    for (auto &i : Objects) {
+    for (auto &i : Barrels) {
       if (i->render)
         i->Render(other_modelMatrix, otherShader);
     }
@@ -329,23 +329,9 @@ std::string Graphics::ErrorString(GLenum error)
 
 void Graphics::CreateObjects()
 {
-  Object* tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(8,2,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
-  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(4,1,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
-  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(0,0,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
-  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(-4,-1,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
-  tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, btVector3(-8,-2,0));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
+	platformSpawner(5, glm::vec3(8,2,0), true);
 
-  tempObject = new Object("Ramp2x1Flipped.obj", "reddy.jpg", 0,0, btVector3(-16,-7,0));
+  Object* tempObject = new Object("Ramp2x1Flipped.obj", "reddy.jpg", 0,0, btVector3(-16,-7,0));
   //tempObject->GetRigidBody()->setRestitution(1.0);
   Objects.push_back(tempObject);
   tempObject = new Object("Ramp2x1Flipped.obj", "reddy.jpg", 0,0, btVector3(-12,-8,0));
@@ -441,6 +427,22 @@ void Graphics::barrelSpawner(unsigned int dt){
 		timeSinceSpawn = 0;
 		spawnBarrel();
 	}
+}
+
+void Graphics::platformSpawner(int platforms, glm::vec3 origin, bool down){
+	Object* tempObject;
+	glm::vec3 platformOffset;
+	if (down)
+		platformOffset = glm::vec3(-4,-1, 0);
+	else 
+		platformOffset = glm::vec3( 4, 1, 0);
+
+	for (int i = 0; i<platforms; i++){
+		btVector3 pos = btVector3(origin.x+platformOffset.x*i, origin.y+platformOffset.y*i, origin.z+platformOffset.z*i);
+		tempObject = new Object("Ramp2x1.obj", "reddy.jpg", 0,0, pos);
+		Objects.push_back(tempObject);
+	}
+	//tempObject->GetRigidBody()->setRestitution(1.0);
 }
 
 void Graphics::spawnBarrel()

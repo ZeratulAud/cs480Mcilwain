@@ -23,6 +23,9 @@ class Graphics
     void moveLeft();
     void moveRight();
     void moveDown();
+    void dropBarrel();
+    void resetBarrel();
+    void descendBarrel(unsigned int dt);
     void jump(unsigned int dt);
     float GetObjectDistance(Object* obj1, Object* obj2);
     std::vector<Object*> GetObjects() const;
@@ -38,6 +41,7 @@ class Graphics
     bool moveLeftFlag;
     bool moveRightFlag;
     bool jumpFlag;
+    bool dropBarrelFlag;
     int lives;
     int gameScore;
     int despawnHeight;
@@ -51,6 +55,8 @@ class Graphics
     float timeSinceSpawn;
     float timeBtwJump;
     float timeSinceJump;
+    float timeBtwDrop;
+    float timeSinceDrop;
 
     Camera *m_camera;
     Shader *m_shader;
@@ -75,6 +81,7 @@ class Graphics
     Object* flipperL;
     Object* flipperR;
     Object* plunger;
+    Object* myBarrel;
 
 
     btHingeConstraint* constraintR;

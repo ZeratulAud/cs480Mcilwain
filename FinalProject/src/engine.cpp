@@ -223,11 +223,11 @@ void Engine::Camera()
         break;
 
       case SDLK_q:
-        m_graphics->GetCamera()->translate.y -= 1.0;
+        m_graphics->dropBarrel();
         break;
 
       case SDLK_e:
-        m_graphics->GetCamera()->translate.y += 1.0;
+        m_graphics->resetBarrel();
         break;
     }
   }

@@ -11,12 +11,15 @@ Graphics::Graphics()
   moveLeftFlag = false;
   moveRightFlag = false;
   jumpFlag = false;
+  dropBarrelFlag = false;
   lives = 3;
   gameScore = 0;
   timeBtwJump = 1000.0;
   timeSinceJump = 0.0;
   timeBtwSpawns = 10000.0;
   timeSinceSpawn = 0.0;
+  timeBtwDrop = 750.0;
+  timeSinceDrop = 0.0;
   despawnHeight =-25;
 }
 
@@ -220,6 +223,7 @@ void Graphics::Update(unsigned int dt)
     moveLeft();
  
   jump(dt);
+  descendBarrel(dt);
 
   dynamicsWorld->stepSimulation(dt, 5);
 
@@ -370,7 +374,7 @@ void Graphics::CreateObjects()
   tempObject->render = false;
   Objects.push_back(tempObject);
 
-  tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 5, 0));
+  myBarrel = tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 5, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   //tempObject->GetRigidBody()->setRestitution(1.0);
   Objects.push_back(tempObject);
@@ -497,12 +501,44 @@ void Graphics::moveDown()
 void Graphics::jump(unsigned int dt)
 {
   timeSinceJump += dt;
-  
   if (timeBtwJump<timeSinceJump && jumpFlag == true){
     timeSinceJump = 0;
     ball->GetRigidBody()->applyCentralImpulse( btVector3( 0, 6.5, 0 ) );
     
   }
+}
+
+void Graphics::dropBarrel()
+{
+
+    myBarrel->GetRigidBody()->setCollisionFlags(myBarrel->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+    timeSinceDrop = 0;
+    dropBarrelFlag = true;
+
+}
+   
+    
+
+void Graphics::descendBarrel(unsigned int dt)
+{
+  timeSinceDrop += dt;
+  btTransform newTrans;
+  if(dropBarrelFlag == true)
+  {
+    myBarrel->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
+    newTrans.getOrigin() += (btVector3(0, -.1, 0));
+    myBarrel->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
+  }
+  if (timeBtwDrop<timeSinceDrop && dropBarrelFlag == true){  
+    resetBarrel();
+    timeSinceDrop = 0;
+  }
+
+}
+void Graphics::resetBarrel()
+{
+    myBarrel->GetRigidBody()->setCollisionFlags(myBarrel->GetRigidBody()->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
+    dropBarrelFlag = false;
 }
 
 

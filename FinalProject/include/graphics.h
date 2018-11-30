@@ -23,7 +23,7 @@ class Graphics
     void moveLeft();
     void moveRight();
     void moveDown();
-    void jump();
+    void jump(unsigned int dt);
     float GetObjectDistance(Object* obj1, Object* obj2);
     std::vector<Object*> GetObjects() const;
     Camera* GetCamera() const;
@@ -35,11 +35,9 @@ class Graphics
     bool blockerSpawned;
     bool switcher;
     bool scoreFlag;
-    bool paddleFlagR;
-    bool impulseFlagR;
-    bool paddleFlagL;
-    bool impulseFlagL;
-    bool increasePlunger;
+    bool moveLeftFlag;
+    bool moveRightFlag;
+    bool jumpFlag;
     int lives;
     int gameScore;
     int despawnHeight;
@@ -51,6 +49,8 @@ class Graphics
     void barrelSpawner(unsigned int dt);
     float timeBtwSpawns;
     float timeSinceSpawn;
+    float timeBtwJump;
+    float timeSinceJump;
 
     Camera *m_camera;
     Shader *m_shader;

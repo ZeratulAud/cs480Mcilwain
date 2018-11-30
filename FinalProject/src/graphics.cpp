@@ -8,14 +8,14 @@ Graphics::Graphics()
   orbitScale = 2.5;
   switcher = false;
   scoreFlag = false;
-  paddleFlagR = false;
-  impulseFlagR = false;
-  paddleFlagL = false;
-  impulseFlagL = false;
-  increasePlunger = false;
+  moveLeftFlag = false;
+  moveRightFlag = false;
+  jumpFlag = false;
   lives = 3;
   gameScore = 0;
-  timeBtwSpawns = 1000.0;
+  timeBtwJump = 1000.0;
+  timeSinceJump = 0.0;
+  timeBtwSpawns = 10000.0;
   timeSinceSpawn = 0.0;
   despawnHeight =-25;
 }
@@ -214,9 +214,21 @@ void Graphics::Update(unsigned int dt)
   	  ++it;
   	}
   }
-
+  if(moveRightFlag == true)
+    moveRight();
+  if(moveLeftFlag == true)
+    moveLeft();
+ 
+  jump(dt);
 
   dynamicsWorld->stepSimulation(dt, 5);
+<<<<<<< HEAD
+=======
+
+
+
+  
+>>>>>>> a38fb609b7b2cd90e92909805b96d7098fa1abfc
 }
 
 void Graphics::Render()
@@ -366,7 +378,7 @@ void Graphics::CreateObjects()
   //tempObject->GetRigidBody()->setRestitution(1.0);
   Objects.push_back(tempObject);
 
-  ball = tempObject = new Object("Ball.obj", "greybaby.jpg", 5,5, btVector3(5, 11, 0));
+  ball = tempObject = new Object("Ball.obj", "greybaby.jpg", 1,5, btVector3(5, 11, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setAngularFactor(btVector3(0,1,0));
   Objects.push_back(tempObject);
@@ -402,7 +414,7 @@ void Graphics::BulletInit()
 	dynamicsWorld =
 		new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
-	dynamicsWorld->setGravity(btVector3(0, -2.5, 0));
+	dynamicsWorld->setGravity(btVector3(0, -3, 0));
 }
 
 void Graphics::barrelSpawner(unsigned int dt){
@@ -460,6 +472,7 @@ btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
 
 void Graphics::moveLeft()
 {
+<<<<<<< HEAD
 
     ball->GetRigidBody()->setLinearVelocity(btVector3(1, 0, 0));
 }
@@ -467,14 +480,42 @@ void Graphics::moveRight()
 {
 
     ball->GetRigidBody()->setLinearVelocity(btVector3(-1, 0, 0));
+=======
+    
+    btVector3 tempbtVec3 =  ball->GetRigidBody()->getLinearVelocity();
+    if(tempbtVec3.x() < 0)
+       tempbtVec3 = btVector3(0, 0, 0);
+    tempbtVec3 = tempbtVec3 + btVector3(.4, 0, 0);
+    if(tempbtVec3.x() > 1)
+      tempbtVec3 = btVector3(1, tempbtVec3.y(), 0);
+    ball->GetRigidBody()->setLinearVelocity(tempbtVec3);
+}
+void Graphics::moveRight()
+{
+    btVector3 tempbtVec3 =  ball->GetRigidBody()->getLinearVelocity();
+    if(tempbtVec3.x() > 0)
+       tempbtVec3 = btVector3(0, 0, 0);
+    tempbtVec3 = tempbtVec3 + btVector3(-.4, 0, 0);
+    if(tempbtVec3.x() < -1)
+      tempbtVec3 = btVector3(-1, tempbtVec3.y(), 0);
+    /*if(tempbtVec3.y() < -2)
+      tempbtVec3 = btVector3(tempbtVec3.x(), -2, 0);*/
+    ball->GetRigidBody()->setLinearVelocity(btVector3(tempbtVec3));
+>>>>>>> a38fb609b7b2cd90e92909805b96d7098fa1abfc
 }
 void Graphics::moveDown()
 {
 
 }
-void Graphics::jump()
+void Graphics::jump(unsigned int dt)
 {
-    ball->GetRigidBody()->applyCentralImpulse( btVector3( 0, 25, 0 ) );
+  timeSinceJump += dt;
+  
+  if (timeBtwJump<timeSinceJump && jumpFlag == true){
+    timeSinceJump = 0;
+    ball->GetRigidBody()->applyCentralImpulse( btVector3( 0, 6.5, 0 ) );
+    
+  }
 }
 
 

@@ -164,13 +164,7 @@ void Engine::Keyboard()
     // handle key down events here
     switch(m_event.key.keysym.sym)
     {
-      case SDLK_RIGHT:
-        m_graphics->paddleFlagR = true;
-        break;
-
-      case SDLK_LEFT:
-        m_graphics->paddleFlagL = true;
-        break;
+     
 
       case SDLK_DOWN:
         m_graphics->spawnBarrel();
@@ -185,9 +179,18 @@ void Engine::Keyboard()
     switch(m_event.key.keysym.sym)
     {
 
-      default:
-      break;
-    }
+      case SDLK_a:
+        m_graphics->moveLeftFlag = false;
+        break;
+
+      case SDLK_d:
+        m_graphics->moveRightFlag = false;
+        break;
+
+      case SDLK_w:
+        m_graphics->jumpFlag = false;
+        break;
+  }
   }
 }
 
@@ -204,11 +207,11 @@ void Engine::Camera()
     switch(m_event.key.keysym.sym)
     {
       case SDLK_w:
-        m_graphics->jump();
+        m_graphics->jumpFlag = true;
         break;
 
       case SDLK_a:
-        m_graphics->moveLeft();
+        m_graphics->moveLeftFlag = true;
         break;
 
       case SDLK_s:
@@ -216,7 +219,7 @@ void Engine::Camera()
         break;
 
       case SDLK_d:
-         m_graphics->moveRight();
+        m_graphics->moveRightFlag = true;
         break;
 
       case SDLK_q:

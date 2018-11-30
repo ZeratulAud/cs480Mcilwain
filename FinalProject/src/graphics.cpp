@@ -218,17 +218,10 @@ void Graphics::Update(unsigned int dt)
     moveRight();
   if(moveLeftFlag == true)
     moveLeft();
- 
+
   jump(dt);
 
   dynamicsWorld->stepSimulation(dt, 5);
-<<<<<<< HEAD
-=======
-
-
-
-  
->>>>>>> a38fb609b7b2cd90e92909805b96d7098fa1abfc
 }
 
 void Graphics::Render()
@@ -472,16 +465,6 @@ btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
 
 void Graphics::moveLeft()
 {
-<<<<<<< HEAD
-
-    ball->GetRigidBody()->setLinearVelocity(btVector3(1, 0, 0));
-}
-void Graphics::moveRight()
-{
-
-    ball->GetRigidBody()->setLinearVelocity(btVector3(-1, 0, 0));
-=======
-    
     btVector3 tempbtVec3 =  ball->GetRigidBody()->getLinearVelocity();
     if(tempbtVec3.x() < 0)
        tempbtVec3 = btVector3(0, 0, 0);
@@ -501,7 +484,6 @@ void Graphics::moveRight()
     /*if(tempbtVec3.y() < -2)
       tempbtVec3 = btVector3(tempbtVec3.x(), -2, 0);*/
     ball->GetRigidBody()->setLinearVelocity(btVector3(tempbtVec3));
->>>>>>> a38fb609b7b2cd90e92909805b96d7098fa1abfc
 }
 void Graphics::moveDown()
 {
@@ -510,11 +492,11 @@ void Graphics::moveDown()
 void Graphics::jump(unsigned int dt)
 {
   timeSinceJump += dt;
-  
+
   if (timeBtwJump<timeSinceJump && jumpFlag == true){
     timeSinceJump = 0;
     ball->GetRigidBody()->applyCentralImpulse( btVector3( 0, 6.5, 0 ) );
-    
+
   }
 }
 

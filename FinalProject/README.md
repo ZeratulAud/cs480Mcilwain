@@ -1,4 +1,4 @@
-# PA9: Pinball (Lighting)
+# PA10: Donkey Kong Clone
 
 ### Enzo Arata
 ### Evan Brown
@@ -14,20 +14,12 @@ This project was ran and tested on the Debian Stretch partition in ECC.
 ```
 ESC - end program
 
-DOWN - launch ball
-LEFT - left paddle
-RIGHT - right paddle
+w - jump
+a - move left
+s - move down
+d - move left
 ```
 
-### Camera
-```
-w - pan up
-a - pan left
-s - pan down
-d - pan right
-q - pan out
-e - pan in
-```
 
 # Dependencies, Building, and Running
 

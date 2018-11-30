@@ -207,19 +207,16 @@ void Graphics::Update(unsigned int dt)
 
 
   for (it=Objects.begin() ; it != Objects.end(); ) {
-	if ((*it)->destroy) {
-	  dynamicsWorld->removeRigidBody((*it)->GetRigidBody());
-	  it = Objects.erase(it);
-	} else {
-	  ++it;
-	}
+  	if ((*it)->destroy) {
+  	  dynamicsWorld->removeRigidBody((*it)->GetRigidBody());
+  	  it = Objects.erase(it);
+  	} else {
+  	  ++it;
+  	}
   }
 
 
   dynamicsWorld->stepSimulation(dt, 5);
-
-
-  
 }
 
 void Graphics::Render()
@@ -241,7 +238,7 @@ void Graphics::Render()
     glUniform3f(temp, (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
                       (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(),
                       (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z());
-	
+
 
     glUniformMatrix4fv(m_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection()));
     glUniformMatrix4fv(m_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
@@ -410,11 +407,11 @@ void Graphics::BulletInit()
 
 void Graphics::barrelSpawner(unsigned int dt){
 	timeSinceSpawn += dt;
-	
+
 	if (timeBtwSpawns<timeSinceSpawn){
 		timeSinceSpawn = 0;
 		spawnBarrel();
-	} 
+	}
 }
 
 void Graphics::spawnBarrel()
@@ -424,7 +421,7 @@ void Graphics::spawnBarrel()
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   Objects.push_back(tempObject);
   dynamicsWorld->addRigidBody(tempObject->GetRigidBody());
-  
+
 
 }
 
@@ -463,16 +460,16 @@ btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
 
 void Graphics::moveLeft()
 {
-    
+
     ball->GetRigidBody()->setLinearVelocity(btVector3(1, 0, 0));
 }
 void Graphics::moveRight()
 {
-    
+
     ball->GetRigidBody()->setLinearVelocity(btVector3(-1, 0, 0));
 }
 void Graphics::moveDown()
-{ 
+{
 
 }
 void Graphics::jump()

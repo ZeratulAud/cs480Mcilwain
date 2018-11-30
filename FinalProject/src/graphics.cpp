@@ -33,13 +33,20 @@ Graphics::~Graphics()
   for (Object *obj : Objects)
     dynamicsWorld->removeRigidBody(obj->GetRigidBody());
 
+  for (Object *obj : Barrels)
+    dynamicsWorld->removeRigidBody(obj->GetRigidBody());
+
   delete dynamicsWorld;
   dynamicsWorld = NULL;
 
   for (Object *obj : Objects)
     delete obj;
 
+  for (Object *obj : Barrels)
+    delete obj;
+
   Objects.clear();
+  Barrels.clear();
 }
 
 bool Graphics::Initialize(int width, int height)
@@ -256,6 +263,11 @@ void Graphics::Render()
       if (i->render)
         i->Render(m_modelMatrix, m_shader);
     }
+
+    for (auto &i : Barrels) {
+      if (i->render)
+        i->Render(m_modelMatrix, m_shader);
+    }
   }
   else
   {
@@ -274,6 +286,11 @@ void Graphics::Render()
     glUniformMatrix4fv(other_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
 
     // Render the object
+    for (auto &i : Objects) {
+      if (i->render)
+        i->Render(other_modelMatrix, otherShader);
+    }
+
     for (auto &i : Objects) {
       if (i->render)
         i->Render(other_modelMatrix, otherShader);
@@ -372,7 +389,7 @@ void Graphics::CreateObjects()
   myBarrel = tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 5, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
+  Barrels.push_back(tempObject);
 
   ball = tempObject = new Object("Ball.obj", "greybaby.jpg", 1,5, btVector3(5, 11, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
@@ -389,6 +406,10 @@ void Graphics::CreateObjects()
 
 
   for (auto &i : Objects) {
+    dynamicsWorld->addRigidBody(i->GetRigidBody());
+  }
+
+  for (auto &i : Barrels) {
     dynamicsWorld->addRigidBody(i->GetRigidBody());
   }
 }
@@ -427,7 +448,7 @@ void Graphics::spawnBarrel()
 
   Object* tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 5, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  Objects.push_back(tempObject);
+  Barrels.push_back(tempObject);
   dynamicsWorld->addRigidBody(tempObject->GetRigidBody());
 
 
@@ -511,8 +532,8 @@ void Graphics::dropBarrel()
     dropBarrelFlag = true;
 
 }
-   
-    
+
+
 
 void Graphics::descendBarrel(unsigned int dt)
 {
@@ -524,7 +545,7 @@ void Graphics::descendBarrel(unsigned int dt)
     newTrans.getOrigin() += (btVector3(0, -.1, 0));
     myBarrel->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
   }
-  if (timeBtwDrop<timeSinceDrop && dropBarrelFlag == true){  
+  if (timeBtwDrop<timeSinceDrop && dropBarrelFlag == true){
     resetBarrel();
     timeSinceDrop = 0;
   }

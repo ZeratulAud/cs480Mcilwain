@@ -65,7 +65,6 @@ class Graphics
     btDiscreteDynamicsWorld *dynamicsWorld;
 
     std::vector<Object*> Objects;
-    std::vector <Object*>::iterator it;
 
     GLint m_projectionMatrix;
     GLint m_viewMatrix;

@@ -28,7 +28,6 @@ bool Camera::Initialize(int w, int h)
   return true;
 }
 
-
 void Camera::Update(glm::vec3 ballPos)
 {
   eyePos = glm::vec3(ballPos.x,ballPos.y,-20);

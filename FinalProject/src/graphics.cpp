@@ -205,11 +205,10 @@ void Graphics::Update(unsigned int dt)
   	}
   }
 
-
-  for (it=Objects.begin() ; it != Objects.end(); ) {
+  for (auto it = Objects.begin(); it != Objects.end(); ) {
   	if ((*it)->destroy) {
   	  dynamicsWorld->removeRigidBody((*it)->GetRigidBody());
-  	  it = Objects.erase(it);
+  	  Objects.erase(it);
   	} else {
   	  ++it;
   	}

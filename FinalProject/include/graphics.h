@@ -76,8 +76,8 @@ class Graphics
     Object* myBarrel;
 
     std::vector<Object*> Objects;
-    std::vector<barrel> barrels;
-    std::vector<ladder> ladders;
+    std::vector<barrel*> barrels;
+    std::vector<ladder*> ladders;
 
     GLint m_projectionMatrix;
     GLint m_viewMatrix;

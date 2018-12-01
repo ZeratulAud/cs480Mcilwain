@@ -31,14 +31,23 @@ Graphics::~Graphics()
   for (Object *obj : Objects)
     dynamicsWorld->removeRigidBody(obj->GetRigidBody());
 
-  /*for (barrel *bar : barrels)
-    dynamicsWorld->removeRigidBody(bar->object->GetRigidBody());*/
+  for (barrel *bar : barrels)
+    dynamicsWorld->removeRigidBody(bar->object->GetRigidBody());
+
+  for (ladder *lad : ladders)
+    dynamicsWorld->removeRigidBody(lad->object->GetRigidBody());
 
   delete dynamicsWorld;
   dynamicsWorld = NULL;
 
   for (Object *obj : Objects)
     delete obj;
+
+  for (barrel *bar : barrels)
+    delete bar;
+
+  for (ladder *lad : ladders)
+    delete lad;
 
   Objects.clear();
   barrels.clear();
@@ -221,16 +230,16 @@ void Graphics::Update(unsigned int dt)
   }
 
   for (auto &i : barrels) {
-    if(i.object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight){
-      i.object->destroy = true;
+    if(i->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight){
+      i->object->destroy = true;
     } else {
-      i.object->Update(dt);
+      i->object->Update(dt);
     }
   }
 
   for (auto it = barrels.begin(); it != barrels.end(); ) {
-    if ((*it).object->destroy) {
-      dynamicsWorld->removeRigidBody((*it).object->GetRigidBody());
+    if ((*it)->object->destroy) {
+      dynamicsWorld->removeRigidBody((*it)->object->GetRigidBody());
       barrels.erase(it);
     } else {
       ++it;
@@ -238,16 +247,16 @@ void Graphics::Update(unsigned int dt)
   }
 
   for (auto &i : ladders) {
-    if(i.object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight){
-      i.object->destroy = true;
+    if(i->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight){
+      i->object->destroy = true;
     } else {
-      i.object->Update(dt);
+      i->object->Update(dt);
     }
   }
 
   for (auto it = ladders.begin(); it != ladders.end(); ) {
-    if ((*it).object->destroy) {
-      dynamicsWorld->removeRigidBody((*it).object->GetRigidBody());
+    if ((*it)->object->destroy) {
+      dynamicsWorld->removeRigidBody((*it)->object->GetRigidBody());
       ladders.erase(it);
     } else {
       ++it;
@@ -294,12 +303,12 @@ void Graphics::Render()
         i->Render(m_modelMatrix, m_shader);
     }
     for (auto &i : barrels) {
-      if (i.object->render)
-        i.object->Render(m_modelMatrix, m_shader);
+      if (i->object->render)
+        i->object->Render(m_modelMatrix, m_shader);
     }
     for (auto &i : ladders) {
-      if (i.object->render)
-        i.object->Render(m_modelMatrix, m_shader);
+      if (i->object->render)
+        i->object->Render(m_modelMatrix, m_shader);
     }
   }
   else
@@ -324,12 +333,12 @@ void Graphics::Render()
         i->Render(other_modelMatrix, otherShader);
     }
     for (auto &i : barrels) {
-      if (i.object->render)
-        i.object->Render(other_modelMatrix, otherShader);
+      if (i->object->render)
+        i->object->Render(other_modelMatrix, otherShader);
     }
     for (auto &i : ladders) {
-      if (i.object->render)
-        i.object->Render(other_modelMatrix, otherShader);
+      if (i->object->render)
+        i->object->Render(other_modelMatrix, otherShader);
     }
   }
 
@@ -388,18 +397,19 @@ void Graphics::CreateObjects()
  
 
   
-  myBarrel = tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 5, 0));
+  /*myBarrel = tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 5, 0));
   barrel tempBarrel = {tempObject, 0, false};
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  barrels.push_back(tempBarrel);
-  dynamicsWorld->addRigidBody(tempObject->GetRigidBody());
+  barrels.push_back(tempBarrel);*/
+
 
   tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(8, -4, 0));
-  ladder tempLadder = {tempObject, 0, false};
-  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  ladder *tempLadder = new ladder();;
+  *tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   ladders.push_back(tempLadder);
-  dynamicsWorld->addRigidBody(tempObject->GetRigidBody());
+  
 
   //tempObject->GetRigidBody()->setRestitution(1.0);
  // Objects.push_back(tempObject);
@@ -420,6 +430,12 @@ void Graphics::CreateObjects()
 
   for (auto &i : Objects) {
     dynamicsWorld->addRigidBody(i->GetRigidBody());
+  }
+  for (auto &i : barrels) {
+    dynamicsWorld->addRigidBody(i->object->GetRigidBody());
+  }
+  for (auto &i : ladders) {
+    dynamicsWorld->addRigidBody(i->object->GetRigidBody());
   }
 }
 
@@ -493,12 +509,14 @@ void Graphics::platformSpawner(int platforms, glm::vec3 origin, int angle){
 
 void Graphics::spawnBarrel()
 {
+  
   Object* tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 20, 0));
-  barrel tempBarrel = {tempObject, 0, false};
+  barrel *tempBarrel = new barrel();;
+  *tempBarrel = {tempObject, 0, false};
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   barrels.push_back(tempBarrel);
-  dynamicsWorld->addRigidBody(tempObject->GetRigidBody());
-
+  dynamicsWorld->addRigidBody(tempBarrel->object->GetRigidBody());
+  
 
 }
 

@@ -211,12 +211,12 @@ void Engine::LightingUpdate()
 {
   for (Object *obj : m_graphics->GetObjects())
   {
-    obj->ambIntensity = ambientVal;
     obj->diffIntensity = diffuseVal;
     obj->specIntensity = specularVal;
     obj->shineIntensity = shininessVal;
-    obj->lightHeight = lightHeight;    
   }
+  m_graphics->ambIntensity = ambientVal;
+  m_graphics->lightHeight = lightHeight;
 }
 
 unsigned int Engine::getDT()

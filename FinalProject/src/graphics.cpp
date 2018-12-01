@@ -19,6 +19,10 @@ Graphics::Graphics()
   timeBtwDrop = 750.0;
   timeSinceDrop = 0.0;
   despawnHeight =-25;
+  ambIntensity = 0.0;
+  lightHeight = 25;
+  
+
 }
 
 Graphics::~Graphics()
@@ -284,6 +288,20 @@ void Graphics::Render()
                       (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(),
                       (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z());
 
+    temp = m_shader->GetUniformLocation("AmbientProduct");
+	glUniform4f(temp, ambIntensity, ambIntensity, ambIntensity, 1);
+
+	temp = m_shader->GetUniformLocation("LightPosition");
+	glUniform3f(temp, 0, lightHeight, 0);
+
+	temp = m_shader->GetUniformLocation("coneDirection");
+	glUniform3f(temp, 0, -lightHeight, 0);
+
+	temp = m_shader->GetUniformLocation("coneCutOff");
+	glUniform1f(temp, .995);
+
+	temp = m_shader->GetUniformLocation("spotExponent");
+	glUniform1f(temp, .1);
 
     glUniformMatrix4fv(m_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection()));
     glUniformMatrix4fv(m_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
@@ -314,6 +332,21 @@ void Graphics::Render()
     glUniform3f(temp, (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
                       (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(),
                       (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z());
+
+    temp = otherShader->GetUniformLocation("AmbientProduct");
+	glUniform4f(temp, ambIntensity, ambIntensity, ambIntensity, 1);
+
+	temp = otherShader->GetUniformLocation("LightPosition");
+	glUniform3f(temp, 0, lightHeight, 0);
+
+	temp = otherShader->GetUniformLocation("coneDirection");
+	glUniform3f(temp, 0, -lightHeight, 0);
+
+	temp = otherShader->GetUniformLocation("coneCutOff");
+	glUniform1f(temp, .995);
+
+	temp = otherShader->GetUniformLocation("spotExponent");
+	glUniform1f(temp, .1);
 
     glUniformMatrix4fv(other_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection()));
     glUniformMatrix4fv(other_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));

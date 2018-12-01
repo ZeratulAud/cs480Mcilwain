@@ -14,6 +14,12 @@ struct barrel{
     int dropTimer;
     bool hasDropped;
 };
+
+struct ladder{
+    Object *object;
+    int ladderCooldown;
+    bool cooldownFlag;
+};
 class Graphics
 {
   public:
@@ -73,6 +79,7 @@ class Graphics
 
     std::vector<Object*> Objects;
     std::vector<barrel> barrels;
+    std::vector<ladder> ladders;
 
     GLint m_projectionMatrix;
     GLint m_viewMatrix;

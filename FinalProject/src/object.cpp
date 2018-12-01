@@ -15,6 +15,7 @@ Object::Object(std::string objFilePath, std::string texFilePath, float Mass, flo
   }
   LoadTexFile(MODEL_DIR + texFilePath, 0);
   //position = glm::vec3(pos.x(), pos.y(), pos.z());
+  diffIntensity = .2;
   specIntensity = .6;
   shineIntensity = 125;
 

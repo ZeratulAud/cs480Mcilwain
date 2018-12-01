@@ -37,6 +37,7 @@ class Object
   private:
     bool LoadObjFile(std::string objFilePath);
     bool LoadTexFile(std::string texFilePath, int count);
+    
     glm::vec3 position;
     glm::mat4 model;
     std::vector<ModelInfo> modelInfo;

@@ -48,21 +48,6 @@ void Object::Update(unsigned int dt)
   rigidBody->getMotionState()->getWorldTransform(trans);
   trans.getOpenGLMatrix(m);
   model = glm::make_mat4(m);
-
-  /*
-  model = glm::scale(model, glm::vec3(planetScale, planetScale, planetScale));
-  model = origin;
-  angle += dt * M_PI/(1000 ) * timeScale;
-  if (orbitRadius > 0) {
-    model = glm::rotate(model, (angle/orbitRadius) * orbitSpeed, glm::vec3(0.0, 1.0, 0.0)) * glm::translate(glm::mat4(1.0), glm::vec3((-orbitRadius)/orbitScale, 0.0, 0.0));
-    model = glm::rotate(model, (angle/orbitRadius) * orbitSpeed, glm::vec3(0.0, 1.0, 0.0));
-  }
-
-  for (auto &i : children) {
-    i->Update(dt, model, timeScale, orbitScale);
-  }
-  model = glm::rotate(model, angle * rotationSpeed, glm::vec3(0.0, 1.0, 0.0));
-  */
 }
 
 void Object::Render(GLint& m_modelMatrix, Shader *shader)

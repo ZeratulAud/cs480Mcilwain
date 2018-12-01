@@ -20,6 +20,7 @@ struct ladder{
     int ladderCooldown;
     bool cooldownFlag;
 };
+
 class Graphics
 {
   public:
@@ -33,20 +34,15 @@ class Graphics
     void spawnBarrel();
     void moveLeft();
     void moveRight();
-    void moveDown();
+    void jump(unsigned int dt);
     void dropBarrel();
     void resetBarrel();
     void descendBarrel(unsigned int dt);
-    void jump(unsigned int dt);
     float GetObjectDistance(Object* obj1, Object* obj2);
     std::vector<Object*> GetObjects() const;
     Camera* GetCamera() const;
     btDiscreteDynamicsWorld* GetDynamicsWorld() const;
 
-    float timeScale;
-    float orbitScale;
-    float plungerforce;
-    bool blockerSpawned;
     bool switcher;
     bool scoreFlag;
     bool moveLeftFlag;
@@ -60,10 +56,9 @@ class Graphics
   private:
     std::string ErrorString(GLenum error);
     void CreateObjects();
-
     void platformSpawner(int platformSections, glm::vec3 origin, int angle);
-
     void barrelSpawner(unsigned int dt);
+
     float timeBtwSpawns;
     float timeSinceSpawn;
     float timeBtwJump;
@@ -77,6 +72,9 @@ class Graphics
 
     btDiscreteDynamicsWorld *dynamicsWorld;
 
+    Object* ball;
+    Object* myBarrel;
+
     std::vector<Object*> Objects;
     std::vector<barrel> barrels;
     std::vector<ladder> ladders;
@@ -84,24 +82,6 @@ class Graphics
     GLint m_projectionMatrix;
     GLint m_viewMatrix;
     GLint m_modelMatrix;
-
-    Object* ball;
-    Object* blocker;
-    Object* bumper1;
-    Object* bumper2;
-    Object* bumper3;
-    Object* bumper4;
-    Object* bumper5;
-    Object* flipperL;
-    Object* flipperR;
-    Object* plunger;
-    Object* myBarrel;
-
-   
-
-
-    btHingeConstraint* constraintR;
-    btHingeConstraint* constraintL;
 
     GLint other_projectionMatrix;
     GLint other_viewMatrix;

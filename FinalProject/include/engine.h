@@ -17,7 +17,6 @@ class Engine
     bool GameOver();
     void Run();
     void Keyboard();
-    void Camera();
     void LightingUpdate();
     unsigned int getDT();
     long long GetCurrentTimeMillis();

@@ -1,4 +1,4 @@
-PROJECT(PA10)
+PROJECT(DK)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 #export compile commands for use in visualizations

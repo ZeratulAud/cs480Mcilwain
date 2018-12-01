@@ -91,7 +91,6 @@ void Engine::Run()
     while(SDL_PollEvent(&m_event) != 0)
     {
       Keyboard();
-      Camera();
     }
 
     // My menu
@@ -129,8 +128,6 @@ void Engine::Run()
     ImGui::SliderFloat("Shininess Value", &shininessVal, -200, 350, "%.0f");
     ImGui::SliderFloat("Light Height", &lightHeight, 0.1, 150, "%.0f");
     
-
-
     ImGui::End();
 
     // Update and render the graphics
@@ -164,13 +161,29 @@ void Engine::Keyboard()
     // handle key down events here
     switch(m_event.key.keysym.sym)
     {
-     
-
       case SDLK_DOWN:
         m_graphics->spawnBarrel();
         break;
-
      
+      case SDLK_w:
+        m_graphics->jumpFlag = true;
+        break;
+
+      case SDLK_a:
+        m_graphics->moveLeftFlag = true;
+        break;
+
+      case SDLK_d:
+        m_graphics->moveRightFlag = true;
+        break;
+
+      case SDLK_q:
+        m_graphics->dropBarrel();
+        break;
+
+      case SDLK_e:
+        m_graphics->resetBarrel();
+        break;
     }
   }
 
@@ -190,45 +203,6 @@ void Engine::Keyboard()
       case SDLK_w:
         m_graphics->jumpFlag = false;
         break;
-  }
-  }
-}
-
-void Engine::Camera()
-{
-  if(m_event.type == SDL_QUIT)
-    m_running = false;
-
-  else if(GameOver())
-    return;
-
-  else if (m_event.type == SDL_KEYDOWN)
-  {
-    switch(m_event.key.keysym.sym)
-    {
-      case SDLK_w:
-        m_graphics->jumpFlag = true;
-        break;
-
-      case SDLK_a:
-        m_graphics->moveLeftFlag = true;
-        break;
-
-      case SDLK_s:
-        m_graphics->moveDown();
-        break;
-
-      case SDLK_d:
-        m_graphics->moveRightFlag = true;
-        break;
-
-      case SDLK_q:
-        m_graphics->dropBarrel();
-        break;
-
-      case SDLK_e:
-        m_graphics->resetBarrel();
-        break;
     }
   }
 }
@@ -241,8 +215,7 @@ void Engine::LightingUpdate()
     obj->diffIntensity = diffuseVal;
     obj->specIntensity = specularVal;
     obj->shineIntensity = shininessVal;
-    obj->lightHeight = lightHeight;
-    
+    obj->lightHeight = lightHeight;    
   }
 }
 

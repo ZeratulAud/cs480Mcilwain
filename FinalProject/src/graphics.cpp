@@ -4,9 +4,6 @@
 Graphics::Graphics()
 {
   BulletInit();
-  plungerforce = 0;
-  timeScale = 1;
-  orbitScale = 2.5;
   switcher = false;
   scoreFlag = false;
   moveLeftFlag = false;
@@ -44,6 +41,8 @@ Graphics::~Graphics()
     delete obj;
 
   Objects.clear();
+  barrels.clear();
+  ladders.clear();
 }
 
 bool Graphics::Initialize(int width, int height)
@@ -558,10 +557,7 @@ void Graphics::moveRight()
       tempbtVec3 = btVector3(tempbtVec3.x(), -2, 0);*/
     ball->GetRigidBody()->setLinearVelocity(btVector3(tempbtVec3));
 }
-void Graphics::moveDown()
-{
 
-}
 void Graphics::jump(unsigned int dt)
 {
   timeSinceJump += dt;

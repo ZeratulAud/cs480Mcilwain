@@ -50,7 +50,7 @@ class Graphics
     std::string ErrorString(GLenum error);
     void CreateObjects();
 
-    void platformSpawner(int platformSections, glm::vec3 origin, bool down);
+    void platformSpawner(int platformSections, glm::vec3 origin, int angle);
 
     void barrelSpawner(unsigned int dt);
     float timeBtwSpawns;

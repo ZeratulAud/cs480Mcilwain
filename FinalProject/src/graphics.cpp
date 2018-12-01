@@ -312,11 +312,11 @@ std::string Graphics::ErrorString(GLenum error)
 
 void Graphics::CreateObjects()
 {
-	platformSpawner(5, glm::vec3(8,18,0), true);
-	platformSpawner(5, glm::vec3(-16,10,0), false);
-	platformSpawner(5, glm::vec3(8,2,0), true);
-	platformSpawner(5, glm::vec3(-16,-6,0), false);
-	platformSpawner(5, glm::vec3(8,-14,0), true);
+	platformSpawner(4, glm::vec3(10,40,0), -30);
+	platformSpawner(4, glm::vec3(-20,25,0), 30);
+	platformSpawner(4, glm::vec3(10,10,0), -30);
+	platformSpawner(4, glm::vec3(-20,-5,0), 30);
+	platformSpawner(4, glm::vec3(10,-20,0), -15);
 
   Object* tempObject;
   tempObject = new Object("LevelWall.obj", "reddy.jpg", 0,0, btVector3(0,0,1.1));
@@ -381,18 +381,32 @@ void Graphics::barrelSpawner(unsigned int dt){
 	}
 }
 
-void Graphics::platformSpawner(int platforms, glm::vec3 origin, bool down){
+void Graphics::platformSpawner(int platforms, glm::vec3 origin, int angle){
 	Object* tempObject;
 	glm::vec3 platformOffset;
 	std::string modelName;
-	if (down){
-		platformOffset = glm::vec3(-4,-1, 0);
-		modelName = "Ramp2x1.obj";
+
+	switch(angle) {
+    	case 15 : 
+ 	   		platformOffset = glm::vec3( 6.9, -4, 0);
+			modelName = "15DegPlatform.obj";
+            break;
+
+ 	   case -15 : 
+ 	   		platformOffset = glm::vec3(-6.9, -4, 0);
+			modelName = "-15DegPlatform.obj";
+            break;
+            
+    	case 30 : 
+			platformOffset = glm::vec3( 6.9, -4, 0);
+			modelName = "30DegPlatform.obj";
+            break;
+ 	   case -30 : 
+ 	   		platformOffset = glm::vec3(-6.9,-4, 0);
+			modelName = "-30DegPlatform.obj";
+            break;
 	}
-	else {
-		platformOffset = glm::vec3( 4, -1, 0);
-		modelName = "Ramp2x1Flipped.obj";
-	}
+
 
 	for (int i = 0; i<platforms; i++){
 		btVector3 pos = btVector3(origin.x+platformOffset.x*i, origin.y+platformOffset.y*i, origin.z+platformOffset.z*i);

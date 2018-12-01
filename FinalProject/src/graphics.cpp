@@ -1,4 +1,5 @@
 #include "graphics.h"
+#include <math.h>
 
 Graphics::Graphics()
 {
@@ -312,11 +313,12 @@ std::string Graphics::ErrorString(GLenum error)
 
 void Graphics::CreateObjects()
 {
-	platformSpawner(4, glm::vec3(10,40,0), -30);
-	platformSpawner(4, glm::vec3(-20,25,0), 30);
-	platformSpawner(4, glm::vec3(10,10,0), -30);
-	platformSpawner(4, glm::vec3(-20,-5,0), 30);
-	platformSpawner(4, glm::vec3(10,-20,0), -15);
+	platformSpawner(4, glm::vec3(10,42,0), -30);
+	platformSpawner(4, glm::vec3(-20,27,0), 30);
+	platformSpawner(4, glm::vec3(10,10,0), -15);
+	platformSpawner(4, glm::vec3(-20,-2,0), 15);
+	platformSpawner(4, glm::vec3(10,-14,0), -15);
+
 
   Object* tempObject;
   tempObject = new Object("LevelWall.obj", "reddy.jpg", 0,0, btVector3(0,0,1.1));
@@ -388,23 +390,27 @@ void Graphics::platformSpawner(int platforms, glm::vec3 origin, int angle){
 
 	switch(angle) {
     	case 15 : 
- 	   		platformOffset = glm::vec3( 6.9, -4, 0);
+ 	   		platformOffset = glm::vec3( 8*cos((15*M_PI)/180), -(8*sin((15*M_PI)/180)), 0);
 			modelName = "15DegPlatform.obj";
             break;
 
  	   case -15 : 
- 	   		platformOffset = glm::vec3(-6.9, -4, 0);
+ 	   		platformOffset = glm::vec3(-(8*cos((15*M_PI)/180)), -(8*sin((15*M_PI)/180)), 0);
 			modelName = "-15DegPlatform.obj";
             break;
             
     	case 30 : 
-			platformOffset = glm::vec3( 6.9, -4, 0);
+			platformOffset = glm::vec3( 8*cos((30*M_PI)/180), -(8*sin((30*M_PI)/180)), 0);
 			modelName = "30DegPlatform.obj";
             break;
  	   case -30 : 
- 	   		platformOffset = glm::vec3(-6.9,-4, 0);
+ 	   		platformOffset = glm::vec3( -(8*cos((30*M_PI)/180)),-(8*sin((30*M_PI)/180)), 0);
 			modelName = "-30DegPlatform.obj";
             break;
+        default :
+        	platformOffset = glm::vec3(8,0,0);
+			modelName = "0DegPlatform.obj";
+        	break;
 	}
 
 

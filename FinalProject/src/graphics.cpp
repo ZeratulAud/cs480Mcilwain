@@ -344,6 +344,7 @@ void Graphics::CreateObjects()
 	platformSpawner(4, glm::vec3(10,42,0), -30);
 	platformSpawner(4, glm::vec3(-20,27,0), 30);
 	platformSpawner(4, glm::vec3(10,10,0), -15);
+	platformSpawner(1, glm::vec3(-28,0,0), 0);
 	platformSpawner(4, glm::vec3(-20,-2,0), 15);
 	platformSpawner(4, glm::vec3(10,-14,0), -15);
 

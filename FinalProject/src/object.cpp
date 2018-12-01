@@ -29,10 +29,38 @@ Object::Object(std::string objFilePath, std::string texFilePath, float Mass, flo
   shape->calculateLocalInertia(mass, inertia);
 
   btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, shape, inertia);
-  //if (Inertia == 0)
-    //shapeRigidBodyCI.m_restitution = 1000;
+
   rigidBody = new btRigidBody(shapeRigidBodyCI);
 }
+
+Object::Object(Object& copy, btVector3 pos){
+
+    diffIntensity = copy.diffIntensity;
+    specIntensity = copy.specIntensity;
+    shineIntensity = copy.shineIntensity;
+
+    model = copy.model;
+    modelInfo = copy.modelInfo;
+    shape = copy.shape;
+    GLuint tempGl;
+    GLuint buffer;
+    texture.push_back(tempGl);
+    LoadTexFile(MODEL_DIR + "rednice.jpg", 0);
+    VB = copy.VB;
+    IB = copy.IB;
+    rigidBody = copy.GetRigidBody();
+
+    btTransform transform;
+    transform.setOrigin(pos);
+    transform.setRotation(btQuaternion::getIdentity());
+
+    rigidBody->setWorldTransform(transform);
+
+    render = true;
+    destroy = false;
+
+}
+
 
 Object::~Object()
 {
@@ -134,6 +162,8 @@ bool Object::LoadObjFile(std::string objFilePath)
     if(mesh->mNumFaces == 224 )
       tempShape = new btSphereShape(btScalar(.25));
     else if(mesh->mNumFaces == 124 )
+      tempShape = new btCylinderShapeZ(btVector3(1,1,1));//btConvexTriangleMeshShape(objTriMesh, true);
+    else if(mesh->mNumFaces == 316)
       tempShape = new btCylinderShapeZ(btVector3(1,1,1));//btConvexTriangleMeshShape(objTriMesh, true);
     else if(mesh->mNumFaces == 260 )
       tempShape = new btConvexTriangleMeshShape(objTriMesh, true);//btBoxShape(btVector3(.3,.3,.6));

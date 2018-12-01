@@ -20,7 +20,7 @@ Graphics::Graphics()
   timeSinceDrop = 0.0;
   despawnHeight =-25;
   ambIntensity = 0.0;
-  lightHeight = 25;
+  lightHeight = 10;
   
 
 }
@@ -216,8 +216,9 @@ void Graphics::Update(unsigned int dt)
 
   //flipperR->GetRigidBody()->applyTorque(btVector3(1,1,1));
   barrelSpawner(dt);
+
   for (auto &i : Objects) {
-  	if(i->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight){
+  	if(i->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight + ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()){
   		i->destroy = true;
   	} else {
   		i->Update(dt);
@@ -234,7 +235,7 @@ void Graphics::Update(unsigned int dt)
   }
 
   for (auto &i : barrels) {
-    if(i->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight){
+    if(i->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight + ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()){
       i->object->destroy = true;
     } else {
       i->object->Update(dt);
@@ -251,7 +252,7 @@ void Graphics::Update(unsigned int dt)
   }
 
   for (auto &i : ladders) {
-    if(i->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight){
+    if(i->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight + ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()){
       i->object->destroy = true;
     } else {
       i->object->Update(dt);
@@ -301,10 +302,10 @@ void Graphics::Render()
 	glUniform4f(temp, ambIntensity, ambIntensity, ambIntensity, 1);
 
 	temp = m_shader->GetUniformLocation("LightPosition");
-	glUniform3f(temp, 0, lightHeight, 0);
+	glUniform3f(temp, 0, lightHeight+ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(), -lightHeight*2);
 
 	temp = m_shader->GetUniformLocation("coneDirection");
-	glUniform3f(temp, 0, -lightHeight, 0);
+	glUniform3f(temp, 0, -(lightHeight+ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()), lightHeight*2);
 
 	temp = m_shader->GetUniformLocation("coneCutOff");
 	glUniform1f(temp, .995);
@@ -425,15 +426,8 @@ void Graphics::CreateObjects()
   tempObject->render = false;
   Objects.push_back(tempObject);
 
-
-
- 
-
   
-  /*myBarrel = tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 5, 0));
-  barrel tempBarrel = {tempObject, 0, false};
-  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  barrels.push_back(tempBarrel);*/
+  myBarrel = new Object("Barrel.obj", "rednice.jpg", 0,0, btVector3(2, 20, -50));
 
 
   tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(8, -4, 0));
@@ -492,15 +486,6 @@ void Graphics::BulletInit()
 	dynamicsWorld->setGravity(btVector3(0, -3, 0));
 }
 
-void Graphics::barrelSpawner(unsigned int dt){
-	timeSinceSpawn += dt;
-
-	if (timeBtwSpawns<timeSinceSpawn){
-		timeSinceSpawn = 0;
-		spawnBarrel();
-	}
-}
-
 void Graphics::platformSpawner(int platforms, glm::vec3 origin, int angle){
 	Object* tempObject;
 	glm::vec3 platformOffset;
@@ -540,16 +525,33 @@ void Graphics::platformSpawner(int platforms, glm::vec3 origin, int angle){
 	//tempObject->GetRigidBody()->setRestitution(1.0);
 }
 
+void Graphics::barrelSpawner(unsigned int dt){
+	timeSinceSpawn += dt;
+
+	if (timeBtwSpawns<timeSinceSpawn){
+		timeSinceSpawn = 0;
+		spawnBarrel();
+	}
+}
+
 void Graphics::spawnBarrel()
 {
   
   Object* tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 20, 0));
-  barrel *tempBarrel = new barrel();;
+  barrel *tempBarrel = new barrel();
   *tempBarrel = {tempObject, 0, false};
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   barrels.push_back(tempBarrel);
   dynamicsWorld->addRigidBody(tempBarrel->object->GetRigidBody());
   
+}
+
+void Graphics::dropBarrel()
+{
+
+    myBarrel->GetRigidBody()->setCollisionFlags(myBarrel->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+    timeSinceDrop = 0;
+    dropBarrelFlag = true;
 
 }
 
@@ -618,18 +620,7 @@ void Graphics::jump(unsigned int dt)
     ball->GetRigidBody()->applyCentralImpulse( btVector3( 0, 6.5, 0 ) );
 
   }
-}
-
-void Graphics::dropBarrel()
-{
-
-    myBarrel->GetRigidBody()->setCollisionFlags(myBarrel->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-    timeSinceDrop = 0;
-    dropBarrelFlag = true;
-
-}
-   
-    
+}   
 
 void Graphics::descendBarrel(unsigned int dt)
 {

@@ -30,7 +30,7 @@ bool Camera::Initialize(int w, int h)
 
 void Camera::Update(glm::vec3 ballPos)
 {
-  eyePos = glm::vec3(ballPos.x,ballPos.y,-20);
+  eyePos = glm::vec3(ballPos.x,ballPos.y+15,-20);
   view = glm::lookAt( eyePos, //Eye Position
                       ballPos, //Focus point
                       glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up

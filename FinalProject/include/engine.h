@@ -26,7 +26,7 @@ class Engine
     float diffuseVal = 0.2;
     float specularVal = 0.6;
     float shininessVal = 125;
-    float lightHeight = 25;
+    float lightHeight = 10;
     float plungerPower = 0;
 
     // Window related variables

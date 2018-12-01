@@ -22,7 +22,7 @@ Engine::Engine(std::string name)
   diffuseVal = 0.1;
   specularVal = 0.6;
   shininessVal = 125.0;
-  lightHeight = 25;
+  lightHeight = 10;
   plungerPower = 25;
 }
 
@@ -106,7 +106,7 @@ void Engine::Run()
       diffuseVal = 0.1;
       specularVal = 0.6;
       shininessVal = 125.0;
-      lightHeight = 25;
+      lightHeight = 10;
       plungerPower = 0;
     }
 

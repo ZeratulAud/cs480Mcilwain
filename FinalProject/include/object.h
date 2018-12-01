@@ -16,7 +16,8 @@ class Object
 {
   public:
     Object(std::string objFilePath, std::string texFilePath, float Mass, float Inertia, btVector3 pos);
-    Object(const Object& other, float radius, float speed, float rotation, float scale);
+    //Object(const Object& other, float radius, float speed, float rotation, float scale);
+    Object( Object& copy, btVector3 pos);
     ~Object();
     void Update(unsigned int dt);
     void Render(GLint& m_modelMatrix, Shader *shader);
@@ -32,11 +33,6 @@ class Object
     bool render;
     bool destroy;
 
-  private:
-    bool LoadObjFile(std::string objFilePath);
-    bool LoadTexFile(std::string texFilePath, int count);
-    
-    glm::vec3 position;
     glm::mat4 model;
     std::vector<ModelInfo> modelInfo;
     std::vector<GLuint> VB;
@@ -44,6 +40,13 @@ class Object
     std::vector<GLuint> texture;
     std::vector<GLuint> normal;
     btCollisionShape *shape;
+
+  private:
+    bool LoadObjFile(std::string objFilePath);
+    bool LoadTexFile(std::string texFilePath, int count);
+    
+    glm::vec3 position;
+
     btRigidBody *rigidBody;
 };
 

@@ -53,6 +53,9 @@ class Graphics
     int gameScore;
     int despawnHeight;
 
+    float ambIntensity;
+    float lightHeight;
+
   private:
     std::string ErrorString(GLenum error);
     void CreateObjects();

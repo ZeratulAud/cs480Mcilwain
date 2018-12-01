@@ -15,11 +15,8 @@ Object::Object(std::string objFilePath, std::string texFilePath, float Mass, flo
   }
   LoadTexFile(MODEL_DIR + texFilePath, 0);
   //position = glm::vec3(pos.x(), pos.y(), pos.z());
-  ambIntensity = 0.0;
-  diffIntensity = .2;
   specIntensity = .6;
   shineIntensity = 125;
-  lightHeight = 25;
 
   render = true;
   destroy = false;
@@ -52,26 +49,11 @@ void Object::Update(unsigned int dt)
 
 void Object::Render(GLint& m_modelMatrix, Shader *shader)
 {
-  GLint temp = shader->GetUniformLocation("AmbientProduct");
-  glUniform4f(temp, ambIntensity, ambIntensity, ambIntensity, 1);
-
-  temp = shader->GetUniformLocation("DiffuseProduct");
+  GLint temp = shader->GetUniformLocation("DiffuseProduct");
   glUniform4f(temp, diffIntensity, diffIntensity, diffIntensity, 1);
 
   temp = shader->GetUniformLocation("SpecularProduct");
   glUniform4f(temp, specIntensity, specIntensity, specIntensity, 1);
-
-  temp = shader->GetUniformLocation("LightPosition");
-  glUniform3f(temp, 0, lightHeight, 0);
-
-  temp = shader->GetUniformLocation("coneDirection");
-  glUniform3f(temp, 0, -lightHeight, 0);
-
-  temp = shader->GetUniformLocation("coneCutOff");
-  glUniform1f(temp, .995);
-
-  temp = shader->GetUniformLocation("spotExponent");
-  glUniform1f(temp, .1);
 
   temp = shader->GetUniformLocation("Shininess");
   glUniform1f(temp, shineIntensity);

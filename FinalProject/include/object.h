@@ -25,11 +25,9 @@ class Object
     btRigidBody* GetRigidBody();
     glm::vec3 GetPosition();
 
-    float ambIntensity;
     float diffIntensity;
     float specIntensity;
     int shineIntensity;
-    float lightHeight;
     
     bool render;
     bool destroy;

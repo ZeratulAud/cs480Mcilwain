@@ -33,6 +33,9 @@ Graphics::~Graphics()
   for (Object *obj : Objects)
     dynamicsWorld->removeRigidBody(obj->GetRigidBody());
 
+  /*for (barrel *bar : barrels)
+    dynamicsWorld->removeRigidBody(bar->object->GetRigidBody());*/
+
   delete dynamicsWorld;
   dynamicsWorld = NULL;
 
@@ -216,6 +219,23 @@ void Graphics::Update(unsigned int dt)
   	  ++it;
   	}
   }
+
+  for (auto &i : barrels) {
+    if(i.object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight){
+      i.object->destroy = true;
+    } else {
+      i.object->Update(dt);
+    }
+  }
+
+  for (auto it = barrels.begin(); it != barrels.end(); ) {
+    if ((*it).object->destroy) {
+      dynamicsWorld->removeRigidBody((*it).object->GetRigidBody());
+      barrels.erase(it);
+    } else {
+      ++it;
+    }
+  }
   if(moveRightFlag == true)
     moveRight();
   if(moveLeftFlag == true)
@@ -256,6 +276,10 @@ void Graphics::Render()
       if (i->render)
         i->Render(m_modelMatrix, m_shader);
     }
+    for (auto &i : barrels) {
+      if (i.object->render)
+        i.object->Render(m_modelMatrix, m_shader);
+    }
   }
   else
   {
@@ -277,6 +301,10 @@ void Graphics::Render()
     for (auto &i : Objects) {
       if (i->render)
         i->Render(other_modelMatrix, otherShader);
+    }
+    for (auto &i : barrels) {
+      if (i.object->render)
+        i.object->Render(other_modelMatrix, otherShader);
     }
   }
 
@@ -328,12 +356,21 @@ void Graphics::CreateObjects()
   tempObject->render = false;
   Objects.push_back(tempObject);
 
-  myBarrel = tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 5, 0));
-  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  Objects.push_back(tempObject);
 
-  ball = tempObject = new Object("Ball.obj", "greybaby.jpg", 1,5, btVector3(5, -12, 0));
+
+ 
+
+  
+  myBarrel = tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 5, 0));
+  barrel tempBarrel = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  barrels.push_back(tempBarrel);
+  dynamicsWorld->addRigidBody(tempObject->GetRigidBody());
+
+  //tempObject->GetRigidBody()->setRestitution(1.0);
+ // Objects.push_back(tempObject);
+
+  ball = tempObject = new Object("Ball.obj", "greybaby.jpg", 1,5, btVector3(8, -10, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setAngularFactor(btVector3(0,1,0));
   Objects.push_back(tempObject);
@@ -418,10 +455,10 @@ void Graphics::platformSpawner(int platforms, glm::vec3 origin, int angle){
 
 void Graphics::spawnBarrel()
 {
-
   Object* tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 20, 0));
+  barrel tempBarrel = {tempObject, 0, false};
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  Objects.push_back(tempObject);
+  barrels.push_back(tempBarrel);
   dynamicsWorld->addRigidBody(tempObject->GetRigidBody());
 
 

@@ -9,6 +9,11 @@
 #include "shader.h"
 #include "object.h"
 
+struct barrel{
+    Object *object;
+    int dropTimer;
+    bool hasDropped;
+};
 class Graphics
 {
   public:
@@ -67,6 +72,7 @@ class Graphics
     btDiscreteDynamicsWorld *dynamicsWorld;
 
     std::vector<Object*> Objects;
+    std::vector<barrel> barrels;
 
     GLint m_projectionMatrix;
     GLint m_viewMatrix;
@@ -83,6 +89,8 @@ class Graphics
     Object* flipperR;
     Object* plunger;
     Object* myBarrel;
+
+   
 
 
     btHingeConstraint* constraintR;

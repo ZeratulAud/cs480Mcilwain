@@ -408,12 +408,12 @@ std::string Graphics::ErrorString(GLenum error)
 
 void Graphics::CreateObjects()
 {
-	platformSpawner(4, glm::vec3(10,42,0), -30);
-	platformSpawner(4, glm::vec3(-20,27,0), 30);
-	platformSpawner(4, glm::vec3(10,10,0), -15);
-	platformSpawner(1, glm::vec3(-28,0,0), 0);
-	platformSpawner(4, glm::vec3(-20,-2,0), 15);
-	platformSpawner(4, glm::vec3(10,-14,0), -15);
+	platformSpawner(4, glm::vec3(15,42,0), -30);
+	platformSpawner(4, glm::vec3(-15,27,0), 30);
+	platformSpawner(4, glm::vec3(15,10,0), -15);
+	platformSpawner(1, glm::vec3(-23,0,0), 0);
+	platformSpawner(4, glm::vec3(-15,-2,0), 15);
+	platformSpawner(4, glm::vec3(15,-14,0), -15);
 
 
   Object* tempObject;
@@ -441,9 +441,9 @@ void Graphics::CreateObjects()
   //tempObject->GetRigidBody()->setRestitution(1.0);
  // Objects.push_back(tempObject);
 
-  ball = tempObject = new Object("Ball.obj", "greybaby.jpg", 1,5, btVector3(8, -10, 0));
+  ball = tempObject = new Object("PlayerSprite.obj", "mario-big.png", 1,5, btVector3(8, -10, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  tempObject->GetRigidBody()->setAngularFactor(btVector3(0,1,0));
+  tempObject->GetRigidBody()->setAngularFactor(btVector3(0,0,0));
   Objects.push_back(tempObject);
 
   //tempObject = new Object("OutterWalls.obj", "rednice.jpg", 0,0, btVector3(0,0,0));
@@ -537,7 +537,7 @@ void Graphics::barrelSpawner(unsigned int dt){
 void Graphics::spawnBarrel()
 {
   
-  Object* tempObject = new Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 20, 0));
+  Object* tempObject = new Object(*myBarrel, btVector3(2, 20, 0));//Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 20, 0));
   barrel *tempBarrel = new barrel();
   *tempBarrel = {tempObject, 0, false};
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);

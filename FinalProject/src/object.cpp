@@ -48,13 +48,25 @@ Object::Object(Object& copy, btVector3 pos){
     LoadTexFile(MODEL_DIR + "rednice.jpg", 0);
     VB = copy.VB;
     IB = copy.IB;
-    rigidBody = copy.GetRigidBody();
 
-    btTransform transform;
+    btDefaultMotionState *shapeMotionState = NULL;
+    shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion::getIdentity(),btVector3(pos)));
+    btScalar mass(5);
+    btVector3 inertia(1, 1, 1);
+    shape->calculateLocalInertia(mass, inertia);
+
+    btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, shape, inertia);
+
+    rigidBody = new btRigidBody(shapeRigidBodyCI);
+    rigidBody->setAngularFactor(btVector3(0,0,1));
+
+    //rigidBody = copy.GetRigidBody();
+
+    /*btTransform transform;
     transform.setOrigin(pos);
     transform.setRotation(btQuaternion::getIdentity());
 
-    rigidBody->setWorldTransform(transform);
+    rigidBody->setWorldTransform(transform);*/
 
     render = true;
     destroy = false;
@@ -160,7 +172,9 @@ bool Object::LoadObjFile(std::string objFilePath)
     btCollisionShape *tempShape = new btBvhTriangleMeshShape(objTriMesh, true);
     std::cout << mesh->mNumFaces << std::endl;
     if(mesh->mNumFaces == 224 )
-      tempShape = new btSphereShape(btScalar(.25));
+      tempShape = new btSphereShape(btScalar(.25)); 
+    else if(mesh->mNumFaces == 2)//256 )
+      tempShape = new btCapsuleShape (.5, .5);
     else if(mesh->mNumFaces == 124 )
       tempShape = new btCylinderShapeZ(btVector3(1,1,1));//btConvexTriangleMeshShape(objTriMesh, true);
     else if(mesh->mNumFaces == 316)

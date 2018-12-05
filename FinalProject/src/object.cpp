@@ -8,12 +8,12 @@
 
 Object::Object(std::string objFilePath, std::string texFilePath, float Mass, float Inertia, btVector3 pos)
 {
-  if (!LoadObjFile(MODEL_DIR + objFilePath))
+  if (!LoadObjFile(ASSET_DIR + objFilePath))
   {
     std::cerr << "Failure to load file" << std::endl;
     exit(1);
   }
-  LoadTexFile(MODEL_DIR + texFilePath, 0);
+  LoadTexFile(ASSET_DIR + texFilePath, 0);
   //position = glm::vec3(pos.x(), pos.y(), pos.z());
   diffIntensity = .2;
   specIntensity = .6;
@@ -45,7 +45,7 @@ Object::Object(Object& copy, btVector3 pos){
     GLuint tempGl;
     GLuint buffer;
     texture.push_back(tempGl);
-    LoadTexFile(MODEL_DIR + "rednice.jpg", 0);
+    LoadTexFile(ASSET_DIR + "rednice.jpg", 0);
     VB = copy.VB;
     IB = copy.IB;
 
@@ -172,7 +172,7 @@ bool Object::LoadObjFile(std::string objFilePath)
     btCollisionShape *tempShape = new btBvhTriangleMeshShape(objTriMesh, true);
     std::cout << mesh->mNumFaces << std::endl;
     if(mesh->mNumFaces == 224 )
-      tempShape = new btSphereShape(btScalar(.25)); 
+      tempShape = new btSphereShape(btScalar(.25));
     else if(mesh->mNumFaces == 2)//256 )
       tempShape = new btCapsuleShape (.5, .5);
     else if(mesh->mNumFaces == 124 )
@@ -181,7 +181,7 @@ bool Object::LoadObjFile(std::string objFilePath)
       tempShape = new btCylinderShapeZ(btVector3(1,1,1));//btConvexTriangleMeshShape(objTriMesh, true);
     else if(mesh->mNumFaces == 260 )
       tempShape = new btConvexTriangleMeshShape(objTriMesh, true);//btBoxShape(btVector3(.3,.3,.6));
-    else if(mesh->mNumFaces == 12 && objFilePath == (MODEL_DIR + "Cube.obj") )
+    else if(mesh->mNumFaces == 12 && objFilePath == (ASSET_DIR + "Cube.obj") )
       tempShape = new btBoxShape(btVector3(.3,.3,.6));
 
     shape = tempShape;

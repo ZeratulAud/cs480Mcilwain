@@ -21,6 +21,9 @@ Graphics::Graphics()
   despawnHeight =-25;
   ambIntensity = 0.0;
   lightHeight = 10;
+  SHADOW_WIDTH = 1024;
+  SHADOW_HEIGHT = 1024;
+
   
 
 }
@@ -98,6 +101,7 @@ bool Graphics::Initialize(int width, int height)
   // Set up the shaders
   m_shader = new Shader();
   otherShader = new Shader();
+  shadow_shader = new Shader();
   if(!m_shader->Initialize())
   {
     printf("Shader Failed to Initialize\n");
@@ -130,6 +134,13 @@ bool Graphics::Initialize(int width, int height)
   if (m_projectionMatrix == INVALID_UNIFORM_LOCATION)
   {
     printf("m_projectionMatrix not found\n");
+    return false;
+  }
+
+  m_lightSpaceMatrix = m_shader->GetUniformLocation("lightSpaceMatrix");
+  if (m_lightSpaceMatrix == INVALID_UNIFORM_LOCATION)
+  {
+    printf("m_lightSpaceMatrix not found\n");
     return false;
   }
 
@@ -200,9 +211,53 @@ bool Graphics::Initialize(int width, int height)
     return false;
   }
 
+
+  //shadow mapping
+  if(!shadow_shader->Initialize())
+  {
+    printf("Shader Failed to Initialize\n");
+    return false;
+  }
+
+  // Add the vertex shader
+  if(!shadow_shader->AddShader(GL_VERTEX_SHADER, "../shaders/shadow_vert"))
+  {
+    printf("Vertex Shader failed to Initialize\n");
+    return false;
+  }
+
+  // Add the fragment shader
+  if(!shadow_shader->AddShader(GL_FRAGMENT_SHADER, "../shaders/shadow_frag"))
+  {
+    printf("Fragment Shader failed to Initialize\n");
+    return false;
+  }
+
+  // Connect the program
+  if(!shadow_shader->Finalize())
+  {
+    printf("Program to Finalize\n");
+    return false;
+  }
+
+  
+  
+
   //enable depth testing
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
+
+
+  // creating the lightspace matrix
+  float near_plane = 1.0f, far_plane = 7.5f;
+  glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+
+
+  glm::mat4 lightView = glm::lookAt(glm::vec3(0, 0.0, -20.0), 
+                                    glm::vec3( 0.0f, 0.0f,  0.0f), 
+                                    glm::vec3( 0.0f, 1.0f,  0.0f));
+
+  lightSpaceMatrix = lightProjection * lightView; 
 
   return true;
 }
@@ -281,13 +336,57 @@ void Graphics::Update(unsigned int dt)
 void Graphics::Render()
 {
   //clear the screen
-  glClearColor(0.0, 0.0, 0.2, 1.0);
+  glClearColor(0.0, 0.0, 0.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  //shadow_shader->Enable();
+  m_shader->Enable();
+
+  /*glGenFramebuffers(1, &depthMapFBO);  
+
+
+
+  glGenTextures(1, &depthMap);
+  glBindTexture(GL_TEXTURE_2D, depthMap);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 
+             SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // Render the objects
+   
+  glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+  glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+      glClear(GL_DEPTH_BUFFER_BIT);
+
+  for (auto &i : Objects) {
+    if (i->render)
+      i->Render(m_modelMatrix, m_shader);
+  }
+  for (auto &i : barrels) {
+    if (i->object->render)
+      i->object->Render(m_modelMatrix, m_shader);
+  }
+  for (auto &i : ladders) {
+    if (i->object->render)
+      i->object->Render(m_modelMatrix, m_shader);
+  }
+  glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+  glDrawBuffer(GL_NONE);
+  glReadBuffer(GL_NONE);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0); 
+
+  glViewport(0, 0, 1080, 920);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
 
   if (!switcher)
   {
     // Start the correct program
-    m_shader->Enable();
+
+    //glBindTexture(GL_TEXTURE_2D, depthMap);
 
     // Send in the projection and view to the shader
     GLint temp = m_shader->GetUniformLocation("eyePos");
@@ -313,6 +412,7 @@ void Graphics::Render()
 	temp = m_shader->GetUniformLocation("spotExponent");
 	glUniform1f(temp, .1);
 
+    glUniformMatrix4fv(m_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection()));
     glUniformMatrix4fv(m_projectionMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetProjection()));
     glUniformMatrix4fv(m_viewMatrix, 1, GL_FALSE, glm::value_ptr(m_camera->GetView()));
 
@@ -408,12 +508,12 @@ std::string Graphics::ErrorString(GLenum error)
 
 void Graphics::CreateObjects()
 {
-	platformSpawner(4, glm::vec3(15,42,0), -30);
-	platformSpawner(4, glm::vec3(-15,27,0), 30);
-	platformSpawner(4, glm::vec3(15,10,0), -15);
-	platformSpawner(1, glm::vec3(-23,0,0), 0);
-	platformSpawner(4, glm::vec3(-15,-2,0), 15);
-	platformSpawner(4, glm::vec3(15,-14,0), -15);
+	platformSpawner(4, glm::vec3(20,35,0), -30);
+	platformSpawner(4, glm::vec3(-20,25,0), 30);
+	platformSpawner(4, glm::vec3(20,10,0), -15);
+	platformSpawner(1, glm::vec3(-26,2,0), 0);
+	platformSpawner(4, glm::vec3(-20,0,0), 15);
+	platformSpawner(4, glm::vec3(20,-10,0), -15);
 
 
   Object* tempObject;

@@ -9,16 +9,17 @@ smooth out vec3 fN;
 smooth out vec3 fE;
 smooth out vec3 fL;
 
-smooth out vec3 fN2;
-smooth out vec3 fL2;
+out vec4 FragPosLightSpace;
 out vec3 coneDir;
 
 out mat4 ModelView;
 
+uniform mat4 lightSpaceMatrix;
+
 uniform mat4 projectionMatrix; 
 uniform mat4 viewMatrix; 
 uniform mat4 modelMatrix; 
-//uniform vec4 AmbientProduct, DiffuseProduct, SpecularProduct;
+
 uniform vec3 LightPosition;
 uniform vec3 eyePos; 
 uniform vec3 ballPos; 
@@ -37,6 +38,7 @@ void main(void)
   fE = eyePos -pos;
   fL = LightPosition - pos;
   coneDir = LightPosition - ballPos;
+  FragPosLightSpace = lightSpaceMatrix * v;
 
 
   texture = v_texture; 

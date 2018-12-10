@@ -6,12 +6,13 @@ smooth in vec3 fN;
 smooth in vec3 fL;
 smooth in vec3 fE;
 
-smooth in vec3 fN2;
-smooth in vec3 fL2;
+in vec4 FragPosLightSpace;
 in vec3 coneDir;
 
 in mat4 ModelView;
 uniform sampler2D sampler;
+uniform sampler2D depthMap;
+
 uniform vec4 AmbientProduct, DiffuseProduct, SpecularProduct;
 uniform mat4 modelMatrix; 
 
@@ -23,6 +24,22 @@ uniform float spotExponent;
 uniform float Shininess;
 
 out vec4 frag_color; 
+
+float ShadowCalculation(vec4 fragPosLightSpace)
+{
+    // perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture2D(depthMap, projCoords.xy).r; 
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // check whether current frag pos is in shadow
+    float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
+
+    return shadow;
+}
 
 void main(void) 
 { 
@@ -60,10 +77,18 @@ void main(void)
     }
 
 
-    
-    vec4 FragColor = ambient + diffuse + specular + spotLight;
+    float shadow = ShadowCalculation(FragPosLightSpace);   
+    vec4 FragColor = (ambient + (1 - shadow)) * (diffuse + specular) + spotLight;
     FragColor.a = 1.0;
 
-   frag_color = texture2D(sampler, texture) + FragColor;
+    frag_color = texture2D(sampler, texture);
+
+    if (frag_color.a < 0.1){
+        discard;
+    } else {
+        //float depthValue = texture2D(depthMap, texture).r;
+        //frag_color = vec4(vec3(depthValue), 1.0);
+        frag_color = texture2D(sampler, texture) + FragColor;
+    }
 } 
           

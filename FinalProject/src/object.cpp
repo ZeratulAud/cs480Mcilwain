@@ -51,8 +51,8 @@ Object::Object(Object& copy, btVector3 pos){
 
     btDefaultMotionState *shapeMotionState = NULL;
     shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion::getIdentity(),btVector3(pos)));
-    btScalar mass(5);
-    btVector3 inertia(1, 1, 1);
+    btScalar mass(25);
+    btVector3 inertia(10, 10, 10);
     shape->calculateLocalInertia(mass, inertia);
 
     btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, shape, inertia);
@@ -98,6 +98,9 @@ void Object::Render(GLint& m_modelMatrix, Shader *shader)
 
   temp = shader->GetUniformLocation("Shininess");
   glUniform1f(temp, shineIntensity);
+
+  //glAlphaFunc(GL_GREATER, 0.1);
+  //glEnable(GL_ALPHA_TEST);
 
   for(int i = 0; i < VB.size(); i++)
   {
@@ -200,6 +203,7 @@ bool Object::LoadObjFile(std::string objFilePath)
   }
   return true;
 }
+
 
 bool Object::LoadTexFile(std::string texFilePath, int count)
 {

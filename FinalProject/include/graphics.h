@@ -55,6 +55,8 @@ class Graphics
 
     float ambIntensity;
     float lightHeight;
+    unsigned int SHADOW_WIDTH , SHADOW_HEIGHT;
+
 
   private:
     std::string ErrorString(GLenum error);
@@ -72,6 +74,8 @@ class Graphics
     Camera *m_camera;
     Shader *m_shader;
     Shader *otherShader;
+    Shader *shadow_shader;
+
 
     btDiscreteDynamicsWorld *dynamicsWorld;
 
@@ -81,14 +85,20 @@ class Graphics
     std::vector<Object*> Objects;
     std::vector<barrel*> barrels;
     std::vector<ladder*> ladders;
-
+    
+    GLint m_lightSpaceMatrix;
     GLint m_projectionMatrix;
     GLint m_viewMatrix;
     GLint m_modelMatrix;
+    unsigned int depthMap;
 
+    glm::mat4 lightSpaceMatrix;
+    
     GLint other_projectionMatrix;
     GLint other_viewMatrix;
     GLint other_modelMatrix;
+
+    unsigned int depthMapFBO;
 };
 
 #endif /* GRAPHICS_H */

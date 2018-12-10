@@ -41,7 +41,9 @@ class Object
     std::vector<GLuint> normal;
     btCollisionShape *shape;
 
+
   private:
+    GLint ShadowMap;
     bool LoadObjFile(std::string objFilePath);
     bool LoadTexFile(std::string texFilePath, int count);
     

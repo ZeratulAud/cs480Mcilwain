@@ -4,7 +4,7 @@
 
 int main(int argc, char **argv)
 {
-  Engine *engine = new Engine("PA10: Pinball", 1080, 920);
+  Engine *engine = new Engine("DK Clone", 1080, 920);
   if(!engine->Initialize())
   {
     printf("The engine failed to start.\n");

@@ -25,9 +25,6 @@
 
 #define INVALID_UNIFORM_LOCATION 0x7fffffff
 
-// File path for all models
-#define MODEL_DIR std::string("../models/")
-
 // ASSIMP headers
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -39,6 +36,9 @@
 
 // Bullet header
 #include <btBulletDynamicsCommon.h>
+
+// File path for all models
+#define ASSET_DIR std::string("../assets/")
 
 struct Vertex
 {

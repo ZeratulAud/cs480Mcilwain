@@ -25,7 +25,9 @@ class Object
     btCollisionShape* GetShape();
     btRigidBody* GetRigidBody();
     glm::vec3 GetPosition();
+    bool LoadTexFile(std::string texFilePath, int count);
 
+    bool LoadShadowMap(GLuint shadowMap, int count);
     float diffIntensity;
     float specIntensity;
     int shineIntensity;
@@ -43,9 +45,8 @@ class Object
 
 
   private:
-    GLint ShadowMap;
+    GLuint ShadowMap;
     bool LoadObjFile(std::string objFilePath);
-    bool LoadTexFile(std::string texFilePath, int count);
     
     glm::vec3 position;
 

@@ -23,6 +23,7 @@ Graphics::Graphics()
   lightHeight = 10;
   SHADOW_WIDTH = 1024;
   SHADOW_HEIGHT = 1024;
+  movingLeft = true;
 
   
 
@@ -240,6 +241,11 @@ bool Graphics::Initialize(int width, int height)
     return false;
   }
 
+  //GLuint texLoc = glGetUniformLocation(m_shader->m_shaderProg, "sampler");
+  //glUniform1i(texLoc, 0);
+  //texLoc = glGetUniformLocation(m_shader->m_shaderProg, "depthMap");
+  //glUniform1i(texLoc, 1);
+
   
   
 
@@ -247,7 +253,7 @@ bool Graphics::Initialize(int width, int height)
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
 
-
+  /*
   // creating the lightspace matrix
   float near_plane = 1.0f, far_plane = 7.5f;
   glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
@@ -258,6 +264,27 @@ bool Graphics::Initialize(int width, int height)
                                     glm::vec3( 0.0f, 1.0f,  0.0f));
 
   lightSpaceMatrix = lightProjection * lightView; 
+
+    glGenFramebuffers(1, &depthMapFBO);  
+  glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+
+  glGenTextures(1, &depthMap);
+  glBindTexture(GL_TEXTURE_2D, depthMap);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 
+             SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+
+  glDrawBuffer(GL_NONE);
+  glReadBuffer(GL_NONE);
+
+  GLuint texLoc = glGetUniformLocation(m_shader->m_shaderProg, "depthMap");
+  glUniform1i(texLoc, 1);*/
 
   return true;
 }
@@ -338,28 +365,19 @@ void Graphics::Render()
   //clear the screen
   glClearColor(0.0, 0.0, 0.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+/*
   //shadow_shader->Enable();
   m_shader->Enable();
 
-  /*glGenFramebuffers(1, &depthMapFBO);  
+
+
+  // Render the objects
 
 
 
-  glGenTextures(1, &depthMap);
-  glBindTexture(GL_TEXTURE_2D, depthMap);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 
-             SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    // Render the objects
-   
-  glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-  glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-      glClear(GL_DEPTH_BUFFER_BIT);
+  glClear(GL_DEPTH_BUFFER_BIT);
+
 
   for (auto &i : Objects) {
     if (i->render)
@@ -373,10 +391,14 @@ void Graphics::Render()
     if (i->object->render)
       i->object->Render(m_modelMatrix, m_shader);
   }
-  glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-  glDrawBuffer(GL_NONE);
-  glReadBuffer(GL_NONE);
+    //glBindTexture(GL_TEXTURE_2D, depthMap);
+
+  GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+  if (Status != GL_FRAMEBUFFER_COMPLETE) {
+      printf("FB error, status: 0x%x\n", Status);
+      exit(0);
+  } 
   glBindFramebuffer(GL_FRAMEBUFFER, 0); 
 
   glViewport(0, 0, 1080, 920);
@@ -385,8 +407,9 @@ void Graphics::Render()
   if (!switcher)
   {
     // Start the correct program
+    m_shader->Enable();
 
-    //glBindTexture(GL_TEXTURE_2D, depthMap);
+      
 
     // Send in the projection and view to the shader
     GLint temp = m_shader->GetUniformLocation("eyePos");
@@ -419,14 +442,17 @@ void Graphics::Render()
     // Render the object
     for (auto &i : Objects) {
       if (i->render)
+        //i->LoadShadowMap(depthMap, 1);
         i->Render(m_modelMatrix, m_shader);
     }
     for (auto &i : barrels) {
       if (i->object->render)
+        //i->object->LoadShadowMap(depthMap, 1);
         i->object->Render(m_modelMatrix, m_shader);
     }
     for (auto &i : ladders) {
       if (i->object->render)
+        //i->object->LoadShadowMap(depthMap, 1);
         i->object->Render(m_modelMatrix, m_shader);
     }
   }
@@ -517,18 +543,18 @@ void Graphics::CreateObjects()
 
 
   Object* tempObject;
-  tempObject = new Object("LevelWall.obj", "reddy.jpg", 0,0, btVector3(0,0,1.1));
+  //tempObject = new Object("LevelWall.obj", "reddy.jpg", 0,0, btVector3(0,0,1.1));
   //tempObject->GetRigidBody()->setRestitution(1.0);
-  tempObject->render = false;
-  Objects.push_back(tempObject);
-  tempObject = new Object("LevelWall.obj", "reddy.jpg", 0,0, btVector3(0,0,-1.1));
+  //tempObject->render = false;
+  //Objects.push_back(tempObject);
+  //tempObject = new Object("LevelWall.obj", "reddy.jpg", 0,0, btVector3(0,0,-1.1));
   //tempObject->GetRigidBody()->setRestitution(1.0);
-  tempObject->render = false;
-  Objects.push_back(tempObject);
+  //tempObject->render = false;
+  //Objects.push_back(tempObject);
 
-  
-  myBarrel = new Object("Barrel.obj", "rednice.jpg", 0,0, btVector3(2, 20, -50));
-
+  std::cout << "creating barrel" << std::endl;
+  myBarrel = new Object("Barrel2.obj", "DKBarrel.png", 0,0, btVector3(2, 20, -50));
+  std::cout << "barre done" << std::endl;
 
   tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(8, -4, 0));
   ladder *tempLadder = new ladder();;
@@ -541,7 +567,7 @@ void Graphics::CreateObjects()
   //tempObject->GetRigidBody()->setRestitution(1.0);
  // Objects.push_back(tempObject);
 
-  ball = tempObject = new Object("PlayerSprite.obj", "mario-big.png", 1,5, btVector3(8, -10, 0));
+  ball = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(8, -10, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setAngularFactor(btVector3(0,0,0));
   Objects.push_back(tempObject);
@@ -690,9 +716,13 @@ btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
 
 void Graphics::moveLeft()
 {
+    if (!movingLeft){
+      ball->LoadTexFile(ASSET_DIR + "marioL.png", 0);
+      movingLeft=true;
+    }
     btVector3 tempbtVec3 =  ball->GetRigidBody()->getLinearVelocity();
-    if(tempbtVec3.x() < 0)
-       tempbtVec3 = btVector3(0, 0, 0);
+    //if(tempbtVec3.x() < 0)
+       //tempbtVec3 = btVector3(0, 0, 0);
     tempbtVec3 = tempbtVec3 + btVector3(.4, 0, 0);
     if(tempbtVec3.x() > 1)
       tempbtVec3 = btVector3(1, tempbtVec3.y(), 0);
@@ -700,9 +730,13 @@ void Graphics::moveLeft()
 }
 void Graphics::moveRight()
 {
+    if (movingLeft){
+      ball->LoadTexFile(ASSET_DIR + "marioR.png", 0);
+      movingLeft=false;
+    }
     btVector3 tempbtVec3 =  ball->GetRigidBody()->getLinearVelocity();
-    if(tempbtVec3.x() > 0)
-       tempbtVec3 = btVector3(0, 0, 0);
+    //if(tempbtVec3.x() > 0)
+       //tempbtVec3 = btVector3(0, 0, 0);
     tempbtVec3 = tempbtVec3 + btVector3(-.4, 0, 0);
     if(tempbtVec3.x() < -1)
       tempbtVec3 = btVector3(-1, tempbtVec3.y(), 0);

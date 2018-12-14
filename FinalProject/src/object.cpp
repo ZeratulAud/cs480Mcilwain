@@ -13,7 +13,9 @@ Object::Object(std::string objFilePath, std::string texFilePath, float Mass, flo
     std::cerr << "Failure to load file" << std::endl;
     exit(1);
   }
-  LoadTexFile(ASSET_DIR + texFilePath, 0);
+  for (int i=0; i<VB.size();i++){
+      LoadTexFile(ASSET_DIR + texFilePath, i);
+  }
   //position = glm::vec3(pos.x(), pos.y(), pos.z());
   diffIntensity = .2;
   specIntensity = .6;
@@ -45,9 +47,15 @@ Object::Object(Object& copy, btVector3 pos){
     GLuint tempGl;
     GLuint buffer;
     texture.push_back(tempGl);
-    LoadTexFile(ASSET_DIR + "rednice.jpg", 0);
+    
     VB = copy.VB;
     IB = copy.IB;
+
+    for (int i=0; i<VB.size();i++){
+      LoadTexFile(ASSET_DIR + "DKBarrel.png", i);
+    }
+    LoadTexFile(ASSET_DIR + "DK.png", 1);
+    LoadTexFile(ASSET_DIR + "DK.png", 3);
 
     btDefaultMotionState *shapeMotionState = NULL;
     shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion::getIdentity(),btVector3(pos)));
@@ -106,6 +114,12 @@ void Object::Render(GLint& m_modelMatrix, Shader *shader)
   {
     glUniformMatrix4fv(m_modelMatrix, 1, GL_FALSE, glm::value_ptr(GetModel()));
 
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture[i]);
+    
+    //glActiveTexture(GL_TEXTURE0+1);
+    //glBindTexture(GL_TEXTURE_2D, ShadowMap);
+
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
@@ -117,9 +131,6 @@ void Object::Render(GLint& m_modelMatrix, Shader *shader)
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex,texture));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB[i]);
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture[i]);
 
     glDrawElements(GL_TRIANGLES, modelInfo[i].Indices.size(), GL_UNSIGNED_INT, 0);
 
@@ -178,6 +189,8 @@ bool Object::LoadObjFile(std::string objFilePath)
       tempShape = new btSphereShape(btScalar(.25));
     else if(mesh->mNumFaces == 2)//256 )
       tempShape = new btCapsuleShape (.5, .5);
+    else if(mesh->mNumFaces == 1 )
+      tempShape = new btCylinderShapeZ(btVector3(1,1,1));//btConvexTriangleMeshShape(objTriMesh, true);
     else if(mesh->mNumFaces == 124 )
       tempShape = new btCylinderShapeZ(btVector3(1,1,1));//btConvexTriangleMeshShape(objTriMesh, true);
     else if(mesh->mNumFaces == 316)
@@ -219,7 +232,20 @@ bool Object::LoadTexFile(std::string texFilePath, int count)
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+
+
   delete my_image;
+  return true;
+}
+
+bool Object::LoadShadowMap(GLuint shadowMap, int count)
+{
+  ShadowMap = shadowMap;
+  //glGenTextures(1, &ShadowMap);
+  //glBindTexture(GL_TEXTURE_2D, ShadowMap);
+    //glActiveTexture(GL_TEXTURE0+1);
+    //glBindTexture(GL_TEXTURE_2D, shadowMap);
+
   return true;
 }
 

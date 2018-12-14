@@ -57,6 +57,7 @@ class Graphics
     float lightHeight;
     unsigned int SHADOW_WIDTH , SHADOW_HEIGHT;
 
+    bool movingLeft;
 
   private:
     std::string ErrorString(GLenum error);

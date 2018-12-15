@@ -178,11 +178,11 @@ void Engine::Keyboard()
         break;
 
       case SDLK_q:
-        m_graphics->dropBarrel();
+        //m_graphics->dropBarrel();
         break;
 
       case SDLK_e:
-        m_graphics->resetBarrel();
+        //m_graphics->resetBarrel();
         break;
     }
   }

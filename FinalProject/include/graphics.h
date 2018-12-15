@@ -35,8 +35,10 @@ class Graphics
     void moveLeft();
     void moveRight();
     void jump(unsigned int dt);
-    void dropBarrel();
-    void resetBarrel();
+    void dropBarrel(barrel* passedBarrel);
+    void resetBarrel(barrel* passedBarrel);
+    void checkBarrelDrop();
+    void checkLadderState(unsigned int dt);
     void descendBarrel(unsigned int dt);
     float GetObjectDistance(Object* obj1, Object* obj2);
     std::vector<Object*> GetObjects() const;
@@ -71,6 +73,7 @@ class Graphics
     float timeSinceJump;
     float timeBtwDrop;
     float timeSinceDrop;
+    float ladderCD;
 
     Camera *m_camera;
     Shader *m_shader;

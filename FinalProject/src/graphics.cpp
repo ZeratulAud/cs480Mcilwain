@@ -16,8 +16,9 @@ Graphics::Graphics()
   timeSinceJump = 0.0;
   timeBtwSpawns = 2500.0;
   timeSinceSpawn = 0.0;
-  timeBtwDrop = 750.0;
+  timeBtwDrop = 1200.0;
   timeSinceDrop = 0.0;
+  ladderCD = 6000;
   despawnHeight =-25;
   ambIntensity = 0.0;
   lightHeight = 10;
@@ -355,6 +356,8 @@ void Graphics::Update(unsigned int dt)
     moveLeft();
 
   jump(dt);
+  checkBarrelDrop();
+  checkLadderState(dt);
   descendBarrel(dt);
 
   dynamicsWorld->stepSimulation(dt, 5);
@@ -556,7 +559,7 @@ void Graphics::CreateObjects()
   myBarrel = new Object("Barrel2.obj", "DKBarrel.png", 0,0, btVector3(2, 20, -50));
   std::cout << "barre done" << std::endl;
 
-  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(8, -4, 0));
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(8, -4, 3));
   ladder *tempLadder = new ladder();;
   *tempLadder = {tempObject, 0, false};
   tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
@@ -663,22 +666,13 @@ void Graphics::barrelSpawner(unsigned int dt){
 void Graphics::spawnBarrel()
 {
   
-  Object* tempObject = new Object(*myBarrel, btVector3(2, 20, 0));//Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 20, 0));
+  Object* tempObject = new Object(*myBarrel, btVector3(2, 20, -.5));//Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 20, 0));
   barrel *tempBarrel = new barrel();
   *tempBarrel = {tempObject, 0, false};
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   barrels.push_back(tempBarrel);
   dynamicsWorld->addRigidBody(tempBarrel->object->GetRigidBody());
   
-}
-
-void Graphics::dropBarrel()
-{
-
-    myBarrel->GetRigidBody()->setCollisionFlags(myBarrel->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-    timeSinceDrop = 0;
-    dropBarrelFlag = true;
-
 }
 
 void Graphics::SwitchShader()
@@ -758,24 +752,83 @@ void Graphics::jump(unsigned int dt)
 
 void Graphics::descendBarrel(unsigned int dt)
 {
-  timeSinceDrop += dt;
+  
   btTransform newTrans;
-  if(dropBarrelFlag == true)
+  for(int j=0; j<barrels.size();j++)
   {
-    myBarrel->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
-    newTrans.getOrigin() += (btVector3(0, -.1, 0));
-    myBarrel->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
+  	barrels[j]->dropTimer += dt;
+  	if(barrels[j]->hasDropped == true)
+  	{
+	    barrels[j]->object->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
+	    newTrans.getOrigin() += (btVector3(0, -.1, 0));
+	    barrels[j]->object->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
+	}
+	if (timeBtwDrop<barrels[j]->dropTimer && barrels[j]->hasDropped == true)
+	{  
+		barrels[j]->hasDropped = false;
+	    barrels[j]->dropTimer = 0;
+	    resetBarrel(barrels[j]);
+	}
+    
   }
-  if (timeBtwDrop<timeSinceDrop && dropBarrelFlag == true){  
-    resetBarrel();
-    timeSinceDrop = 0;
-  }
+  
 
 }
-void Graphics::resetBarrel()
+void Graphics::dropBarrel(barrel* passedBarrel)
 {
-    myBarrel->GetRigidBody()->setCollisionFlags(myBarrel->GetRigidBody()->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
-    dropBarrelFlag = false;
+	std::cout << "dropping barrell" << std::endl;
+    passedBarrel->object->GetRigidBody()->setCollisionFlags(passedBarrel->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+    passedBarrel->dropTimer = 0;
+    passedBarrel->hasDropped = true;
+
+}
+void Graphics::resetBarrel(barrel* passedBarrel)
+{
+	std::cout << "reseting barrell" << std::endl;
+    passedBarrel->object->GetRigidBody()->setCollisionFlags(passedBarrel->object->GetRigidBody()->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
+    //passedBarrel->object->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+    
+}
+void Graphics::checkBarrelDrop()
+{
+	for(int i=0; i<ladders.size();i++)
+	{
+		for(int j=0; j<barrels.size();j++)
+		{
+			if( (barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() - 
+				ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() <= 15) &&
+				(barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() - 
+				ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() >= 10 ) )
+				{
+					if((barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() - 
+					ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() <= 0.5) &&
+					(barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() - 
+					ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() >= -0.5 ))
+					{
+						if(ladders[i]->cooldownFlag == false)
+						{
+							ladders[i]->cooldownFlag = true;
+							dropBarrel(barrels[j]);
+							ladders[i]->ladderCooldown = 0;
+						}
+						
+					}
+
+				}
+		}
+	}
+}
+void Graphics::checkLadderState(unsigned int dt)
+{
+	for(int j=0; j<ladders.size();j++)
+	{
+  		ladders[j]->ladderCooldown += dt;
+  		if (ladderCD<ladders[j]->ladderCooldown && ladders[j]->cooldownFlag == true)
+		{  
+		    ladders[j]->cooldownFlag = false;
+		    ladders[j]->ladderCooldown = 0;
+		}
+  }
 }
 
 

@@ -3,10 +3,10 @@
 
 #include <sys/time.h>
 #include <assert.h>
-#include <SDL2/SDL_mixer.h>
 
 #include "window.h"
 #include "graphics.h"
+#include "audio.h"
 
 class Engine
 {
@@ -39,6 +39,7 @@ class Engine
     SDL_Event m_event;
 
     Graphics *m_graphics;
+    Audio *m_audio;
     unsigned int m_DT;
     long long m_currentTimeMillis;
     bool m_running;

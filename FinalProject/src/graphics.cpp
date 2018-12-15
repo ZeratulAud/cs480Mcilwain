@@ -25,6 +25,7 @@ Graphics::Graphics()
   SHADOW_WIDTH = 1024;
   SHADOW_HEIGHT = 1024;
   movingLeft = true;
+  spawnlocation = btVector3(2, 20, -.5);
 
   
 
@@ -293,12 +294,13 @@ bool Graphics::Initialize(int width, int height)
 void Graphics::Update(unsigned int dt)
 {
   // Update the object
+  float playerY = ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y();
   m_camera->Update(glm::vec3(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
-                      		 ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(),
+                      		 playerY,
                     		 ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z()));
 
   //flipperR->GetRigidBody()->applyTorque(btVector3(1,1,1));
-  barrelSpawner(dt);
+  barrelSpawner(dt,playerY);
 
   for (auto &i : Objects) {
   	if(i->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight + ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()){
@@ -555,17 +557,23 @@ void Graphics::CreateObjects()
   //tempObject->render = false;
   //Objects.push_back(tempObject);
 
-  std::cout << "creating barrel" << std::endl;
+  //std::cout << "creating barrel" << std::endl;
   myBarrel = new Object("Barrel2.obj", "DKBarrel.png", 0,0, btVector3(2, 20, -50));
-  std::cout << "barre done" << std::endl;
+  //std::cout << "barre done" << std::endl;
 
-  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(8, -4, 3));
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(8, 9, .5));
   ladder *tempLadder = new ladder();;
   *tempLadder = {tempObject, 0, false};
   tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   ladders.push_back(tempLadder);
-  
+
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(-4, 5, .5));
+  tempLadder = new ladder();;
+  *tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  ladders.push_back(tempLadder);
 
   //tempObject->GetRigidBody()->setRestitution(1.0);
  // Objects.push_back(tempObject);
@@ -654,19 +662,24 @@ void Graphics::platformSpawner(int platforms, glm::vec3 origin, int angle){
 	//tempObject->GetRigidBody()->setRestitution(1.0);
 }
 
-void Graphics::barrelSpawner(unsigned int dt){
+void Graphics::barrelSpawner(unsigned int dt, float playerHeight){
 	timeSinceSpawn += dt;
 
 	if (timeBtwSpawns<timeSinceSpawn){
+    if (spawnlocation.y()-8 < playerHeight){
+      spawnlocation += btVector3(0,10,0);
+    }
 		timeSinceSpawn = 0;
-		spawnBarrel();
+    int spawnAmount = rand()%3+1;
+    for (int i=0;i<spawnAmount;i++)
+		  spawnBarrel(spawnlocation);
 	}
 }
 
-void Graphics::spawnBarrel()
+void Graphics::spawnBarrel(btVector3 pos)
 {
   
-  Object* tempObject = new Object(*myBarrel, btVector3(2, 20, -.5));//Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 20, 0));
+  Object* tempObject = new Object(*myBarrel, pos);//btVector3(2, 20, -.5));//Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 20, 0));
   barrel *tempBarrel = new barrel();
   *tempBarrel = {tempObject, 0, false};
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
@@ -796,9 +809,9 @@ void Graphics::checkBarrelDrop()
 		for(int j=0; j<barrels.size();j++)
 		{
 			if( (barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() - 
-				ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() <= 15) &&
+				ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() <= 5) &&
 				(barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() - 
-				ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() >= 10 ) )
+				ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() >= 0 ) )
 				{
 					if((barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() - 
 					ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() <= 0.5) &&

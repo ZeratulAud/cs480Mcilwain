@@ -162,7 +162,7 @@ void Engine::Keyboard()
     switch(m_event.key.keysym.sym)
     {
       case SDLK_DOWN:
-        m_graphics->spawnBarrel();
+        m_graphics->spawnBarrel(m_graphics->spawnlocation);
         break;
      
       case SDLK_w:

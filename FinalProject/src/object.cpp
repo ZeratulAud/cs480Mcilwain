@@ -187,9 +187,9 @@ bool Object::LoadObjFile(std::string objFilePath)
     std::cout << mesh->mNumFaces << std::endl;
     if(mesh->mNumFaces == 224 )
       tempShape = new btSphereShape(btScalar(.25));
-    else if(mesh->mNumFaces == 2)//256 )
+    else if(objFilePath == (ASSET_DIR + "PlayerSprite.obj"))
       tempShape = new btCapsuleShape (.5, .5);
-    else if(mesh->mNumFaces == 1 )
+    else if(objFilePath == (ASSET_DIR + "Barrel2.obj") )
       tempShape = new btCylinderShapeZ(btVector3(1,1,1));//btConvexTriangleMeshShape(objTriMesh, true);
     else if(mesh->mNumFaces == 124 )
       tempShape = new btCylinderShapeZ(btVector3(1,1,1));//btConvexTriangleMeshShape(objTriMesh, true);
@@ -197,7 +197,7 @@ bool Object::LoadObjFile(std::string objFilePath)
       tempShape = new btCylinderShapeZ(btVector3(1,1,1));//btConvexTriangleMeshShape(objTriMesh, true);
     else if(mesh->mNumFaces == 260 )
       tempShape = new btConvexTriangleMeshShape(objTriMesh, true);//btBoxShape(btVector3(.3,.3,.6));
-    else if(mesh->mNumFaces == 12 && objFilePath == (ASSET_DIR + "Cube.obj") )
+    else if(objFilePath == (ASSET_DIR + "Cube.obj") )
       tempShape = new btBoxShape(btVector3(.3,.3,.6));
 
     shape = tempShape;

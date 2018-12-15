@@ -31,7 +31,7 @@ class Graphics
     void Update(unsigned int dt);
     void Render();
     void SwitchShader();
-    void spawnBarrel();
+    void spawnBarrel(btVector3 pos);
     void moveLeft();
     void moveRight();
     void jump(unsigned int dt);
@@ -61,11 +61,13 @@ class Graphics
 
     bool movingLeft;
 
+    btVector3 spawnlocation;
+
   private:
     std::string ErrorString(GLenum error);
     void CreateObjects();
     void platformSpawner(int platformSections, glm::vec3 origin, int angle);
-    void barrelSpawner(unsigned int dt);
+    void barrelSpawner(unsigned int dt, float playerHeight);
 
     float timeBtwSpawns;
     float timeSinceSpawn;
@@ -74,6 +76,8 @@ class Graphics
     float timeBtwDrop;
     float timeSinceDrop;
     float ladderCD;
+
+
 
     Camera *m_camera;
     Shader *m_shader;

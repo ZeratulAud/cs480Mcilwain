@@ -56,6 +56,16 @@ bool Engine::Initialize()
     return false;
   }
 
+  /*
+  m_audio = new Audio();
+  if (!m_audio->Initialize())
+  {
+    printf("The audio failed to initialize.\n");
+    return false;
+  }
+  m_audio->PlayTheme();
+  */
+
   // Set the time
   m_currentTimeMillis = GetCurrentTimeMillis();
 
@@ -127,11 +137,11 @@ void Engine::Run()
     ImGui::SliderFloat("Specular Value", &specularVal, -1, 1, "%.05f");
     ImGui::SliderFloat("Shininess Value", &shininessVal, -200, 350, "%.0f");
     ImGui::SliderFloat("Light Height", &lightHeight, 0.1, 150, "%.0f");
-    
+
     ImGui::End();
 
     // Update and render the graphics
-    
+
     m_graphics->Update(m_DT);
     m_graphics->Render();
     LightingUpdate();
@@ -164,7 +174,7 @@ void Engine::Keyboard()
       case SDLK_DOWN:
         m_graphics->spawnBarrel();
         break;
-     
+
       case SDLK_w:
         m_graphics->jumpFlag = true;
         break;

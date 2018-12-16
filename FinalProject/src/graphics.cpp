@@ -575,6 +575,8 @@ void Graphics::CreateObjects()
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   ladders.push_back(tempLadder);
 
+  //floor = new Object("LavaFloor.obj", "bluebaby.jpg", -1,-1, btVector3(-4, 5, .5));
+
   //tempObject->GetRigidBody()->setRestitution(1.0);
  // Objects.push_back(tempObject);
 
@@ -730,7 +732,7 @@ void Graphics::moveLeft()
     btVector3 tempbtVec3 =  ball->GetRigidBody()->getLinearVelocity();
     //if(tempbtVec3.x() < 0)
        //tempbtVec3 = btVector3(0, 0, 0);
-    tempbtVec3 = tempbtVec3 + btVector3(.4, 0, 0);
+    tempbtVec3 = tempbtVec3 + btVector3(.6, 0, 0);
     if(tempbtVec3.x() > 1)
       tempbtVec3 = btVector3(1, tempbtVec3.y(), 0);
     ball->GetRigidBody()->setLinearVelocity(tempbtVec3);
@@ -744,7 +746,7 @@ void Graphics::moveRight()
     btVector3 tempbtVec3 =  ball->GetRigidBody()->getLinearVelocity();
     //if(tempbtVec3.x() > 0)
        //tempbtVec3 = btVector3(0, 0, 0);
-    tempbtVec3 = tempbtVec3 + btVector3(-.4, 0, 0);
+    tempbtVec3 = tempbtVec3 + btVector3(-.6, 0, 0);
     if(tempbtVec3.x() < -1)
       tempbtVec3 = btVector3(-1, tempbtVec3.y(), 0);
     /*if(tempbtVec3.y() < -2)
@@ -761,7 +763,9 @@ void Graphics::jump(unsigned int dt)
     ball->GetRigidBody()->applyCentralImpulse( btVector3( 0, 6.5, 0 ) );
 
   }
-}   
+} 
+
+//bool Graphics::Grounded()  
 
 void Graphics::descendBarrel(unsigned int dt)
 {

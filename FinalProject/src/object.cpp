@@ -24,15 +24,19 @@ Object::Object(std::string objFilePath, std::string texFilePath, float Mass, flo
   render = true;
   destroy = false;
 
-  btDefaultMotionState *shapeMotionState = NULL;
-  shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion::getIdentity(),btVector3(pos)));
-  btScalar mass(Mass);
-  btVector3 inertia(Inertia, Inertia, Inertia);
-  shape->calculateLocalInertia(mass, inertia);
+  if (Mass>=0&&Inertia>=0){
+    btDefaultMotionState *shapeMotionState = NULL;
+    shapeMotionState = new btDefaultMotionState(btTransform(btQuaternion::getIdentity(),btVector3(pos)));
+    btScalar mass(Mass);
+    btVector3 inertia(Inertia, Inertia, Inertia);
+    shape->calculateLocalInertia(mass, inertia);
 
-  btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, shape, inertia);
+    btRigidBody::btRigidBodyConstructionInfo shapeRigidBodyCI(mass, shapeMotionState, shape, inertia);
 
-  rigidBody = new btRigidBody(shapeRigidBodyCI);
+    rigidBody = new btRigidBody(shapeRigidBodyCI);
+  }
+
+
 }
 
 Object::Object(Object& copy, btVector3 pos){

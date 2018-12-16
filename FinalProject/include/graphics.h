@@ -89,6 +89,7 @@ class Graphics
 
     Object* ball;
     Object* myBarrel;
+    Object* floor;
 
     std::vector<Object*> Objects;
     std::vector<barrel*> barrels;

@@ -183,18 +183,30 @@ void Engine::Keyboard()
         break;
 
       case SDLK_w:
-        m_graphics->jumpFlag = true;
+        if(m_graphics->playerOnLadder == false)
+          m_graphics->jumpFlag = true;
+        else
+          m_graphics->climbUp();
         break;
 
       case SDLK_a:
-        m_graphics->moveLeftFlag = true;
+        if(m_graphics->playerOnLadder == false)
+          m_graphics->moveLeftFlag = true;
+        else
+          m_graphics->climbLeft();
         break;
 
       case SDLK_d:
-        m_graphics->moveRightFlag = true;
+        if(m_graphics->playerOnLadder == false)
+          m_graphics->moveRightFlag = true;
+        else
+          m_graphics->climbRight();
         break;
 
-      case SDLK_q:
+      case SDLK_s:
+        if(m_graphics->playerOnLadder == true)
+          m_graphics->climbDown();
+
         //m_graphics->dropBarrel();
         break;
 

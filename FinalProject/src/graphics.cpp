@@ -18,7 +18,7 @@ Graphics::Graphics()
   timeSinceSpawn = 0.0;
   timeBtwDrop = 1200.0;
   timeSinceDrop = 0.0;
-  ladderCD = 6000;
+  ladderCD = 800;
   despawnHeight =-25;
   ambIntensity = 0.0;
   lightHeight = 10;
@@ -26,9 +26,6 @@ Graphics::Graphics()
   SHADOW_HEIGHT = 1024;
   movingLeft = true;
   spawnlocation = btVector3(2, 20, -.5);
-
-  
-
 }
 
 Graphics::~Graphics()
@@ -248,8 +245,8 @@ bool Graphics::Initialize(int width, int height)
   //texLoc = glGetUniformLocation(m_shader->m_shaderProg, "depthMap");
   //glUniform1i(texLoc, 1);
 
-  
-  
+
+
 
   //enable depth testing
   glEnable(GL_DEPTH_TEST);
@@ -261,22 +258,22 @@ bool Graphics::Initialize(int width, int height)
   glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 
 
-  glm::mat4 lightView = glm::lookAt(glm::vec3(0, 0.0, -20.0), 
-                                    glm::vec3( 0.0f, 0.0f,  0.0f), 
+  glm::mat4 lightView = glm::lookAt(glm::vec3(0, 0.0, -20.0),
+                                    glm::vec3( 0.0f, 0.0f,  0.0f),
                                     glm::vec3( 0.0f, 1.0f,  0.0f));
 
-  lightSpaceMatrix = lightProjection * lightView; 
+  lightSpaceMatrix = lightProjection * lightView;
 
-    glGenFramebuffers(1, &depthMapFBO);  
+    glGenFramebuffers(1, &depthMapFBO);
   glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 
   glGenTextures(1, &depthMap);
   glBindTexture(GL_TEXTURE_2D, depthMap);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
              SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
@@ -294,20 +291,16 @@ bool Graphics::Initialize(int width, int height)
 void Graphics::Update(unsigned int dt)
 {
   // Update the object
-  float playerY = ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y();
-  m_camera->Update(glm::vec3(ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
+  float playerY = player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y();
+  m_camera->Update(glm::vec3(player->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
                       		 playerY,
-                    		 ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z()));
+                    		 player->GetRigidBody()->getCenterOfMassTransform().getOrigin().z()));
 
   //flipperR->GetRigidBody()->applyTorque(btVector3(1,1,1));
   barrelSpawner(dt,playerY);
 
   for (auto &i : Objects) {
-  	if(i->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight + ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()){
-  		i->destroy = true;
-  	} else {
-  		i->Update(dt);
-  	}
+  	i->Update(dt);
   }
 
   for (auto it = Objects.begin(); it != Objects.end(); ) {
@@ -320,7 +313,7 @@ void Graphics::Update(unsigned int dt)
   }
 
   for (auto &i : barrels) {
-    if(i->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight + ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()){
+    if(i->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight + player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()){
       i->object->destroy = true;
     } else {
       i->object->Update(dt);
@@ -337,8 +330,8 @@ void Graphics::Update(unsigned int dt)
   }
 
   for (auto &i : ladders) {
-    if(i->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight + ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()){
-      i->object->destroy = true;
+    if(i->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight + player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()){
+      //i->object->destroy = true;
     } else {
       i->object->Update(dt);
     }
@@ -403,8 +396,8 @@ void Graphics::Render()
   if (Status != GL_FRAMEBUFFER_COMPLETE) {
       printf("FB error, status: 0x%x\n", Status);
       exit(0);
-  } 
-  glBindFramebuffer(GL_FRAMEBUFFER, 0); 
+  }
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   glViewport(0, 0, 1080, 920);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
@@ -414,25 +407,25 @@ void Graphics::Render()
     // Start the correct program
     m_shader->Enable();
 
-      
+
 
     // Send in the projection and view to the shader
     GLint temp = m_shader->GetUniformLocation("eyePos");
     glUniform3f(temp, m_camera->eyePos.x, m_camera->eyePos.y, m_camera->eyePos.z);
 
-    temp = m_shader->GetUniformLocation("ballPos");
-    glUniform3f(temp, (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
-                      (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(),
-                      (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z());
+    temp = m_shader->GetUniformLocation("playerPos");
+    glUniform3f(temp, (float) player->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
+                      (float) player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(),
+                      (float) player->GetRigidBody()->getCenterOfMassTransform().getOrigin().z());
 
     temp = m_shader->GetUniformLocation("AmbientProduct");
 	glUniform4f(temp, ambIntensity, ambIntensity, ambIntensity, 1);
 
 	temp = m_shader->GetUniformLocation("LightPosition");
-	glUniform3f(temp, 0, lightHeight+ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(), -lightHeight*2);
+	glUniform3f(temp, 0, lightHeight+player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(), -lightHeight*2);
 
 	temp = m_shader->GetUniformLocation("coneDirection");
-	glUniform3f(temp, 0, -(lightHeight+ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()), lightHeight*2);
+	glUniform3f(temp, 0, -(lightHeight+player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()), lightHeight*2);
 
 	temp = m_shader->GetUniformLocation("coneCutOff");
 	glUniform1f(temp, .995);
@@ -469,10 +462,10 @@ void Graphics::Render()
     GLint temp = otherShader->GetUniformLocation("eyePos");
     glUniform3f(temp, m_camera->eyePos.x, m_camera->eyePos.y, m_camera->eyePos.z);
 
-    temp = otherShader->GetUniformLocation("ballPos");
-    glUniform3f(temp, (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
-                      (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(),
-                      (float) ball->GetRigidBody()->getCenterOfMassTransform().getOrigin().z());
+    temp = otherShader->GetUniformLocation("playerPos");
+    glUniform3f(temp, (float) player->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
+                      (float) player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y(),
+                      (float) player->GetRigidBody()->getCenterOfMassTransform().getOrigin().z());
 
     temp = otherShader->GetUniformLocation("AmbientProduct");
 	glUniform4f(temp, ambIntensity, ambIntensity, ambIntensity, 1);
@@ -539,60 +532,48 @@ std::string Graphics::ErrorString(GLenum error)
 
 void Graphics::CreateObjects()
 {
+  bottom = -50;
+
 	platformSpawner(4, glm::vec3(20,35,0), -30);
 	platformSpawner(4, glm::vec3(-20,25,0), 30);
 	platformSpawner(4, glm::vec3(20,10,0), -15);
 	platformSpawner(1, glm::vec3(-26,2,0), 0);
 	platformSpawner(4, glm::vec3(-20,0,0), 15);
 	platformSpawner(4, glm::vec3(20,-10,0), -15);
-
+  platformSpawner(4, glm::vec3(-20,-20,0), 15);
+  platformSpawner(4, glm::vec3(20,-25,0), -30);
+  platformSpawner(4, glm::vec3(-20,-40,0), 15);
+  platformSpawner(4, glm::vec3(10,bottom,0), 0);
 
   Object* tempObject;
-  //tempObject = new Object("LevelWall.obj", "reddy.jpg", 0,0, btVector3(0,0,1.1));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  //tempObject->render = false;
-  //Objects.push_back(tempObject);
-  //tempObject = new Object("LevelWall.obj", "reddy.jpg", 0,0, btVector3(0,0,-1.1));
-  //tempObject->GetRigidBody()->setRestitution(1.0);
-  //tempObject->render = false;
-  //Objects.push_back(tempObject);
-
-  //std::cout << "creating barrel" << std::endl;
   myBarrel = new Object("Barrel2.obj", "DKBarrel.png", 0,0, btVector3(2, 20, -50));
-  //std::cout << "barre done" << std::endl;
+  std::cout << "spawning dk" << std::endl;
+  tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(-26,4,0));
+  ladder *tempLadder = new ladder();
+  *tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  ladders.push_back(tempLadder);
 
-  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(8, 9, .5));
-  ladder *tempLadder = new ladder();;
+  /*tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(8, 9, .5));
+  ladder *tempLadder = new ladder();
   *tempLadder = {tempObject, 0, false};
   tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   ladders.push_back(tempLadder);
 
   tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(-4, 5, .5));
-  tempLadder = new ladder();;
+  tempLadder = new ladder();
   *tempLadder = {tempObject, 0, false};
   tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  ladders.push_back(tempLadder);
+  ladders.push_back(tempLadder);*/
 
-  //floor = new Object("LavaFloor.obj", "bluebaby.jpg", -1,-1, btVector3(-4, 5, .5));
 
-  //tempObject->GetRigidBody()->setRestitution(1.0);
- // Objects.push_back(tempObject);
-
-  ball = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(8, -10, 0));
+  player = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(8, bottom+2, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setAngularFactor(btVector3(0,0,0));
   Objects.push_back(tempObject);
-
-  //tempObject = new Object("OutterWalls.obj", "rednice.jpg", 0,0, btVector3(0,0,0));
-
-  /*bumper1 = tempObject = new Object("Bumper1.obj", "rednice.jpg", 5,10, btVector3(1, 0,-.3));
-  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  tempObject->GetRigidBody()->setRestitution(7.0);
-  Objects.push_back(tempObject);*/
-
 
   for (auto &i : Objects) {
     dynamicsWorld->addRigidBody(i->GetRigidBody());
@@ -601,7 +582,7 @@ void Graphics::CreateObjects()
     dynamicsWorld->addRigidBody(i->object->GetRigidBody());
   }
   for (auto &i : ladders) {
-    dynamicsWorld->addRigidBody(i->object->GetRigidBody());
+    //dynamicsWorld->addRigidBody(i->object->GetRigidBody());
   }
 }
 
@@ -631,21 +612,21 @@ void Graphics::platformSpawner(int platforms, glm::vec3 origin, int angle){
 	std::string modelName;
 
 	switch(angle) {
-    	case 15 : 
+    	case 15 :
  	   		platformOffset = glm::vec3( 8*cos((15*M_PI)/180), -(8*sin((15*M_PI)/180)), 0);
 			modelName = "15DegPlatform.obj";
             break;
 
- 	   case -15 : 
+ 	   case -15 :
  	   		platformOffset = glm::vec3(-(8*cos((15*M_PI)/180)), -(8*sin((15*M_PI)/180)), 0);
 			modelName = "-15DegPlatform.obj";
             break;
-            
-    	case 30 : 
+
+    	case 30 :
 			platformOffset = glm::vec3( 8*cos((30*M_PI)/180), -(8*sin((30*M_PI)/180)), 0);
 			modelName = "30DegPlatform.obj";
             break;
- 	   case -30 : 
+ 	   case -30 :
  	   		platformOffset = glm::vec3( -(8*cos((30*M_PI)/180)),-(8*sin((30*M_PI)/180)), 0);
 			modelName = "-30DegPlatform.obj";
             break;
@@ -660,6 +641,15 @@ void Graphics::platformSpawner(int platforms, glm::vec3 origin, int angle){
 		btVector3 pos = btVector3(origin.x+platformOffset.x*i, origin.y+platformOffset.y*i, origin.z+platformOffset.z*i);
 		tempObject = new Object(modelName, "reddy.jpg", 0,0, pos);
 		Objects.push_back(tempObject);
+    if (rand()%3 == 0){
+      tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(pos.x(), pos.y()+1.5, -.5));
+      ladder *tempLadder = new ladder();
+      *tempLadder = {tempObject, 0, false};
+      tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+      tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+      ladders.push_back(tempLadder);    
+    }
+
 	}
 	//tempObject->GetRigidBody()->setRestitution(1.0);
 }
@@ -668,11 +658,13 @@ void Graphics::barrelSpawner(unsigned int dt, float playerHeight){
 	timeSinceSpawn += dt;
 
 	if (timeBtwSpawns<timeSinceSpawn){
-    if (spawnlocation.y()-8 < playerHeight){
+    if (spawnlocation.y()-15 < playerHeight){
       spawnlocation += btVector3(0,10,0);
+    } else if (spawnlocation.y()-30 > playerHeight){
+      spawnlocation += btVector3(0,-10,0);
     }
 		timeSinceSpawn = 0;
-    int spawnAmount = rand()%3+1;
+    int spawnAmount = rand()%2+1;
     for (int i=0;i<spawnAmount;i++)
 		  spawnBarrel(spawnlocation);
 	}
@@ -680,14 +672,14 @@ void Graphics::barrelSpawner(unsigned int dt, float playerHeight){
 
 void Graphics::spawnBarrel(btVector3 pos)
 {
-  
+
   Object* tempObject = new Object(*myBarrel, pos);//btVector3(2, 20, -.5));//Object("Barrel.obj", "rednice.jpg", 5,1, btVector3(2, 20, 0));
   barrel *tempBarrel = new barrel();
   *tempBarrel = {tempObject, 0, false};
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   barrels.push_back(tempBarrel);
   dynamicsWorld->addRigidBody(tempBarrel->object->GetRigidBody());
-  
+
 }
 
 void Graphics::SwitchShader()
@@ -695,7 +687,151 @@ void Graphics::SwitchShader()
   switcher ? switcher = false : switcher = true;
 }
 
+bool Graphics::HasDied()
+{
+  if (player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < bottom)
+    return true;
+  return false;
+}
 
+void Graphics::ResetPlayer()
+{
+  //delete player;
+  dynamicsWorld->removeRigidBody(player->GetRigidBody());
+  Object* tempObject;
+  player = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(8, bottom+2, 0));
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  tempObject->GetRigidBody()->setAngularFactor(btVector3(0,0,0));
+  dynamicsWorld->addRigidBody(tempObject->GetRigidBody());
+  Objects.push_back(tempObject);
+}
+
+void Graphics::moveLeft()
+{
+    if (!movingLeft){
+      player->LoadTexFile(ASSET_DIR + "marioL.png", 0);
+      movingLeft=true;
+    }
+    btVector3 tempbtVec3 =  player->GetRigidBody()->getLinearVelocity();
+    //if(tempbtVec3.x() < 0)
+       //tempbtVec3 = btVector3(0, 0, 0);
+    tempbtVec3 = tempbtVec3 + btVector3(.6, 0, 0);
+    if(tempbtVec3.x() > 1)
+      tempbtVec3 = btVector3(1, tempbtVec3.y(), 0);
+    player->GetRigidBody()->setLinearVelocity(tempbtVec3);
+}
+void Graphics::moveRight()
+{
+    if (movingLeft){
+      player->LoadTexFile(ASSET_DIR + "marioR.png", 0);
+      movingLeft=false;
+    }
+    btVector3 tempbtVec3 =  player->GetRigidBody()->getLinearVelocity();
+    //if(tempbtVec3.x() > 0)
+       //tempbtVec3 = btVector3(0, 0, 0);
+    tempbtVec3 = tempbtVec3 + btVector3(-.6, 0, 0);
+    if(tempbtVec3.x() < -1)
+      tempbtVec3 = btVector3(-1, tempbtVec3.y(), 0);
+    /*if(tempbtVec3.y() < -2)
+      tempbtVec3 = btVector3(tempbtVec3.x(), -2, 0);*/
+    player->GetRigidBody()->setLinearVelocity(btVector3(tempbtVec3));
+}
+
+void Graphics::jump(unsigned int dt)
+{
+  timeSinceJump += dt;
+
+  if (timeBtwJump<timeSinceJump && jumpFlag == true){
+    timeSinceJump = 0;
+    player->GetRigidBody()->applyCentralImpulse( btVector3( 0, 6.5, 0 ) );
+
+  }
+} 
+
+//bool Graphics::Grounded()  
+
+
+void Graphics::descendBarrel(unsigned int dt)
+{
+
+  btTransform newTrans;
+  for(int j=0; j<barrels.size();j++)
+  {
+  	barrels[j]->dropTimer += dt;
+  	if(barrels[j]->hasDropped == true)
+  	{
+	    barrels[j]->object->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
+	    newTrans.getOrigin() += (btVector3(0, -.1, 0));
+	    barrels[j]->object->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
+	}
+	if (timeBtwDrop<barrels[j]->dropTimer && barrels[j]->hasDropped == true)
+	{
+		barrels[j]->hasDropped = false;
+	    barrels[j]->dropTimer = 0;
+	    resetBarrel(barrels[j]);
+	}
+
+  }
+
+
+}
+void Graphics::dropBarrel(barrel* passedBarrel)
+{
+	std::cout << "dropping barrell" << std::endl;
+    passedBarrel->object->GetRigidBody()->setCollisionFlags(passedBarrel->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+    passedBarrel->dropTimer = 0;
+    passedBarrel->hasDropped = true;
+
+}
+void Graphics::resetBarrel(barrel* passedBarrel)
+{
+	std::cout << "reseting barrell" << std::endl;
+    passedBarrel->object->GetRigidBody()->setCollisionFlags(passedBarrel->object->GetRigidBody()->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
+    //passedBarrel->object->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+
+}
+void Graphics::checkBarrelDrop()
+{
+	for(int i=0; i<ladders.size();i++)
+	{
+		for(int j=0; j<barrels.size();j++)
+		{
+			if( (barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() -
+				ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() <= 5) &&
+				(barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() -
+				ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() >= 0 ) )
+				{
+					if((barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() -
+					ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() <= 0.5) &&
+					(barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() -
+					ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() >= -0.5 ))
+					{
+						if(ladders[i]->cooldownFlag == false)
+						{
+							ladders[i]->cooldownFlag = true;
+              if (rand()%3)
+							  dropBarrel(barrels[j]);
+							ladders[i]->ladderCooldown = 0;
+						}
+
+					}
+
+				}
+		}
+	}
+}
+void Graphics::checkLadderState(unsigned int dt)
+{
+	for(int j=0; j<ladders.size();j++)
+	{
+  		ladders[j]->ladderCooldown += dt;
+  		if (ladderCD<ladders[j]->ladderCooldown && ladders[j]->cooldownFlag == true)
+		{
+		    ladders[j]->cooldownFlag = false;
+		    ladders[j]->ladderCooldown = 0;
+		}
+  }
+}
 
 float Graphics::GetObjectDistance(Object* obj1, Object* obj2)
 {
@@ -706,6 +842,11 @@ float Graphics::GetObjectDistance(Object* obj1, Object* obj2)
             - obj2->GetRigidBody()->getCenterOfMassTransform().getOrigin().z();
 
   return sqrt(pow(x, 2.0) + pow(z, 2.0));
+}
+
+Object* Graphics::GetPlayer() const
+{
+  return player;
 }
 
 std::vector<Object*> Graphics::GetObjects() const
@@ -722,130 +863,3 @@ btDiscreteDynamicsWorld* Graphics::GetDynamicsWorld() const
 {
   return dynamicsWorld;
 }
-
-void Graphics::moveLeft()
-{
-    if (!movingLeft){
-      ball->LoadTexFile(ASSET_DIR + "marioL.png", 0);
-      movingLeft=true;
-    }
-    btVector3 tempbtVec3 =  ball->GetRigidBody()->getLinearVelocity();
-    //if(tempbtVec3.x() < 0)
-       //tempbtVec3 = btVector3(0, 0, 0);
-    tempbtVec3 = tempbtVec3 + btVector3(.6, 0, 0);
-    if(tempbtVec3.x() > 1)
-      tempbtVec3 = btVector3(1, tempbtVec3.y(), 0);
-    ball->GetRigidBody()->setLinearVelocity(tempbtVec3);
-}
-void Graphics::moveRight()
-{
-    if (movingLeft){
-      ball->LoadTexFile(ASSET_DIR + "marioR.png", 0);
-      movingLeft=false;
-    }
-    btVector3 tempbtVec3 =  ball->GetRigidBody()->getLinearVelocity();
-    //if(tempbtVec3.x() > 0)
-       //tempbtVec3 = btVector3(0, 0, 0);
-    tempbtVec3 = tempbtVec3 + btVector3(-.6, 0, 0);
-    if(tempbtVec3.x() < -1)
-      tempbtVec3 = btVector3(-1, tempbtVec3.y(), 0);
-    /*if(tempbtVec3.y() < -2)
-      tempbtVec3 = btVector3(tempbtVec3.x(), -2, 0);*/
-    ball->GetRigidBody()->setLinearVelocity(btVector3(tempbtVec3));
-}
-
-void Graphics::jump(unsigned int dt)
-{
-  timeSinceJump += dt;
-
-  if (timeBtwJump<timeSinceJump && jumpFlag == true){
-    timeSinceJump = 0;
-    ball->GetRigidBody()->applyCentralImpulse( btVector3( 0, 6.5, 0 ) );
-
-  }
-} 
-
-//bool Graphics::Grounded()  
-
-void Graphics::descendBarrel(unsigned int dt)
-{
-  
-  btTransform newTrans;
-  for(int j=0; j<barrels.size();j++)
-  {
-  	barrels[j]->dropTimer += dt;
-  	if(barrels[j]->hasDropped == true)
-  	{
-	    barrels[j]->object->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
-	    newTrans.getOrigin() += (btVector3(0, -.1, 0));
-	    barrels[j]->object->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
-	}
-	if (timeBtwDrop<barrels[j]->dropTimer && barrels[j]->hasDropped == true)
-	{  
-		barrels[j]->hasDropped = false;
-	    barrels[j]->dropTimer = 0;
-	    resetBarrel(barrels[j]);
-	}
-    
-  }
-  
-
-}
-void Graphics::dropBarrel(barrel* passedBarrel)
-{
-	std::cout << "dropping barrell" << std::endl;
-    passedBarrel->object->GetRigidBody()->setCollisionFlags(passedBarrel->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-    passedBarrel->dropTimer = 0;
-    passedBarrel->hasDropped = true;
-
-}
-void Graphics::resetBarrel(barrel* passedBarrel)
-{
-	std::cout << "reseting barrell" << std::endl;
-    passedBarrel->object->GetRigidBody()->setCollisionFlags(passedBarrel->object->GetRigidBody()->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
-    //passedBarrel->object->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-    
-}
-void Graphics::checkBarrelDrop()
-{
-	for(int i=0; i<ladders.size();i++)
-	{
-		for(int j=0; j<barrels.size();j++)
-		{
-			if( (barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() - 
-				ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() <= 5) &&
-				(barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() - 
-				ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() >= 0 ) )
-				{
-					if((barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() - 
-					ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() <= 0.5) &&
-					(barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() - 
-					ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() >= -0.5 ))
-					{
-						if(ladders[i]->cooldownFlag == false)
-						{
-							ladders[i]->cooldownFlag = true;
-							dropBarrel(barrels[j]);
-							ladders[i]->ladderCooldown = 0;
-						}
-						
-					}
-
-				}
-		}
-	}
-}
-void Graphics::checkLadderState(unsigned int dt)
-{
-	for(int j=0; j<ladders.size();j++)
-	{
-  		ladders[j]->ladderCooldown += dt;
-  		if (ladderCD<ladders[j]->ladderCooldown && ladders[j]->cooldownFlag == true)
-		{  
-		    ladders[j]->cooldownFlag = false;
-		    ladders[j]->ladderCooldown = 0;
-		}
-  }
-}
-
-

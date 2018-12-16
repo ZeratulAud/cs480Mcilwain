@@ -120,6 +120,13 @@ void Engine::Run()
       plungerPower = 0;
     }
 
+    if (m_graphics->HasDied())
+    {
+      m_graphics->GetPlayer()->destroy = true;
+      m_graphics->ResetPlayer();
+      m_graphics->lives--;
+    }
+
     if (GameOver())
     {
       if (ImGui::Button("Game over. Play Again?"))

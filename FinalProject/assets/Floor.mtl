@@ -1,4 +1,4 @@
-# Blender MTL File: 'Pinball2.blend'
+# Blender MTL File: 'DKSetup.blend'
 # Material Count: 1
 
 newmtl Material.001
@@ -10,4 +10,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Textures/PlayfieldTexture.png
+map_Kd /home/zmcilwain/Downloads/bright-red-lava-burning-yellow-magma-molten-rock-ground-seamless-tileable-high-resolution-texture-512x512.jpg

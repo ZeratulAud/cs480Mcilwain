@@ -196,8 +196,8 @@ bool Object::LoadObjFile(std::string objFilePath)
       tempShape = new btSphereShape(btScalar(.25));
     else if(objFilePath == (ASSET_DIR + "PlayerSprite.obj"))
       tempShape = new btCapsuleShape (.5, .5);
-    else if(mesh->mNumFaces == 18){
-      LoadTexFile(ASSET_DIR + "c07_eye00.png", i);
+    else if(objFilePath == (ASSET_DIR + "Floor.obj")){
+      tempShape = new btSphereShape(btScalar(.25));
     }
     else if(objFilePath == (ASSET_DIR + "Barrel2.obj") )
       tempShape = new btCylinderShapeZ(btVector3(1,1,1));//btConvexTriangleMeshShape(objTriMesh, true);

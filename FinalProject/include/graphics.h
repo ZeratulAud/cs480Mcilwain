@@ -21,6 +21,13 @@ struct ladder{
     bool cooldownFlag;
 };
 
+//struct DK_Platform{
+ //   Object *platform;
+ //   Object *DK;
+ //   btVector3 spawnlocation;
+ //   float maxHeight;
+//}SpawnPlatform;
+
 class Graphics
 {
   public:

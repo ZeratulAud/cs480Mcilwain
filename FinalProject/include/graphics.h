@@ -40,7 +40,10 @@ class Graphics
     void checkBarrelDrop();
     void checkLadderState(unsigned int dt);
     void descendBarrel(unsigned int dt);
+    bool HasDied();
+    void ResetPlayer();
     float GetObjectDistance(Object* obj1, Object* obj2);
+    Object* GetPlayer() const;
     std::vector<Object*> GetObjects() const;
     Camera* GetCamera() const;
     btDiscreteDynamicsWorld* GetDynamicsWorld() const;
@@ -51,6 +54,7 @@ class Graphics
     bool moveRightFlag;
     bool jumpFlag;
     bool dropBarrelFlag;
+    int bottom;
     int lives;
     int gameScore;
     int despawnHeight;
@@ -87,13 +91,13 @@ class Graphics
 
     btDiscreteDynamicsWorld *dynamicsWorld;
 
-    Object* ball;
+    Object* player;
     Object* myBarrel;
 
     std::vector<Object*> Objects;
     std::vector<barrel*> barrels;
     std::vector<ladder*> ladders;
-    
+
     GLint m_lightSpaceMatrix;
     GLint m_projectionMatrix;
     GLint m_viewMatrix;
@@ -101,7 +105,7 @@ class Graphics
     unsigned int depthMap;
 
     glm::mat4 lightSpaceMatrix;
-    
+
     GLint other_projectionMatrix;
     GLint other_viewMatrix;
     GLint other_modelMatrix;

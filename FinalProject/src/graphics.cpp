@@ -16,7 +16,7 @@ Graphics::Graphics()
   timeSinceJump = 0.0;
   timeBtwSpawns = 2500.0;
   timeSinceSpawn = 0.0;
-  timeBtwDrop = 1200.0;
+  timeBtwDrop = 1000.0;
   timeSinceDrop = 0.0;
   ladderCD = 800;
   despawnHeight =-25;
@@ -26,6 +26,7 @@ Graphics::Graphics()
   SHADOW_HEIGHT = 1024;
   movingLeft = true;
   spawnlocation = btVector3(2, 20, -.5);
+  playerOnLadder = false;
 }
 
 Graphics::~Graphics()
@@ -345,14 +346,19 @@ void Graphics::Update(unsigned int dt)
       ++it;
     }
   }
-  if(moveRightFlag == true)
-    moveRight();
-  if(moveLeftFlag == true)
-    moveLeft();
+  //if(playerOnLadder == false)
+  //{
+  	if(moveRightFlag == true)
+    	moveRight();
+  	if(moveLeftFlag == true)
+    	moveLeft();
+  //}
+  
 
   jump(dt);
   checkBarrelDrop();
   checkLadderState(dt);
+  checkPlayerOnLadder(dt);
   descendBarrel(dt);
 
   dynamicsWorld->stepSimulation(dt, 5);
@@ -777,7 +783,7 @@ void Graphics::descendBarrel(unsigned int dt)
 }
 void Graphics::dropBarrel(barrel* passedBarrel)
 {
-	std::cout << "dropping barrell" << std::endl;
+	//std::cout << "dropping barrell" << std::endl;
     passedBarrel->object->GetRigidBody()->setCollisionFlags(passedBarrel->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
     passedBarrel->dropTimer = 0;
     passedBarrel->hasDropped = true;
@@ -785,7 +791,7 @@ void Graphics::dropBarrel(barrel* passedBarrel)
 }
 void Graphics::resetBarrel(barrel* passedBarrel)
 {
-	std::cout << "reseting barrell" << std::endl;
+	//std::cout << "reseting barrell" << std::endl;
     passedBarrel->object->GetRigidBody()->setCollisionFlags(passedBarrel->object->GetRigidBody()->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
     //passedBarrel->object->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
 
@@ -831,6 +837,63 @@ void Graphics::checkLadderState(unsigned int dt)
 		    ladders[j]->ladderCooldown = 0;
 		}
   }
+}
+void Graphics::checkPlayerOnLadder(unsigned int dt)
+{
+	bool playerFound = false;
+	for(int i=0; i<ladders.size();i++)
+	{
+		if( (player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() -
+				ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() <= 0) &&
+				(player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() -
+				ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() >= -10 ) )
+				{
+					if((player->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() -
+					ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() <= 0.7) &&
+					(player->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() -
+					ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() >= -0.7 ))
+					{
+						playerOnLadder = true;
+						playerFound = true;
+						player->GetRigidBody()->setCollisionFlags(player->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+					}
+				}
+	}
+	if(playerFound == false)
+	{
+		playerOnLadder = false;
+		 player->GetRigidBody()->setCollisionFlags(player->GetRigidBody()->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
+	}
+
+
+}
+void Graphics::climbUp()
+{
+	btTransform newTrans;
+	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
+    newTrans.getOrigin() += (btVector3(0, .2, 0));
+    player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
+}
+void Graphics::climbLeft()
+{
+	btTransform newTrans;
+	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
+    newTrans.getOrigin() += (btVector3(.2, 0, 0));
+    player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
+}
+void Graphics::climbRight()
+{
+	btTransform newTrans;
+	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
+    newTrans.getOrigin() += (btVector3(-.2, 0, 0));
+    player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
+}
+void Graphics::climbDown()
+{
+	btTransform newTrans;
+	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
+    newTrans.getOrigin() += (btVector3(0, -.2, 0));
+    player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
 }
 
 float Graphics::GetObjectDistance(Object* obj1, Object* obj2)

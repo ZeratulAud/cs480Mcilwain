@@ -34,11 +34,16 @@ class Graphics
     void spawnBarrel(btVector3 pos);
     void moveLeft();
     void moveRight();
+    void climbUp();
+    void climbLeft();
+    void climbRight();
+    void climbDown();
     void jump(unsigned int dt);
     void dropBarrel(barrel* passedBarrel);
     void resetBarrel(barrel* passedBarrel);
     void checkBarrelDrop();
     void checkLadderState(unsigned int dt);
+    void checkPlayerOnLadder(unsigned int dt);
     void descendBarrel(unsigned int dt);
     bool HasDied();
     void ResetPlayer();
@@ -54,6 +59,7 @@ class Graphics
     bool moveRightFlag;
     bool jumpFlag;
     bool dropBarrelFlag;
+    bool playerOnLadder;
     int bottom;
     int lives;
     int gameScore;

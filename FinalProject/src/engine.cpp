@@ -186,26 +186,26 @@ void Engine::Keyboard()
         if(m_graphics->playerOnLadder == false)
           m_graphics->jumpFlag = true;
         else
-          m_graphics->climbUp();
+          m_graphics->climbUpFlag=true;
         break;
 
       case SDLK_a:
         if(m_graphics->playerOnLadder == false)
           m_graphics->moveLeftFlag = true;
         else
-          m_graphics->climbLeft();
+          m_graphics->climbLeftFlag = true;
         break;
 
       case SDLK_d:
         if(m_graphics->playerOnLadder == false)
           m_graphics->moveRightFlag = true;
         else
-          m_graphics->climbRight();
+          m_graphics->climbRightFlag = true;
         break;
 
       case SDLK_s:
         if(m_graphics->playerOnLadder == true)
-          m_graphics->climbDown();
+          m_graphics->climbDownFlag = true;
 
         //m_graphics->dropBarrel();
         break;
@@ -223,15 +223,21 @@ void Engine::Keyboard()
 
       case SDLK_a:
         m_graphics->moveLeftFlag = false;
+        m_graphics->climbLeftFlag = false;
         break;
 
       case SDLK_d:
         m_graphics->moveRightFlag = false;
+        m_graphics->climbRightFlag = false;
         break;
 
       case SDLK_w:
         m_graphics->jumpFlag = false;
+        m_graphics->climbUpFlag = false;
         break;
+
+      case SDLK_s:
+        m_graphics->climbDownFlag = false;
     }
   }
 }

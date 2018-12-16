@@ -297,6 +297,18 @@ void Graphics::Update(unsigned int dt)
   newTrans.getOrigin() += (btVector3(0, .025, 0));
   floor->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
 
+  if (climbUpFlag){
+    climbUp();
+  }
+  if (climbDownFlag){
+    climbDown();
+  }
+  if (climbLeftFlag){
+    climbLeft();
+  }
+  if (climbRightFlag){
+    climbRight();
+  }
   // Update the object
   float playerY = player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y();
   m_camera->Update(glm::vec3(player->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
@@ -885,28 +897,28 @@ void Graphics::climbUp()
 {
 	btTransform newTrans;
 	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
-    newTrans.getOrigin() += (btVector3(0, .2, 0));
+    newTrans.getOrigin() += (btVector3(0, .1, 0));
     player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
 }
 void Graphics::climbLeft()
 {
 	btTransform newTrans;
 	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
-    newTrans.getOrigin() += (btVector3(.2, 0, 0));
+    newTrans.getOrigin() += (btVector3(.1, 0, 0));
     player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
 }
 void Graphics::climbRight()
 {
 	btTransform newTrans;
 	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
-    newTrans.getOrigin() += (btVector3(-.2, 0, 0));
+    newTrans.getOrigin() += (btVector3(-.1, 0, 0));
     player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
 }
 void Graphics::climbDown()
 {
 	btTransform newTrans;
 	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
-    newTrans.getOrigin() += (btVector3(0, -.2, 0));
+    newTrans.getOrigin() += (btVector3(0, -.1, 0));
     player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
 }
 

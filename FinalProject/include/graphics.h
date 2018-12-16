@@ -67,6 +67,12 @@ class Graphics
     bool jumpFlag;
     bool dropBarrelFlag;
     bool playerOnLadder;
+
+    bool climbUpFlag = false;
+    bool climbLeftFlag = false;
+    bool climbRightFlag = false;
+    bool climbDownFlag = false;
+
     int bottom;
     int lives;
     int gameScore;

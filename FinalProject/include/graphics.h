@@ -21,6 +21,13 @@ struct ladder{
     bool cooldownFlag;
 };
 
+//struct DK_Platform{
+ //   Object *platform;
+ //   Object *DK;
+ //   btVector3 spawnlocation;
+ //   float maxHeight;
+//}SpawnPlatform;
+
 class Graphics
 {
   public:
@@ -61,6 +68,12 @@ class Graphics
     bool jumpFlag;
     bool dropBarrelFlag;
     bool playerOnLadder;
+
+    bool climbUpFlag = false;
+    bool climbLeftFlag = false;
+    bool climbRightFlag = false;
+    bool climbDownFlag = false;
+
     int bottom;
     int lives;
     int gameScore;

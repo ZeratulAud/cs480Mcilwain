@@ -292,11 +292,30 @@ bool Graphics::Initialize(int width, int height)
 
 void Graphics::Update(unsigned int dt)
 {
+  btTransform newTrans;
+
+  floor->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
+  newTrans.getOrigin() += (btVector3(0, .025, 0));
+  floor->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
+
+  if (climbUpFlag){
+    climbUp();
+  }
+  if (climbDownFlag){
+    climbDown();
+  }
+  if (climbLeftFlag){
+    climbLeft();
+  }
+  if (climbRightFlag){
+    climbRight();
+  }
   // Update the object
   float playerY = player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y();
   m_camera->Update(glm::vec3(player->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
-                      		 playerY,
-                    		 player->GetRigidBody()->getCenterOfMassTransform().getOrigin().z()));
+                      		   playerY,
+                    		     player->GetRigidBody()->getCenterOfMassTransform().getOrigin().z()),
+                             floor->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()); //3.75 is the offset of the lavaplane from its origin
 
   //flipperR->GetRigidBody()->applyTorque(btVector3(1,1,1));
   barrelSpawner(dt,playerY);
@@ -556,12 +575,19 @@ void Graphics::CreateObjects()
   Object* tempObject;
   myBarrel = new Object("Barrel2.obj", "DKBarrel.png", 0,0, btVector3(2, 20, -50));
   std::cout << "spawning dk" << std::endl;
-  tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(-26,4,0));
+  tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(-26,2,0));
   ladder *tempLadder = new ladder();
   *tempLadder = {tempObject, 0, false};
   tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   ladders.push_back(tempLadder);
+
+  floor = tempObject = new Object("Floor.obj", "2kSun.jpg", 0,0, btVector3(0,bottom-5,0));
+  *tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  ladders.push_back(tempLadder);
+
 
   /*tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(8, 9, .5));
   ladder *tempLadder = new ladder();
@@ -590,7 +616,7 @@ void Graphics::CreateObjects()
     dynamicsWorld->addRigidBody(i->object->GetRigidBody());
   }
   for (auto &i : ladders) {
-    //dynamicsWorld->addRigidBody(i->object->GetRigidBody());
+    dynamicsWorld->addRigidBody(i->object->GetRigidBody());
   }
 }
 
@@ -723,7 +749,7 @@ void Graphics::moveLeft()
     btVector3 tempbtVec3 =  player->GetRigidBody()->getLinearVelocity();
     //if(tempbtVec3.x() < 0)
        //tempbtVec3 = btVector3(0, 0, 0);
-    tempbtVec3 = tempbtVec3 + btVector3(.6, 0, 0);
+    tempbtVec3 = tempbtVec3 + btVector3(.75, 0, 0);
     if(tempbtVec3.x() > 1)
       tempbtVec3 = btVector3(1, tempbtVec3.y(), 0);
     player->GetRigidBody()->setLinearVelocity(tempbtVec3);
@@ -737,7 +763,7 @@ void Graphics::moveRight()
     btVector3 tempbtVec3 =  player->GetRigidBody()->getLinearVelocity();
     //if(tempbtVec3.x() > 0)
        //tempbtVec3 = btVector3(0, 0, 0);
-    tempbtVec3 = tempbtVec3 + btVector3(-.6, 0, 0);
+    tempbtVec3 = tempbtVec3 + btVector3(-.75, 0, 0);
     if(tempbtVec3.x() < -1)
       tempbtVec3 = btVector3(-1, tempbtVec3.y(), 0);
     /*if(tempbtVec3.y() < -2)
@@ -873,28 +899,28 @@ void Graphics::climbUp()
 {
 	btTransform newTrans;
 	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
-    newTrans.getOrigin() += (btVector3(0, .2, 0));
+    newTrans.getOrigin() += (btVector3(0, .1, 0));
     player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
 }
 void Graphics::climbLeft()
 {
 	btTransform newTrans;
 	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
-    newTrans.getOrigin() += (btVector3(.2, 0, 0));
+    newTrans.getOrigin() += (btVector3(.1, 0, 0));
     player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
 }
 void Graphics::climbRight()
 {
 	btTransform newTrans;
 	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
-    newTrans.getOrigin() += (btVector3(-.2, 0, 0));
+    newTrans.getOrigin() += (btVector3(-.1, 0, 0));
     player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
 }
 void Graphics::climbDown()
 {
 	btTransform newTrans;
 	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
-    newTrans.getOrigin() += (btVector3(0, -.2, 0));
+    newTrans.getOrigin() += (btVector3(0, -.1, 0));
     player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
 }
 void Graphics::checkBarrelJumped(unsigned int dt)

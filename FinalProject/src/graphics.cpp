@@ -579,18 +579,16 @@ void Graphics::CreateObjects()
   Object* tempObject;
   myBarrel = new Object("Barrel2.obj", "DKBarrel.png", 0,0, btVector3(2, 20, -50));
   std::cout << "spawning dk" << std::endl;
-  tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(0,0,0));
-  ladder *tempLadder = new ladder();
-  *tempLadder = {tempObject, 0, false};
-  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(-26,4,0));
+  //*tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  ladders.push_back(tempLadder);
+  Objects.push_back(tempObject);
 
   floor = tempObject = new Object("Floor.obj", "2kSun.jpg", 0,0, btVector3(0,bottom-5-3.75,0));
-  *tempLadder = {tempObject, 0, false};
-  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  ladders.push_back(tempLadder);
+  Objects.push_back(tempObject);
 
 
   /*tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(8, 9, .5));
@@ -908,31 +906,47 @@ void Graphics::checkPlayerOnLadder(unsigned int dt)
 void Graphics::climbUp()
 {
 	btTransform newTrans;
-	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
+  if(playerOnLadder == true){
+    player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
     newTrans.getOrigin() += (btVector3(0, .1, 0));
     player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
+  }
+
 }
+
 void Graphics::climbLeft()
 {
-	btTransform newTrans;
-	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
+  if(playerOnLadder == true){
+    btTransform newTrans;
+    player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
     newTrans.getOrigin() += (btVector3(.1, 0, 0));
     player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
+  }
+
+
 }
 void Graphics::climbRight()
 {
-	btTransform newTrans;
-	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
+  if(playerOnLadder == true){
+    btTransform newTrans;
+    player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
     newTrans.getOrigin() += (btVector3(-.1, 0, 0));
     player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
+  }
+
+
 }
 void Graphics::climbDown()
 {
-	btTransform newTrans;
-	player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
+  if(playerOnLadder == true){
+    btTransform newTrans;
+    player->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
     newTrans.getOrigin() += (btVector3(0, -.1, 0));
     player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
+  }
 }
+
+
 void Graphics::checkBarrelJumped(unsigned int dt)
 {
 	//std::cout << "Score ifunction!" << std::endl;
@@ -940,9 +954,9 @@ void Graphics::checkBarrelJumped(unsigned int dt)
 	for(int i=0; i<barrels.size();i++)
 	{
 		if( (player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() -
-				barrels[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() <= 4) &&
+				barrels[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() <= 5) &&
 				(player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() -
-				barrels[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() >= 0 ) )
+				barrels[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() >= 1 ) )
 				{
 					if((player->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() -
 					barrels[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() <= 1) &&

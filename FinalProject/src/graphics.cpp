@@ -566,17 +566,20 @@ void Graphics::CreateObjects()
 {
   bottom = -50;
 
-	platformSpawner(4, glm::vec3(20,35,0), -30);
-	platformSpawner(4, glm::vec3(-20,25,0), 30);
-	platformSpawner(4, glm::vec3(20,10,0), -15);
-	platformSpawner(1, glm::vec3(-26,2,0), 0);
-	platformSpawner(4, glm::vec3(-20,0,0), 15);
-	platformSpawner(4, glm::vec3(20,-10,0), -15);
-  platformSpawner(4, glm::vec3(-20,-20,0), 15);
-  platformSpawner(4, glm::vec3(20,-25,0), -30);
-  platformSpawner(4, glm::vec3(-20,-40,0), 15);
+	platformSpawner(1, glm::vec3(31,61,0), 0);
+  platformSpawner(4, glm::vec3(20,50,0), -30);
+  platformSpawner(3, glm::vec3(-5,30,0), 30);
+  platformSpawner(1, glm::vec3(23,19,0), -0);
+  platformSpawner(2, glm::vec3(15,15,0), -30);
+  platformSpawner(1, glm::vec3(0,5,0), -0);
+  platformSpawner(6, glm::vec3(12,-5,0), -30);
+  platformSpawner(1, glm::vec3(-34,-26,0), 0);
+  //platformSpawner(1, glm::vec3(-34,-29,0), 0);
+  //platformSpawner(1, glm::vec3(-34,-31,0), 0);
+  platformSpawner(1, glm::vec3(-25 ,-33,0), 0);
+  platformSpawner(3, glm::vec3(-15,-40,0), 15);
   platformSpawner(4, glm::vec3(10,bottom,0), 0);
-
+  spawnlocation = btVector3(2, 20, -.5);
   Object* tempObject;
   myBarrel = new Object("Barrel2.obj", "DKBarrel.png", 0,0, btVector3(2, 20, -50));
   std::cout << "spawning dk" << std::endl;
@@ -590,6 +593,27 @@ void Graphics::CreateObjects()
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   Objects.push_back(tempObject);
+
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(0, 6.5, -.5) );
+  ladder *tempLadder = new ladder();
+  *tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  ladders.push_back(tempLadder);  
+
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(28,62.5,-.5) );
+  tempLadder = new ladder();
+  *tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  ladders.push_back(tempLadder); 
+
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(28,55,-.5) );
+  tempLadder = new ladder();
+  *tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  ladders.push_back(tempLadder);  
 
 
   /*tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(8, 9, .5));
@@ -607,7 +631,7 @@ void Graphics::CreateObjects()
   ladders.push_back(tempLadder);*/
 
 
-  player = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(8, bottom+2, 0));
+  player = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(0,bottom+2,0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setAngularFactor(btVector3(0,0,0));
   Objects.push_back(tempObject);
@@ -679,7 +703,7 @@ void Graphics::platformSpawner(int platforms, glm::vec3 origin, int angle){
 		tempObject = new Object(modelName, "reddy.jpg", 0,0, pos);
 		Objects.push_back(tempObject);
     if (rand()%3 == 0){
-      tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(pos.x(), pos.y()+1.5, -.5));
+      tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(pos.x(), pos.y()+1.5, -.5));
       ladder *tempLadder = new ladder();
       *tempLadder = {tempObject, 0, false};
       tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);

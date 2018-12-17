@@ -17,7 +17,7 @@ Graphics::Graphics()
   timeSinceJump = 0.0;
   timeBtwSpawns = 2500.0;
   timeSinceSpawn = 0.0;
-  timeBtwDrop = 1000.0;
+  timeBtwDrop = 1300.0;
   timeSinceDrop = 0.0;
   timeBtwScoring = 400.0;
   ladderCD = 800;
@@ -635,7 +635,53 @@ void Graphics::loadLevel1(){
 
 }
 void Graphics::loadLevel2(){
+  Object* tempObject; bottom = -50;
+  platformSpawner(4, glm::vec3(0,71,0), 0);
+  platformSpawner(1, glm::vec3(20,61,0), 0);
+  platformSpawner(4, glm::vec3(20,50,0), -30); 
+  platformSpawner(3, glm::vec3(-5,29,0), 30); 
+  platformSpawner(2, glm::vec3(15,13,0), -30); 
+  platformSpawner(1, glm::vec3(0,1,0), -0); 
+  platformSpawner(3, glm::vec3(35,15,0), -30); 
+  //platformSpawner(1, glm::vec3(23,8,0), 0); 
+  platformSpawner(4, glm::vec3(-5 ,-15,0), 30); 
+  platformSpawner(3, glm::vec3(30,-34,0), -30); 
+  platformSpawner(4, glm::vec3(10,bottom,0), 0); 
+  playerSpawn = btVector3(10, bottom+2, -.5);
 
+  DK = tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(20,63,0));
+  //*tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  Objects.push_back(tempObject);
+
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(25, -21.5, 0) );
+  ladder *tempLadder = new ladder();
+  *tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  ladders.push_back(tempLadder);
+
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(0,2.5,0) );
+  tempLadder = new ladder();
+  *tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  ladders.push_back(tempLadder);  
+
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(-5,-1,0) );
+  tempLadder = new ladder();
+  *tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  ladders.push_back(tempLadder); 
+
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(20,62.5,0) );
+  tempLadder = new ladder();
+  *tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  ladders.push_back(tempLadder);  
 }
 
 void Graphics::CreateObjects(int Level)
@@ -681,6 +727,7 @@ void Graphics::CreateObjects(int Level)
   player = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(playerSpawn.x(),bottom+2,0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setAngularFactor(btVector3(0,0,0));
+
   Objects.push_back(tempObject);
 
   for (auto &i : Objects) {
@@ -750,7 +797,7 @@ void Graphics::platformSpawner(int platforms, glm::vec3 origin, int angle){
 		tempObject = new Object(modelName, "reddy.jpg", 0,0, pos);
 		Objects.push_back(tempObject);
     if (rand()%3 == 0){
-      tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(pos.x(), pos.y()+1.5, -.5));
+      tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(pos.x(), pos.y()+1.5, 0));
       ladder *tempLadder = new ladder();
       *tempLadder = {tempObject, 0, false};
       tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
@@ -785,6 +832,7 @@ void Graphics::spawnBarrel(btVector3 pos)
   barrel *tempBarrel = new barrel();
   *tempBarrel = {tempObject, 0, false};
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  tempObject->GetRigidBody()->setLinearFactor(btVector3(1,1,0));
   barrels.push_back(tempBarrel);
   dynamicsWorld->addRigidBody(tempBarrel->object->GetRigidBody());
 
@@ -862,6 +910,7 @@ void Graphics::jump(unsigned int dt)
 
   if (timeBtwJump<timeSinceJump && jumpFlag == true){
     timeSinceJump = 0;
+    player->GetRigidBody()->clearForces();
     player->GetRigidBody()->applyCentralImpulse( btVector3( 0, 6.5, 0 ) );
 
   }
@@ -1035,17 +1084,19 @@ void Graphics::checkBarrelJumped(unsigned int dt)
 				(player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() -
 				barrels[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() >= 1 ) )
 				{
+          std::cout << "Score chance!" << std::endl;
 					if((player->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() -
 					barrels[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() <= 1) &&
 					(player->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() -
 					barrels[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() >= -1 ))
 					{
-						if(timeBtwScoring<scoreCooldown && playerOnLadder == false)
-						{
+            std::cout << "Score chance2!" << std::endl;
+						//if(timeBtwScoring<scoreCooldown && playerOnLadder == false)
+						//{
 							std::cout << "Score increased!" << std::endl;
 							scoreCooldown = 0;
-							gameScore += 20;
-						}
+							gameScore += 2;
+						//}
 						
 					}
 				}

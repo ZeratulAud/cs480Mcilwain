@@ -1,4 +1,4 @@
-# PA10: Donkey Kong Clone
+# PA11: Donkey Kong Clone
 
 ### Enzo Arata
 ### Evan Brown
@@ -16,7 +16,6 @@ ESC - end program
 
 w - jump
 a - move left
-s - move down
 d - move left
 ```
 

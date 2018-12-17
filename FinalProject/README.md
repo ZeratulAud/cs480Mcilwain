@@ -73,7 +73,7 @@ mkdir build
 cd build
 cmake ..
 make
-./PA8
+./DK
 ```
 
 ### Makefile Instructions
@@ -84,7 +84,7 @@ mkdir build
 cd build
 cp ../makefile .
 make
-./PA8
+./DK
 ```
 
 ## Ubuntu.cse.unr.edu

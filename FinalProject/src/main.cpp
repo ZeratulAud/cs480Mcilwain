@@ -2,9 +2,10 @@
 
 #include "engine.h"
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
-  Engine *engine = new Engine("DK Clone", 1080, 920);
+  //std::cout << atoi(argv[1]) << std::endl;
+  Engine *engine = new Engine("DK Clone", 1080, 920, atoi(argv[1]));
   if(!engine->Initialize())
   {
     printf("The engine failed to start.\n");

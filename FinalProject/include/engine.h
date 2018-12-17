@@ -11,7 +11,7 @@
 class Engine
 {
   public:
-    Engine(std::string name, int width, int height);
+    Engine(std::string name, int width, int height, int level);
     Engine(std::string name);
     ~Engine();
     bool Initialize();
@@ -36,6 +36,9 @@ class Engine
     int m_WINDOW_WIDTH;
     int m_WINDOW_HEIGHT;
     bool m_FULLSCREEN;
+
+    int currentLevel;
+
     SDL_Event m_event;
 
     Graphics *m_graphics;

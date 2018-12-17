@@ -63,7 +63,7 @@ Graphics::~Graphics()
   ladders.clear();
 }
 
-bool Graphics::Initialize(int width, int height)
+bool Graphics::Initialize(int width, int height, int Level)
 {
   // Used for the linux OS
   #if !defined(__APPLE__) && !defined(MACOSX)
@@ -98,7 +98,7 @@ bool Graphics::Initialize(int width, int height)
   }
 
   // Create all objects
-  CreateObjects();
+  CreateObjects(Level);
 
   // Set up the shaders
   m_shader = new Shader();
@@ -562,20 +562,39 @@ std::string Graphics::ErrorString(GLenum error)
     return "None";
 }
 
-void Graphics::CreateObjects()
-{
+void Graphics::loadLevel0(){
   bottom = -50;
 
-	platformSpawner(4, glm::vec3(20,35,0), -30);
-	platformSpawner(4, glm::vec3(-20,25,0), 30);
-	platformSpawner(4, glm::vec3(20,10,0), -15);
-	platformSpawner(1, glm::vec3(-26,2,0), 0);
-	platformSpawner(4, glm::vec3(-20,0,0), 15);
-	platformSpawner(4, glm::vec3(20,-10,0), -15);
+  platformSpawner(4, glm::vec3(20,35,0), -30);
+  platformSpawner(4, glm::vec3(-20,25,0), 30);
+  platformSpawner(4, glm::vec3(20,10,0), -15);
+  platformSpawner(1, glm::vec3(-26,2,0), 0);
+  platformSpawner(4, glm::vec3(-20,0,0), 15);
+  platformSpawner(4, glm::vec3(20,-10,0), -15);
   platformSpawner(4, glm::vec3(-20,-20,0), 15);
   platformSpawner(4, glm::vec3(20,-25,0), -30);
   platformSpawner(4, glm::vec3(-20,-40,0), 15);
   platformSpawner(4, glm::vec3(10,bottom,0), 0);
+}
+void Graphics::loadLevel1(){
+
+}
+void Graphics::loadLevel2(){
+
+}
+
+void Graphics::CreateObjects(int Level)
+{
+  std::cout << "Level loaded: " << Level << std::endl;
+  switch (Level){
+    case 1: loadLevel1();
+    break;
+    case 2: loadLevel2();
+    break;
+    default:
+      loadLevel0();
+  }
+
 
   Object* tempObject;
   myBarrel = new Object("Barrel2.obj", "DKBarrel.png", 0,0, btVector3(2, 20, -50));

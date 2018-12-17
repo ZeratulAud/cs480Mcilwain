@@ -3,12 +3,14 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 
-Engine::Engine(std::string name, int width, int height)
+Engine::Engine(std::string name, int width, int height, int Level)
 {
   m_WINDOW_NAME = name;
   m_WINDOW_WIDTH = width;
   m_WINDOW_HEIGHT = height;
   m_FULLSCREEN = false;
+  currentLevel = Level;
+  std::cout << currentLevel << std::endl;
 }
 
 Engine::Engine(std::string name)
@@ -50,7 +52,8 @@ bool Engine::Initialize()
 
   // Start the graphics
   m_graphics = new Graphics();
-  if(!m_graphics->Initialize(m_WINDOW_WIDTH, m_WINDOW_HEIGHT))
+  std::cout << currentLevel << std::endl;
+  if(!m_graphics->Initialize(m_WINDOW_WIDTH, m_WINDOW_HEIGHT, currentLevel))
   {
     printf("The graphics failed to initialize.\n");
     return false;

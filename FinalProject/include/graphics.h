@@ -33,7 +33,7 @@ class Graphics
   public:
     Graphics();
     ~Graphics();
-    bool Initialize(int width, int height);
+    bool Initialize(int width, int height, int Level);
     void BulletInit();
     void Update(unsigned int dt);
     void Render();
@@ -90,7 +90,10 @@ class Graphics
 
   private:
     std::string ErrorString(GLenum error);
-    void CreateObjects();
+    void loadLevel0();
+    void loadLevel1();
+    void loadLevel2();
+    void CreateObjects(int level);
     void platformSpawner(int platformSections, glm::vec3 origin, int angle);
     void barrelSpawner(unsigned int dt, float playerHeight);
 

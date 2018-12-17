@@ -27,7 +27,9 @@ Graphics::Graphics()
   SHADOW_HEIGHT = 1024;
   movingLeft = true;
   spawnlocation = btVector3(2, 20, -.5);
+  spawnlocation = btVector3(0, 0, 0);
   playerOnLadder = false;
+
 }
 
 Graphics::~Graphics()
@@ -63,7 +65,7 @@ Graphics::~Graphics()
   ladders.clear();
 }
 
-bool Graphics::Initialize(int width, int height)
+bool Graphics::Initialize(int width, int height, int Level)
 {
   // Used for the linux OS
   #if !defined(__APPLE__) && !defined(MACOSX)
@@ -98,7 +100,7 @@ bool Graphics::Initialize(int width, int height)
   }
 
   // Create all objects
-  CreateObjects();
+  CreateObjects(Level);
 
   // Set up the shaders
   m_shader = new Shader();
@@ -562,11 +564,27 @@ std::string Graphics::ErrorString(GLenum error)
     return "None";
 }
 
-void Graphics::CreateObjects()
-{
+void Graphics::loadLevel0(){
   bottom = -50;
 
-	platformSpawner(1, glm::vec3(31,61,0), 0);
+
+  platformSpawner(4, glm::vec3(20,35,0), -30);
+  platformSpawner(4, glm::vec3(-20,25,0), 30);
+  platformSpawner(4, glm::vec3(20,10,0), -15);
+  platformSpawner(1, glm::vec3(-26,2,0), 0);
+  platformSpawner(4, glm::vec3(-20,0,0), 15);
+  platformSpawner(4, glm::vec3(20,-10,0), -15);
+  platformSpawner(4, glm::vec3(-20,-20,0), 15);
+  platformSpawner(4, glm::vec3(20,-25,0), -30);
+  platformSpawner(4, glm::vec3(-20,-40,0), 15);
+  platformSpawner(4, glm::vec3(10,bottom,0), 0);
+}
+void Graphics::loadLevel1(){
+
+  Object* tempObject;
+  bottom = -50;
+  playerSpawn = btVector3(10, 0, 0);
+  platformSpawner(1, glm::vec3(31,61,0), 0);
   platformSpawner(4, glm::vec3(20,50,0), -30);
   platformSpawner(3, glm::vec3(-5,30,0), 30);
   platformSpawner(1, glm::vec3(23,19,0), -0);
@@ -574,26 +592,10 @@ void Graphics::CreateObjects()
   platformSpawner(1, glm::vec3(0,5,0), -0);
   platformSpawner(6, glm::vec3(12,-5,0), -30);
   platformSpawner(1, glm::vec3(-34,-26,0), 0);
-  //platformSpawner(1, glm::vec3(-34,-29,0), 0);
-  //platformSpawner(1, glm::vec3(-34,-31,0), 0);
   platformSpawner(1, glm::vec3(-25 ,-33,0), 0);
   platformSpawner(3, glm::vec3(-15,-40,0), 15);
   platformSpawner(4, glm::vec3(10,bottom,0), 0);
   spawnlocation = btVector3(2, 20, -.5);
-  Object* tempObject;
-  myBarrel = new Object("Barrel2.obj", "DKBarrel.png", 0,0, btVector3(2, 20, -50));
-  std::cout << "spawning dk" << std::endl;
-  tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(-26,4,0));
-  //*tempLadder = {tempObject, 0, false};
-  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  Objects.push_back(tempObject);
-
-  floor = tempObject = new Object("Floor.obj", "2kSun.jpg", 0,0, btVector3(0,bottom-5-3.75,0));
-  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  Objects.push_back(tempObject);
-
   tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(0, 6.5, -.5) );
   ladder *tempLadder = new ladder();
   *tempLadder = {tempObject, 0, false};
@@ -615,6 +617,43 @@ void Graphics::CreateObjects()
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   ladders.push_back(tempLadder);  
 
+  tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(33,63,0));
+  //*tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  Objects.push_back(tempObject);
+
+}
+void Graphics::loadLevel2(){
+
+}
+
+void Graphics::CreateObjects(int Level)
+{
+  std::cout << "Level loaded: " << Level << std::endl;
+  switch (Level){
+    case 1: loadLevel1();
+    break;
+    case 2: loadLevel2();
+    break;
+    default:
+      loadLevel0();
+  }
+
+
+
+  Object* tempObject;
+  myBarrel = new Object("Barrel2.obj", "DKBarrel.png", 0,0, btVector3(2, 20, -50));
+  std::cout << "spawning dk" << std::endl;
+  
+
+  floor = tempObject = new Object("Floor.obj", "2kSun.jpg", 0,0, btVector3(0,bottom-5-3.75,0));
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  Objects.push_back(tempObject);
+
+  
+
 
   /*tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(8, 9, .5));
   ladder *tempLadder = new ladder();
@@ -631,7 +670,7 @@ void Graphics::CreateObjects()
   ladders.push_back(tempLadder);*/
 
 
-  player = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(0,bottom+2,0));
+  player = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(playerSpawn.x(),bottom+2,0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setAngularFactor(btVector3(0,0,0));
   Objects.push_back(tempObject);
@@ -719,8 +758,8 @@ void Graphics::barrelSpawner(unsigned int dt, float playerHeight){
 	timeSinceSpawn += dt;
 
 	if (timeBtwSpawns<timeSinceSpawn){
-    if (spawnlocation.y()-15 < playerHeight){
-      spawnlocation += btVector3(0,10,0);
+    if (spawnlocation.y()-25 < playerHeight){
+      spawnlocation += btVector3(0,25,0);
     } else if (spawnlocation.y()-30 > playerHeight){
       spawnlocation += btVector3(0,-10,0);
     }
@@ -766,7 +805,7 @@ void Graphics::ResetPlayer()
   //delete player;
   dynamicsWorld->removeRigidBody(player->GetRigidBody());
   Object* tempObject;
-  player = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(8, bottom+2, 0));
+  player = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(playerSpawn.x(), bottom+2, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setAngularFactor(btVector3(0,0,0));
   dynamicsWorld->addRigidBody(tempObject->GetRigidBody());

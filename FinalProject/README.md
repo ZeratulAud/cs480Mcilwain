@@ -68,14 +68,6 @@ The building of the project is done using CMake, installation with apt-get or br
 COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/shaders/ ${CMAKE_CURRENT_BINARY_DIR}/shaders
 ```
 
-```bash
-mkdir build
-cd build
-cmake ..
-make
-./DK level
-```
-
 ### Makefile Instructions
 The makefile works as expected and must be updated with new files added in.
 

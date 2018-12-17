@@ -291,10 +291,14 @@ bool Graphics::Initialize(int width, int height)
 
 void Graphics::Update(unsigned int dt)
 {
+  float playerY = player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y();
   btTransform newTrans;
 
   floor->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
-  newTrans.getOrigin() += (btVector3(0, .025, 0));
+  if (playerY + despawnHeight > newTrans.getOrigin().y())
+    newTrans.getOrigin() += (btVector3(0, .075, 0));
+  else
+    newTrans.getOrigin() += (btVector3(0, .025, 0));
   floor->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
 
   if (climbUpFlag){
@@ -310,11 +314,11 @@ void Graphics::Update(unsigned int dt)
     climbRight();
   }
   // Update the object
-  float playerY = player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y();
+
   m_camera->Update(glm::vec3(player->GetRigidBody()->getCenterOfMassTransform().getOrigin().x(),
                       		   playerY,
                     		     player->GetRigidBody()->getCenterOfMassTransform().getOrigin().z()),
-                             floor->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()); //3.75 is the offset of the lavaplane from its origin
+                             floor->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()+3.75); //3.75 is the offset of the lavaplane from its origin
 
   //flipperR->GetRigidBody()->applyTorque(btVector3(1,1,1));
   barrelSpawner(dt,playerY);
@@ -333,7 +337,7 @@ void Graphics::Update(unsigned int dt)
   }
 
   for (auto &i : barrels) {
-    if(i->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < despawnHeight + player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()){
+    if(i->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < floor->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()+2){
       i->object->destroy = true;
     } else {
       i->object->Update(dt);
@@ -573,14 +577,14 @@ void Graphics::CreateObjects()
   Object* tempObject;
   myBarrel = new Object("Barrel2.obj", "DKBarrel.png", 0,0, btVector3(2, 20, -50));
   std::cout << "spawning dk" << std::endl;
-  tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(-26,2,0));
+  tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(0,0,0));
   ladder *tempLadder = new ladder();
   *tempLadder = {tempObject, 0, false};
   tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   ladders.push_back(tempLadder);
 
-  floor = tempObject = new Object("Floor.obj", "2kSun.jpg", 0,0, btVector3(0,bottom-5,0));
+  floor = tempObject = new Object("Floor.obj", "2kSun.jpg", 0,0, btVector3(0,bottom-5-3.75,0));
   *tempLadder = {tempObject, 0, false};
   tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
@@ -721,8 +725,14 @@ void Graphics::SwitchShader()
 
 bool Graphics::HasDied()
 {
-  if (player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < bottom)
+  if (player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < floor->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()+4){
+    btTransform newTrans;
+
+    floor->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
+    newTrans.setOrigin(btVector3(0, bottom-5-3.75, 0));
+    floor->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
     return true;
+  }
   return false;
 }
 

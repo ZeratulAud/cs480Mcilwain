@@ -1,0 +1,72 @@
+[
+{
+  "directory": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build",
+  "command": "/usr/bin/c++  -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DUNIX -I/usr/lib/include -I/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/include -I/usr/include/SDL2 -I/usr/include/bullet   -std=gnu++11 -g   -o CMakeFiles/DK.dir/src/audio.cpp.o -c /home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/audio.cpp",
+  "file": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/audio.cpp"
+},
+{
+  "directory": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build",
+  "command": "/usr/bin/c++  -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DUNIX -I/usr/lib/include -I/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/include -I/usr/include/SDL2 -I/usr/include/bullet   -std=gnu++11 -g   -o CMakeFiles/DK.dir/src/camera.cpp.o -c /home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/camera.cpp",
+  "file": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/camera.cpp"
+},
+{
+  "directory": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build",
+  "command": "/usr/bin/c++  -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DUNIX -I/usr/lib/include -I/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/include -I/usr/include/SDL2 -I/usr/include/bullet   -std=gnu++11 -g   -o CMakeFiles/DK.dir/src/engine.cpp.o -c /home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/engine.cpp",
+  "file": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/engine.cpp"
+},
+{
+  "directory": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build",
+  "command": "/usr/bin/c++  -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DUNIX -I/usr/lib/include -I/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/include -I/usr/include/SDL2 -I/usr/include/bullet   -std=gnu++11 -g   -o CMakeFiles/DK.dir/src/graphics.cpp.o -c /home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/graphics.cpp",
+  "file": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/graphics.cpp"
+},
+{
+  "directory": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build",
+  "command": "/usr/bin/c++  -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DUNIX -I/usr/lib/include -I/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/include -I/usr/include/SDL2 -I/usr/include/bullet   -std=gnu++11 -g   -o CMakeFiles/DK.dir/src/imgui.cpp.o -c /home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/imgui.cpp",
+  "file": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/imgui.cpp"
+},
+{
+  "directory": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build",
+  "command": "/usr/bin/c++  -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DUNIX -I/usr/lib/include -I/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/include -I/usr/include/SDL2 -I/usr/include/bullet   -std=gnu++11 -g   -o CMakeFiles/DK.dir/src/imgui_demo.cpp.o -c /home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/imgui_demo.cpp",
+  "file": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/imgui_demo.cpp"
+},
+{
+  "directory": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build",
+  "command": "/usr/bin/c++  -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DUNIX -I/usr/lib/include -I/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/include -I/usr/include/SDL2 -I/usr/include/bullet   -std=gnu++11 -g   -o CMakeFiles/DK.dir/src/imgui_draw.cpp.o -c /home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/imgui_draw.cpp",
+  "file": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/imgui_draw.cpp"
+},
+{
+  "directory": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build",
+  "command": "/usr/bin/c++  -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DUNIX -I/usr/lib/include -I/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/include -I/usr/include/SDL2 -I/usr/include/bullet   -std=gnu++11 -g   -o CMakeFiles/DK.dir/src/imgui_impl_opengl3.cpp.o -c /home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/imgui_impl_opengl3.cpp",
+  "file": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/imgui_impl_opengl3.cpp"
+},
+{
+  "directory": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build",
+  "command": "/usr/bin/c++  -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DUNIX -I/usr/lib/include -I/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/include -I/usr/include/SDL2 -I/usr/include/bullet   -std=gnu++11 -g   -o CMakeFiles/DK.dir/src/imgui_impl_sdl.cpp.o -c /home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/imgui_impl_sdl.cpp",
+  "file": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/imgui_impl_sdl.cpp"
+},
+{
+  "directory": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build",
+  "command": "/usr/bin/c++  -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DUNIX -I/usr/lib/include -I/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/include -I/usr/include/SDL2 -I/usr/include/bullet   -std=gnu++11 -g   -o CMakeFiles/DK.dir/src/imgui_widgets.cpp.o -c /home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/imgui_widgets.cpp",
+  "file": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/imgui_widgets.cpp"
+},
+{
+  "directory": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build",
+  "command": "/usr/bin/c++  -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DUNIX -I/usr/lib/include -I/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/include -I/usr/include/SDL2 -I/usr/include/bullet   -std=gnu++11 -g   -o CMakeFiles/DK.dir/src/main.cpp.o -c /home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/main.cpp",
+  "file": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/main.cpp"
+},
+{
+  "directory": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build",
+  "command": "/usr/bin/c++  -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DUNIX -I/usr/lib/include -I/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/include -I/usr/include/SDL2 -I/usr/include/bullet   -std=gnu++11 -g   -o CMakeFiles/DK.dir/src/object.cpp.o -c /home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/object.cpp",
+  "file": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/object.cpp"
+},
+{
+  "directory": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build",
+  "command": "/usr/bin/c++  -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DUNIX -I/usr/lib/include -I/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/include -I/usr/include/SDL2 -I/usr/include/bullet   -std=gnu++11 -g   -o CMakeFiles/DK.dir/src/shader.cpp.o -c /home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/shader.cpp",
+  "file": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/shader.cpp"
+},
+{
+  "directory": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build",
+  "command": "/usr/bin/c++  -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DUNIX -I/usr/lib/include -I/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/include -I/usr/include/SDL2 -I/usr/include/bullet   -std=gnu++11 -g   -o CMakeFiles/DK.dir/src/window.cpp.o -c /home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/window.cpp",
+  "file": "/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/src/window.cpp"
+}
+]

@@ -87,6 +87,7 @@ class Graphics
     bool movingLeft;
 
     btVector3 spawnlocation;
+    btVector3 playerSpawn;
 
   private:
     std::string ErrorString(GLenum error);
@@ -119,6 +120,7 @@ class Graphics
     Object* player;
     Object* myBarrel;
     Object* floor;
+    Object* DK;
 
     std::vector<Object*> Objects;
     std::vector<barrel*> barrels;

@@ -107,7 +107,7 @@ void Engine::Run()
     }
 
     // My menu
-    ImGui::Begin("Lighting Menu");
+    ImGui::Begin("Menu");
 
     if (ImGui::Button("Switch Shader"))
       m_graphics->SwitchShader();

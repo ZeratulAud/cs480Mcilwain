@@ -73,7 +73,7 @@ mkdir build
 cd build
 cmake ..
 make
-./DK
+./DK level
 ```
 
 ### Makefile Instructions
@@ -84,7 +84,7 @@ mkdir build
 cd build
 cp ../makefile .
 make
-./DK
+./DK level
 ```
 
 ## Ubuntu.cse.unr.edu

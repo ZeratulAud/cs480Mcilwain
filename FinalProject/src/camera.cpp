@@ -30,7 +30,7 @@ bool Camera::Initialize(int w, int h)
 
 void Camera::Update(glm::vec3 ballPos, float lavaLevel)
 {
-  eyePos = glm::vec3(ballPos.x/2,lavaLevel+15,-20);//ballPos.x
+  eyePos = glm::vec3(ballPos.x*2/3,lavaLevel+15,-20);//ballPos.x
   view = glm::lookAt( eyePos, //Eye Position
                       ballPos, //Focus point
                       glm::vec3(0.0, 1.0, 0.0)); //Positive Y is up

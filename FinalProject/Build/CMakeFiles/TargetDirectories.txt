@@ -1,0 +1,4 @@
+/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build/CMakeFiles/rebuild_cache.dir
+/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build/CMakeFiles/edit_cache.dir
+/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build/CMakeFiles/DK.dir
+/home/enzoarata/Desktop/Repository/Copy/cs480Mcilwain/FinalProject/Build/CMakeFiles/DK_SUCCESSFUL.dir

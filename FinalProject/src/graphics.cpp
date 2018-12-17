@@ -28,8 +28,10 @@ Graphics::Graphics()
   SHADOW_HEIGHT = 1024;
   movingLeft = true;
   spawnlocation = btVector3(2, 20, -.5);
+  spawnlocation = btVector3(0, 0, 0);
   playerOnLadder = false;
   srand(time(NULL));
+
 }
 
 Graphics::~Graphics()
@@ -294,9 +296,12 @@ bool Graphics::Initialize(int width, int height, int Level)
 
 void Graphics::Update(unsigned int dt)
 {
+
+
   float lavaSpeed = 0.01;
   float playerY = player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y();
   btTransform newTrans;
+
 
   floor->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
   if (playerY + despawnHeight > newTrans.getOrigin().y())
@@ -566,8 +571,9 @@ std::string Graphics::ErrorString(GLenum error)
 
 void Graphics::loadLevel0(){
   bottom = -50;
+  playerSpawn = btVector3(8, 0, 0);
 
-  platformSpawner(1, glm::vec3(-26,2,0), 0);
+  platformSpawner(1, glm::vec3(26,37,0), 0);
   platformSpawner(4, glm::vec3(20,35,0), -30);
   platformSpawner(4, glm::vec3(-20,25,0), 30);
   platformSpawner(4, glm::vec3(20,10,0), -15);
@@ -578,12 +584,54 @@ void Graphics::loadLevel0(){
   platformSpawner(4, glm::vec3(20,-25,0), -30);
   platformSpawner(4, glm::vec3(-20,-40,0), 15);
   platformSpawner(4, glm::vec3(10,bottom,0), 0);
-  Object* tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(-26,4,0));
+  Object* tempObject = DK = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(26,39,0));
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   Objects.push_back(tempObject);
 }
 void Graphics::loadLevel1(){
+
+  Object* tempObject;
+  bottom = -50;
+  playerSpawn = btVector3(10, 0, 0);
+  platformSpawner(1, glm::vec3(31,61,0), 0);
+  platformSpawner(4, glm::vec3(20,50,0), -30);
+  platformSpawner(3, glm::vec3(-5,30,0), 30);
+  platformSpawner(1, glm::vec3(23,19,0), -0);
+  platformSpawner(2, glm::vec3(15,15,0), -30);
+  platformSpawner(1, glm::vec3(0,5,0), -0);
+  platformSpawner(6, glm::vec3(12,-5,0), -30);
+  platformSpawner(1, glm::vec3(-34,-26,0), 0);
+  platformSpawner(1, glm::vec3(-25 ,-33,0), 0);
+  platformSpawner(3, glm::vec3(-15,-40,0), 15);
+  platformSpawner(4, glm::vec3(10,bottom,0), 0);
+  spawnlocation = btVector3(2, 20, -.5);
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(0, 6.5, -.5) );
+  ladder *tempLadder = new ladder();
+  *tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  ladders.push_back(tempLadder);  
+
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(28,62.5,-.5) );
+  tempLadder = new ladder();
+  *tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  ladders.push_back(tempLadder); 
+
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(28,55,-.5) );
+  tempLadder = new ladder();
+  *tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  ladders.push_back(tempLadder);  
+
+  tempObject = DK = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(33,63,0));
+  //*tempLadder = {tempObject, 0, false};
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  Objects.push_back(tempObject);
 
 }
 void Graphics::loadLevel2(){
@@ -603,14 +651,16 @@ void Graphics::CreateObjects(int Level)
   }
 
 
+
   Object* tempObject;
   myBarrel = new Object("Barrel2.obj", "DKBarrel.png", 0,0, btVector3(2, 20, -50));
-
 
   floor = tempObject = new Object("Floor.obj", "2kSun.jpg", 0,0, btVector3(0,bottom-5-3.75,0));
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   Objects.push_back(tempObject);
+
+  
 
 
   /*tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(8, 9, .5));
@@ -628,7 +678,7 @@ void Graphics::CreateObjects(int Level)
   ladders.push_back(tempLadder);*/
 
 
-  player = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(8, bottom+2, 0));
+  player = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(playerSpawn.x(),bottom+2,0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setAngularFactor(btVector3(0,0,0));
   Objects.push_back(tempObject);
@@ -640,7 +690,7 @@ void Graphics::CreateObjects(int Level)
     dynamicsWorld->addRigidBody(i->object->GetRigidBody());
   }
   for (auto &i : ladders) {
-    dynamicsWorld->addRigidBody(i->object->GetRigidBody());
+    //dynamicsWorld->addRigidBody(i->object->GetRigidBody());
   }
 }
 
@@ -700,7 +750,7 @@ void Graphics::platformSpawner(int platforms, glm::vec3 origin, int angle){
 		tempObject = new Object(modelName, "reddy.jpg", 0,0, pos);
 		Objects.push_back(tempObject);
     if (rand()%3 == 0){
-      tempObject = new Object("Ladder.obj", "bluebaby.jpg", 5,1, btVector3(pos.x(), pos.y()+1.5, -.5));
+      tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(pos.x(), pos.y()+1.5, -.5));
       ladder *tempLadder = new ladder();
       *tempLadder = {tempObject, 0, false};
       tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
@@ -716,8 +766,8 @@ void Graphics::barrelSpawner(unsigned int dt, float playerHeight){
 	timeSinceSpawn += dt;
 
 	if (timeBtwSpawns<timeSinceSpawn){
-    if (spawnlocation.y()-15 < playerHeight){
-      spawnlocation += btVector3(0,10,0);
+    if (spawnlocation.y()-25 < playerHeight){
+      spawnlocation += btVector3(0,25,0);
     } else if (spawnlocation.y()-30 > playerHeight){
       spawnlocation += btVector3(0,-10,0);
     }
@@ -747,7 +797,9 @@ void Graphics::SwitchShader()
 
 bool Graphics::HasDied()
 {
-  if (player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < floor->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()+4){
+  if ((player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() < floor->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()+4)
+    ||(player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() >= DK->GetRigidBody()->getCenterOfMassTransform().getOrigin().y()))
+  {
     btTransform newTrans;
 
     floor->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
@@ -766,7 +818,7 @@ void Graphics::ResetPlayer()
   //delete player;
   dynamicsWorld->removeRigidBody(player->GetRigidBody());
   Object* tempObject;
-  player = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(8, bottom+2, 0));
+  player = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(playerSpawn.x(), bottom+2, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setAngularFactor(btVector3(0,0,0));
   dynamicsWorld->addRigidBody(tempObject->GetRigidBody());
@@ -876,7 +928,7 @@ void Graphics::checkBarrelDrop()
 						if(ladders[i]->cooldownFlag == false)
 						{
 							ladders[i]->cooldownFlag = true;
-              if (!rand()%3)
+              if (!(rand()%3))
 							  dropBarrel(barrels[j]);
 							ladders[i]->ladderCooldown = 0;
 						}

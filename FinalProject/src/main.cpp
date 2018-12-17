@@ -4,8 +4,11 @@
 
 int main(int argc, char *argv[])
 {
-  //std::cout << atoi(argv[1]) << std::endl;
-  Engine *engine = new Engine("DK Clone", 1080, 920, atoi(argv[1]));
+  int level = 0;
+  if (argc>1){
+    level = atoi(argv[1]);
+  }
+  Engine *engine = new Engine("DK Clone", 1080, 920, level);
   if(!engine->Initialize())
   {
     printf("The engine failed to start.\n");

@@ -1,5 +1,6 @@
 #include "graphics.h"
 #include <math.h>
+#include <time.h> 
 
 Graphics::Graphics()
 {
@@ -28,6 +29,7 @@ Graphics::Graphics()
   movingLeft = true;
   spawnlocation = btVector3(2, 20, -.5);
   playerOnLadder = false;
+  srand(time(NULL));
 }
 
 Graphics::~Graphics()
@@ -565,6 +567,7 @@ std::string Graphics::ErrorString(GLenum error)
 void Graphics::loadLevel0(){
   bottom = -50;
 
+  platformSpawner(1, glm::vec3(-26,2,0), 0);
   platformSpawner(4, glm::vec3(20,35,0), -30);
   platformSpawner(4, glm::vec3(-20,25,0), 30);
   platformSpawner(4, glm::vec3(20,10,0), -15);
@@ -575,6 +578,10 @@ void Graphics::loadLevel0(){
   platformSpawner(4, glm::vec3(20,-25,0), -30);
   platformSpawner(4, glm::vec3(-20,-40,0), 15);
   platformSpawner(4, glm::vec3(10,bottom,0), 0);
+  Object* tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(-26,4,0));
+  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+  Objects.push_back(tempObject);
 }
 void Graphics::loadLevel1(){
 
@@ -598,12 +605,7 @@ void Graphics::CreateObjects(int Level)
 
   Object* tempObject;
   myBarrel = new Object("Barrel2.obj", "DKBarrel.png", 0,0, btVector3(2, 20, -50));
-  std::cout << "spawning dk" << std::endl;
-  tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(-26,4,0));
-  //*tempLadder = {tempObject, 0, false};
-  tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-  tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-  Objects.push_back(tempObject);
+
 
   floor = tempObject = new Object("Floor.obj", "2kSun.jpg", 0,0, btVector3(0,bottom-5-3.75,0));
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
@@ -751,6 +753,9 @@ bool Graphics::HasDied()
     floor->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
     newTrans.setOrigin(btVector3(0, bottom-5-3.75, 0));
     floor->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
+    for (auto &i : barrels) {
+      i->object->destroy = true;
+    }
     return true;
   }
   return false;
@@ -871,7 +876,7 @@ void Graphics::checkBarrelDrop()
 						if(ladders[i]->cooldownFlag == false)
 						{
 							ladders[i]->cooldownFlag = true;
-              if (rand()%3)
+              if (!rand()%3)
 							  dropBarrel(barrels[j]);
 							ladders[i]->ladderCooldown = 0;
 						}

@@ -51,6 +51,7 @@ class Graphics
     void checkBarrelDrop();
     void checkLadderState(unsigned int dt);
     void checkPlayerOnLadder(unsigned int dt);
+    void checkBarrelJumped(unsigned int dt);
     void descendBarrel(unsigned int dt);
     bool HasDied();
     void ResetPlayer();
@@ -77,6 +78,7 @@ class Graphics
     int lives;
     int gameScore;
     int despawnHeight;
+    int scoreCooldown;
 
     float ambIntensity;
     float lightHeight;
@@ -99,6 +101,7 @@ class Graphics
     float timeBtwDrop;
     float timeSinceDrop;
     float ladderCD;
+    float timeBtwScoring;
 
 
 

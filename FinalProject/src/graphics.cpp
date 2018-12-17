@@ -18,6 +18,7 @@ Graphics::Graphics()
   timeSinceSpawn = 0.0;
   timeBtwDrop = 1000.0;
   timeSinceDrop = 0.0;
+  timeBtwScoring = 400.0;
   ladderCD = 800;
   despawnHeight =-25;
   ambIntensity = 0.0;
@@ -383,6 +384,7 @@ void Graphics::Update(unsigned int dt)
   checkLadderState(dt);
   checkPlayerOnLadder(dt);
   descendBarrel(dt);
+  checkBarrelJumped(dt);
 
   dynamicsWorld->stepSimulation(dt, 5);
 }
@@ -931,7 +933,33 @@ void Graphics::climbDown()
     newTrans.getOrigin() += (btVector3(0, -.1, 0));
     player->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
 }
-
+void Graphics::checkBarrelJumped(unsigned int dt)
+{
+	//std::cout << "Score ifunction!" << std::endl;
+	scoreCooldown += dt;
+	for(int i=0; i<barrels.size();i++)
+	{
+		if( (player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() -
+				barrels[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() <= 4) &&
+				(player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() -
+				barrels[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() >= 0 ) )
+				{
+					if((player->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() -
+					barrels[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() <= 1) &&
+					(player->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() -
+					barrels[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() >= -1 ))
+					{
+						if(timeBtwScoring<scoreCooldown && playerOnLadder == false)
+						{
+							std::cout << "Score increased!" << std::endl;
+							scoreCooldown = 0;
+							gameScore += 20;
+						}
+						
+					}
+				}
+	}
+}
 float Graphics::GetObjectDistance(Object* obj1, Object* obj2)
 {
   float x = obj1->GetRigidBody()->getCenterOfMassTransform().getOrigin().x()

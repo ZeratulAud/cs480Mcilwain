@@ -292,14 +292,15 @@ bool Graphics::Initialize(int width, int height)
 
 void Graphics::Update(unsigned int dt)
 {
+  float lavaSpeed = 0.01;
   float playerY = player->GetRigidBody()->getCenterOfMassTransform().getOrigin().y();
   btTransform newTrans;
 
   floor->GetRigidBody()->getMotionState()->getWorldTransform(newTrans);
   if (playerY + despawnHeight > newTrans.getOrigin().y())
-    newTrans.getOrigin() += (btVector3(0, .075, 0));
+    newTrans.getOrigin() += (btVector3(0, lavaSpeed*3, 0));
   else
-    newTrans.getOrigin() += (btVector3(0, .025, 0));
+    newTrans.getOrigin() += (btVector3(0, lavaSpeed, 0));
   floor->GetRigidBody()->getMotionState()->setWorldTransform(newTrans);
 
   if (climbUpFlag){

@@ -94,6 +94,7 @@ class Graphics
     void loadLevel0();
     void loadLevel1();
     void loadLevel2();
+    void loadLevel3();
     void CreateObjects(int level);
     void platformSpawner(int platformSections, glm::vec3 origin, int angle);
     void barrelSpawner(unsigned int dt, float playerHeight);

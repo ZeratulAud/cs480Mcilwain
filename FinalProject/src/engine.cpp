@@ -10,7 +10,7 @@ Engine::Engine(std::string name, int width, int height, int Level)
   m_WINDOW_HEIGHT = height;
   m_FULLSCREEN = false;
   currentLevel = Level;
-  std::cout << currentLevel << std::endl;
+  //std::cout << currentLevel << std::endl;
 }
 
 Engine::Engine(std::string name)

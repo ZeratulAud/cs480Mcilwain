@@ -13,6 +13,7 @@ struct barrel{
     Object *object;
     int dropTimer;
     bool hasDropped;
+    bool scoreFlag;
 };
 
 struct ladder{
@@ -95,6 +96,7 @@ class Graphics
     void loadLevel1();
     void loadLevel2();
     void loadLevel3();
+    void destroyObjects();
     void CreateObjects(int level);
     void platformSpawner(int platformSections, glm::vec3 origin, int angle);
     void barrelSpawner(unsigned int dt, float playerHeight);
@@ -107,6 +109,8 @@ class Graphics
     float timeSinceDrop;
     float ladderCD;
     float timeBtwScoring;
+
+    int curLevel;
 
 
 

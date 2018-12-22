@@ -28,9 +28,10 @@ Graphics::Graphics()
   SHADOW_HEIGHT = 1024;
   movingLeft = true;
   spawnlocation = btVector3(2, 20, -.5);
-  spawnlocation = btVector3(0, 0, 0);
+  playerSpawn = btVector3(0, 0, 0);
   playerOnLadder = false;
   srand(time(NULL));
+  spawnIndex  = 0;
 
 }
 
@@ -555,6 +556,12 @@ void Graphics::loadLevel0(){
   bottom = -50;
   playerSpawn = btVector3(8, 0, 0);
 
+  barrelSpawns.push_back( std::make_pair( btVector3(-23, -17, -.5), 1));
+  barrelSpawns.push_back( std::make_pair( btVector3(17, -7, -.5),  1));
+  barrelSpawns.push_back( std::make_pair( btVector3(-23, 3, -.5),   1));
+  barrelSpawns.push_back( std::make_pair( btVector3(17, 12, -.5),  1));
+  barrelSpawns.push_back( std::make_pair( btVector3(-21, 30, -.5),  2));
+  spawnlocation = barrelSpawns[0].first;
   platformSpawner(1, glm::vec3(26,37,0), 0);
   platformSpawner(4, glm::vec3(20,35,0), -30);
   platformSpawner(4, glm::vec3(-20,25,0), 30);
@@ -587,7 +594,12 @@ void Graphics::loadLevel1(){
   platformSpawner(1, glm::vec3(-25 ,-33,0), 0);
   platformSpawner(3, glm::vec3(-15,-40,0), 15);
   platformSpawner(4, glm::vec3(10,bottom,0), 0);
-  spawnlocation = btVector3(2, 20, -.5);
+
+  barrelSpawns.push_back( std::make_pair( btVector3(12, -20, -.5), 1));
+  barrelSpawns.push_back( std::make_pair( btVector3(12, -10, -.5),  1));
+  barrelSpawns.push_back( std::make_pair( btVector3(12, 0, -.5),   1));
+  barrelSpawns.push_back( std::make_pair( btVector3(12, 10, -.5),  1));
+  barrelSpawns.push_back( std::make_pair( btVector3(12, 20, -.5),  1));
   tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(0, 6.5, -.5) );
   ladder *tempLadder = new ladder();
   *tempLadder = {tempObject, 0, false};
@@ -631,6 +643,12 @@ void Graphics::loadLevel2(){
   platformSpawner(4, glm::vec3(10,bottom,0), 0); 
   playerSpawn = btVector3(10, bottom+2, -.5);
 
+  barrelSpawns.push_back( std::make_pair( btVector3(12, -20, -.5), 1));
+  barrelSpawns.push_back( std::make_pair( btVector3(12, -10, -.5),  1));
+  barrelSpawns.push_back( std::make_pair( btVector3(12, 0, -.5),   1));
+  barrelSpawns.push_back( std::make_pair( btVector3(12, 10, -.5),  1));
+  barrelSpawns.push_back( std::make_pair( btVector3(12, 20, -.5),  1));
+
   DK = tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(23,63,0));
   //*tempLadder = {tempObject, 0, false};
   tempObject->GetRigidBody()->setCollisionFlags(tempObject->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
@@ -667,16 +685,21 @@ void Graphics::loadLevel2(){
 }
 
 void Graphics::loadLevel3(){
+  barrelSpawns.clear();
   Object* tempObject; bottom = -50;
 
   platformSpawner(3, glm::vec3(-10,0,0), 15); 
   platformSpawner(1, glm::vec3(9,-12,0), 0);
   platformSpawner(1, glm::vec3(17,-25,0), 0); 
   platformSpawner(3, glm::vec3(-8,-30,0), 30); 
-  platformSpawner(1, glm::vec3(22,-32,0), 0); 
+  platformSpawner(1, glm::vec3(21,-32,0), 0); 
   platformSpawner(4, glm::vec3(10,bottom,0), 0); 
   playerSpawn = btVector3(10, bottom+2, -.5);
-  spawnlocation = btVector3(3.5, 20, -.5);
+  barrelSpawns.push_back( std::make_pair( btVector3(12, -20, -.5), 1));
+  barrelSpawns.push_back( std::make_pair( btVector3(12, -10, -.5),  1));
+  barrelSpawns.push_back( std::make_pair( btVector3(12, 0, -.5),   1));
+  barrelSpawns.push_back( std::make_pair( btVector3(12, 10, -.5),  1));
+  barrelSpawns.push_back( std::make_pair( btVector3(12, 20, -.5),  1));
 
   DK = tempObject = new Object("DK_Arm_UP.obj", "donkey_tex.png", 0,0, btVector3(24,63,0));
   //*tempLadder = {tempObject, 0, false};
@@ -684,14 +707,14 @@ void Graphics::loadLevel3(){
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   Objects.push_back(tempObject);
 
-  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(25, -30, 0) );
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(23, -30, 0) );
   ladder *tempLadder = new ladder();
   *tempLadder = {tempObject, 0, false};
   tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   ladders.push_back(tempLadder);
 
-  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(32,-35,0) );
+  tempObject = new Object("Ladder.obj", "bluebaby.jpg", 0,0, btVector3(30,-35,0) );
   tempLadder = new ladder();
   *tempLadder = {tempObject, 0, false};
   tempObject->GetRigidBody()->setCollisionFlags(tempLadder->object->GetRigidBody()->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
@@ -845,15 +868,15 @@ void Graphics::barrelSpawner(unsigned int dt, float playerHeight){
 	timeSinceSpawn += dt;
 
 	if (timeBtwSpawns<timeSinceSpawn){
-    if (spawnlocation.y()-25 < playerHeight){
-      spawnlocation += btVector3(0,25,0);
-    } else if (spawnlocation.y()-30 > playerHeight){
-      spawnlocation += btVector3(0,-10,0);
-    }
 		timeSinceSpawn = 0;
-    int spawnAmount = rand()%2+1;
-    for (int i=0;i<spawnAmount;i++)
-		  spawnBarrel(spawnlocation);
+    //int spawnAmount = rand()%2+1;
+    //for (int i=0;i<spawnAmount;i++)
+    for (int i=0;i<barrelSpawns.size();i++)
+      if (barrelSpawns[i].first.y() < playerHeight + 25) {
+        for (int j=0;j<barrelSpawns[i].second;j++)
+          spawnBarrel(barrelSpawns[i].first);       
+      }
+
 	}
 }
 
@@ -919,6 +942,7 @@ void Graphics::ResetPlayer()
   //delete player;
   dynamicsWorld->removeRigidBody(player->GetRigidBody());
   Object* tempObject;
+  movingLeft = true;
   player = tempObject = new Object("PlayerSprite.obj", "marioL.png", 1,5, btVector3(playerSpawn.x(), bottom+2, 0));
   tempObject->GetRigidBody()->setActivationState(DISABLE_DEACTIVATION);
   tempObject->GetRigidBody()->setAngularFactor(btVector3(0,0,0));
@@ -1016,6 +1040,10 @@ void Graphics::checkBarrelDrop()
 {
 	for(int i=0; i<ladders.size();i++)
 	{
+    if(ladders[i]->cooldownFlag == true)
+    {
+      continue;
+    }
 		for(int j=0; j<barrels.size();j++)
 		{
 			if( (barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().y() -
@@ -1028,13 +1056,11 @@ void Graphics::checkBarrelDrop()
 					(barrels[j]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() -
 					ladders[i]->object->GetRigidBody()->getCenterOfMassTransform().getOrigin().x() >= -0.5 ))
 					{
-						if(ladders[i]->cooldownFlag == false)
-						{
-							ladders[i]->cooldownFlag = true;
-              if (!(rand()%3))
-							  dropBarrel(barrels[j]);
-							ladders[i]->ladderCooldown = 0;
-						}
+						ladders[i]->cooldownFlag = true;
+            if (!(rand()%3))
+						  dropBarrel(barrels[j]);
+						ladders[i]->ladderCooldown = 0;
+						
 
 					}
 

@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+//#include <pair>
+#include <utility>
 
 #include "graphics_headers.h"
 #include "camera.h"
@@ -130,6 +132,9 @@ class Graphics
     std::vector<Object*> Objects;
     std::vector<barrel*> barrels;
     std::vector<ladder*> ladders;
+    std::vector<std::pair<btVector3,int>> barrelSpawns;
+    int spawnIndex;
+
 
     GLint m_lightSpaceMatrix;
     GLint m_projectionMatrix;
